@@ -1,26 +1,362 @@
+/* ============================================================
+   KOTA ACADEMY — globals.css
+   The single stylesheet entry point. Import this once in the
+   root layout (app/layout.tsx):  import "./globals.css";
+
+   Order matters:
+     1. tailwindcss   — engine + utility generation
+     2. theme.css     — color primitives, semantic tokens,
+                        @theme utility mapping, base color bindings
+     3. base.css      — reset, typography tokens, type utilities
+   ============================================================ */
+
 @import "tailwindcss";
+@import "../themes/theme.css";
+@import "../themes/base.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============================================================
+   KOTA ACADEMY — PREMIUM SECTION BACKGROUNDS
+   Use with Tailwind:
+   <section className="ka-section-light">...</section>
+   <section className="ka-section-dark">...</section>
+   ============================================================ */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer utilities {
+  /* ------------------------------------------------------------
+     LIGHT SECTION
+     Premium academic background:
+     warm ivory + blue mist + lime glow + subtle grid + soft vignette
+     ------------------------------------------------------------ */
+
+  .ka-section-light {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 8% 72%, rgba(190, 255, 72, 0.22), transparent 30%),
+      radial-gradient(circle at 90% 12%, rgba(111, 168, 255, 0.18), transparent 34%),
+      radial-gradient(circle at 56% 96%, rgba(255, 204, 92, 0.11), transparent 32%),
+      radial-gradient(circle at 50% 8%, rgba(255, 255, 255, 0.72), transparent 44%),
+      linear-gradient(180deg, #fbfaf4 0%, #f7f4ea 48%, #f2eddf 100%);
+  }
+
+  .ka-section-light::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(16, 24, 39, 0.032) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16, 24, 39, 0.032) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(
+      circle at 50% 42%,
+      black 0%,
+      black 42%,
+      transparent 78%
+    );
+  }
+
+  .ka-section-light::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 50% 50%, transparent 58%, rgba(16, 24, 39, 0.045) 100%),
+      linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.08));
+    opacity: 0.75;
+  }
+
+  /* ------------------------------------------------------------
+     DARK SECTION
+     Premium focused background:
+     deep navy + lime energy glow + blue depth + dotted grid + orbit lines
+     ------------------------------------------------------------ */
+
+  .ka-section-dark {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    color: #ffffff;
+    background:
+      radial-gradient(circle at 88% 18%, rgba(190, 255, 72, 0.18), transparent 26%),
+      radial-gradient(circle at 12% 78%, rgba(66, 153, 225, 0.16), transparent 34%),
+      radial-gradient(circle at 50% 112%, rgba(190, 255, 72, 0.08), transparent 36%),
+      linear-gradient(180deg, #07101f 0%, #081421 48%, #050a14 100%);
+  }
+
+  .ka-section-dark::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle, rgba(255, 255, 255, 0.095) 1px, transparent 1px),
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size:
+      22px 22px,
+      72px 72px,
+      72px 72px;
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 16%,
+      black 84%,
+      transparent 100%
+    );
+  }
+
+  .ka-section-dark::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 15% 90%, rgba(190, 255, 72, 0.12), transparent 34%),
+      radial-gradient(ellipse at 92% 8%, rgba(96, 165, 250, 0.16), transparent 38%),
+      radial-gradient(circle at 50% 50%, transparent 52%, rgba(0, 0, 0, 0.36) 100%);
+    opacity: 0.9;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+@layer utilities {
+  /* Soft orbital lines — best for dark sections */
+  .ka-orbit-pattern {
+    position: relative;
+  }
+
+  .ka-orbit-pattern > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  .ka-orbit-pattern .ka-orbit-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .ka-orbit-pattern .ka-orbit-bg::before,
+  .ka-orbit-pattern .ka-orbit-bg::after {
+    content: "";
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    border: 1px solid rgba(190, 255, 72, 0.12);
+    border-radius: 999px;
+    transform: rotate(-18deg) scaleX(1.6);
+  }
+
+  .ka-orbit-pattern .ka-orbit-bg::before {
+    left: -240px;
+    bottom: -260px;
+  }
+
+  .ka-orbit-pattern .ka-orbit-bg::after {
+    right: -220px;
+    top: -260px;
+    border-color: rgba(96, 165, 250, 0.13);
+  }
+
+  /* Subtle paper/noise feel without image file */
+  .ka-noise {
+    position: relative;
+  }
+
+  .ka-noise::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.035;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(0, 0, 0, 0.28) 0.5px, transparent 0.7px),
+      radial-gradient(circle at 80% 70%, rgba(0, 0, 0, 0.22) 0.5px, transparent 0.7px);
+    background-size: 6px 6px, 9px 9px;
+  }
+
+  .ka-noise > * {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+@layer utilities {
+  .ka-card-light {
+    background: rgba(255, 255, 255, 0.74);
+    border: 1px solid rgba(16, 24, 39, 0.08);
+    box-shadow:
+      0 24px 70px rgba(16, 24, 39, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(18px);
+  }
+
+  .ka-card-dark {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.075),
+        rgba(255, 255, 255, 0.035)
+      );
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    box-shadow:
+      0 24px 70px rgba(0, 0, 0, 0.34),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(18px);
+  }
+
+  .ka-card-dark-lime {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(190, 255, 72, 0.08),
+        rgba(255, 255, 255, 0.035)
+      );
+    border: 1px solid rgba(190, 255, 72, 0.22);
+    box-shadow:
+      0 24px 80px rgba(0, 0, 0, 0.36),
+      0 0 44px rgba(190, 255, 72, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(18px);
+  }
+}
+
+
+/* */
+
+@utility trust-divider {
+  position: relative;
+}
+
+/* Top divider — used on mobile between stacked items, hidden on lg */
+.trust-divider::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 1.25rem;
+  right: 1.25rem;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.09) 18%,
+    rgba(255, 255, 255, 0.09) 82%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.trust-divider:first-child::before {
+  display: none;
+}
+
+/* sm: 2-column grid */
+@media (min-width: 640px) {
+  /* Row 1 (items 1, 2): no top divider */
+  .trust-divider:nth-child(-n + 2)::before {
+    display: none;
+  }
+
+  /* Items 2 and 4: vertical left divider instead */
+  .trust-divider:nth-child(even)::before {
+    display: block;
+    top: 1.5rem;
+    bottom: 1.5rem;
+    left: 0;
+    right: auto;
+    width: 1px;
+    height: auto;
+    background-image: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(255, 255, 255, 0.09) 18%,
+      rgba(255, 255, 255, 0.09) 82%,
+      transparent
+    );
+  }
+}
+
+/* lg: 4-column grid */
+@media (min-width: 1024px) {
+  /* Restore all dividers (some were hidden at sm), then handle below */
+  .trust-divider::before {
+    display: block;
+  }
+
+  /* First item: no divider */
+  .trust-divider:first-child::before {
+    display: none;
+  }
+
+  /* All non-first items: vertical left divider */
+  .trust-divider:nth-child(n + 2)::before {
+    top: 1.75rem;
+    bottom: 1.75rem;
+    left: 0;
+    right: auto;
+    width: 1px;
+    height: auto;
+    background-image: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(255, 255, 255, 0.09) 18%,
+      rgba(255, 255, 255, 0.09) 82%,
+      transparent
+    );
+  }
+}
+
+
+
+@utility fade-divider-left {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: var(--fade-divider-inset, 1.5rem);
+    bottom: var(--fade-divider-inset, 1.5rem);
+    width: 1px;
+    background-image: linear-gradient(
+      to bottom,
+      transparent,
+      var(--fade-divider-color, rgba(255, 255, 255, 0.09)) 18%,
+      var(--fade-divider-color, rgba(255, 255, 255, 0.09)) 82%,
+      transparent
+    );
+    pointer-events: none;
+  }
+}
+
+@utility fade-divider-top {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: var(--fade-divider-inset, 1.5rem);
+    right: var(--fade-divider-inset, 1.5rem);
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      transparent,
+      var(--fade-divider-color, rgba(255, 255, 255, 0.09)) 18%,
+      var(--fade-divider-color, rgba(255, 255, 255, 0.09)) 82%,
+      transparent
+    );
+    pointer-events: none;
+  }
 }

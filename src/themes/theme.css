@@ -1,0 +1,337 @@
+/* ============================================================
+   KOTA ACADEMY — theme.css
+   Tailwind v4 themeable token system.
+   Palette sampled from the reference mockup: Lime primary,
+   Violet secondary, near-black blue surfaces.
+
+   ── How it fits together ────────────────────────────────────
+   LAYER 1  PRIMITIVES   raw palette + motion. Theme-agnostic.
+                         Never referenced by components.
+   LAYER 2  SEMANTICS    roles (--bg-base, --brand-primary…).
+                         THEME-SCOPED — the only layer a theme
+                         remaps. Lives under :root and
+                         [data-theme="…"].
+   LAYER 3  @theme        maps the semantics onto Tailwind v4
+                         utilities, so `bg-base` / `text-accent`
+                         resolve correctly in ANY theme.
+
+   Default theme is "dark" (mirrored on bare :root for SSR / no-JS).
+   A "light" theme is included as a working stub — the toggle hook
+   is ready; tune the light values when you build that screen.
+
+   ── Import order (once, e.g. app/globals.css) ───────────────
+       @import "tailwindcss";
+       @import "./theme.css";
+   ============================================================ */
+
+
+/* ════════════════════════════════════════════════════════════
+   LAYER 1 — PRIMITIVES   (palette + motion; theme-agnostic)
+   ════════════════════════════════════════════════════════════ */
+:root {
+
+  /* --- Lime — Primary accent ramp (sampled: base #C6F624) --- */
+  --lime-950: #1A2400;
+  --lime-900: #2C3D00;
+  --lime-800: #455F00;
+  --lime-700: #5E8200;
+  --lime-600: #7BA600;
+  --lime-500: #9BC900;
+  --lime-400: #B4E215;
+  --lime-300: #C6F624;   /* brand primary base — CTAs, highlight */
+  --lime-200: #D6F95E;
+  --lime-100: #E6FB95;
+  --lime-50:  #F4FDD2;
+
+  /* --- Violet — Secondary accent ramp (sampled: ~#8987BB) --- */
+  --violet-950: #15123A;
+  --violet-900: #1E1A52;
+  --violet-800: #2C2675;
+  --violet-700: #3D359C;
+  --violet-600: #5247C4;
+  --violet-500: #6C61DD;
+  --violet-400: #8987BB;   /* sampled mid — rank numbers, eyebrows */
+  --violet-300: #ABA6EC;
+  --violet-200: #C9C6F4;
+  --violet-100: #E4E2FA;
+  --violet-50:  #F2F1FD;
+
+  /* --- Ink — near-black blue neutral ramp --- */
+  --ink-950: #00020B;   /* darkest — page base                 */
+  --ink-900: #020616;   /* hero / elevated dark                */
+  --ink-850: #050B1A;
+  --ink-800: #060B24;   /* dark cards / panels                 */
+  --ink-700: #0E1326;
+  --ink-600: #141B38;
+  --ink-500: #243745;
+  --ink-400: #3A4658;
+  --ink-300: #5A6478;
+  --ink-200: #8D95A6;
+  --ink-100: #C2C7D2;
+  --ink-50:  #E6E8EE;
+
+  /* --- Paper — light-surface neutral ramp --- */
+  --paper-950: #090F1C;   /* dark text on light                */
+  --paper-900: #1A2230;
+  --paper-700: #3C4658;
+  --paper-500: #6B7486;
+  --paper-300: #AEB4C0;
+  --paper-200: #D4D7DE;
+  --paper-100: #EDEEF1;
+  --paper-50:  #FAFAFC;   /* lightest section bg               */
+  --paper-0:   #FFFFFF;
+
+  /* --- Absolutes + status primitives --- */
+  --white: #FFFFFF;
+  --black: #000000;
+
+  --green:  #22C55E;
+  --amber:  #F59E0B;
+  --red:    #EF4444;
+  --sky:    #3B82F6;
+
+  /* --- Motion (theme-agnostic) --- */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft:   cubic-bezier(0.40, 0, 0.20, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 160ms;
+  --dur-base: 280ms;
+  --dur-slow: 440ms;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   LAYER 2 — SEMANTIC TOKENS   (roles; theme-scoped)
+
+   DEFAULT = "dark". Bare :root mirrors it so the app renders
+   correctly before JS sets data-theme.
+   ════════════════════════════════════════════════════════════ */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Background */
+  --bg-base:     var(--ink-950);
+  --bg-elevated: var(--ink-900);
+  --bg-card:     var(--ink-800);
+  --bg-overlay:  var(--ink-800);
+  --bg-subtle:   var(--ink-700);
+  --bg-muted:    var(--ink-600);
+  /* Light-section surfaces — the mockup alternates dark/light
+     bands within ONE theme. These let a section opt into a light
+     band without a full theme switch. (In the light theme below
+     they collapse toward the page surfaces.) */
+  --bg-section-light:      var(--paper-50);
+  --bg-section-light-card: var(--paper-0);
+
+  /* Text */
+  --text-primary:   var(--paper-50);
+  --text-secondary: var(--ink-200);
+  --text-muted:     var(--ink-300);
+  --text-disabled:  var(--ink-400);
+  --text-link:      var(--lime-300);
+  --text-accent:    var(--lime-300);
+  --text-inverse:   var(--ink-950);
+  /* Text for use on the light section bands */
+  --text-on-light-primary:   var(--paper-950);
+  --text-on-light-secondary: var(--paper-500);
+
+  /* Brand — primary (Lime) */
+  --brand-primary:        var(--lime-300);
+  --brand-primary-hover:  var(--lime-200);
+  --brand-primary-active: var(--lime-400);
+  --brand-primary-subtle: var(--lime-900);
+  --brand-primary-ink:    var(--ink-950);   /* text ON lime fills */
+
+  /* Brand — secondary (Violet) */
+  --brand-secondary:        var(--violet-500);
+  --brand-secondary-hover:  var(--violet-400);
+  --brand-secondary-active: var(--violet-600);
+  --brand-secondary-subtle: var(--violet-900);
+
+  /* Borders */
+  --border-subtle:  var(--ink-700);
+  --border-default: var(--ink-600);
+  --border-strong:  var(--ink-500);
+  --border-brand:   var(--lime-300);
+  --border-secondary: var(--violet-500);
+
+  /* Status */
+  --status-success: var(--green);
+  --status-warning: var(--amber);
+  --status-error:   var(--red);
+  --status-info:    var(--sky);
+
+  /* Utility roles — keep base styles off raw primitives */
+  --selection-bg: var(--lime-300);
+  --selection-fg: var(--ink-950);
+  --scrollbar-track: var(--bg-base);
+  --scrollbar-thumb: var(--ink-600);
+  --scrollbar-thumb-hover: var(--ink-500);
+  --focus-ring: var(--lime-300);
+
+  /* Effects — glow/shadow tuned for dark surfaces */
+  --glow-primary: 0 0 24px -4px rgb(198 246 36 / 0.55);
+  --glow-soft:    0 0 40px -8px rgb(198 246 36 / 0.30);
+  --shadow-card:  0 24px 60px -20px rgb(0 0 0 / 0.7);
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   THEME — "light"  (working stub; toggle hook is live)
+   Only semantic tokens are remapped — primitives, @theme, and
+   every component stay untouched. Tune these when the light
+   screens get designed.
+   ════════════════════════════════════════════════════════════ */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg-base:     var(--paper-50);
+  --bg-elevated: var(--paper-0);
+  --bg-card:     var(--paper-0);
+  --bg-overlay:  var(--paper-0);
+  --bg-subtle:   var(--paper-100);
+  --bg-muted:    var(--paper-200);
+  --bg-section-light:      var(--paper-100);
+  --bg-section-light-card: var(--paper-0);
+
+  --text-primary:   var(--paper-950);
+  --text-secondary: var(--paper-700);
+  --text-muted:     var(--paper-500);
+  --text-disabled:  var(--paper-300);
+  --text-link:      var(--lime-700);
+  --text-accent:    var(--lime-700);
+  --text-inverse:   var(--paper-50);
+  --text-on-light-primary:   var(--paper-950);
+  --text-on-light-secondary: var(--paper-500);
+
+  --brand-primary:        var(--lime-500);
+  --brand-primary-hover:  var(--lime-600);
+  --brand-primary-active: var(--lime-700);
+  --brand-primary-subtle: var(--lime-100);
+  --brand-primary-ink:    var(--ink-950);
+
+  --brand-secondary:        var(--violet-600);
+  --brand-secondary-hover:  var(--violet-500);
+  --brand-secondary-active: var(--violet-700);
+  --brand-secondary-subtle: var(--violet-100);
+
+  --border-subtle:  var(--paper-100);
+  --border-default: var(--paper-200);
+  --border-strong:  var(--paper-300);
+  --border-brand:   var(--lime-500);
+  --border-secondary: var(--violet-600);
+
+  --status-success: var(--green);
+  --status-warning: var(--amber);
+  --status-error:   var(--red);
+  --status-info:    var(--sky);
+
+  --selection-bg: var(--lime-200);
+  --selection-fg: var(--paper-950);
+  --scrollbar-track: var(--bg-base);
+  --scrollbar-thumb: var(--paper-300);
+  --scrollbar-thumb-hover: var(--paper-500);
+  --focus-ring: var(--lime-600);
+
+  --glow-primary: 0 0 24px -6px rgb(123 166 0 / 0.45);
+  --glow-soft:    0 0 40px -10px rgb(123 166 0 / 0.25);
+  --shadow-card:  0 20px 50px -20px rgb(20 27 56 / 0.18);
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   LAYER 3 — @theme   (bind semantics → Tailwind v4 utilities)
+
+   Every value points at a LAYER-2 var, so utilities like
+   `bg-base`, `text-accent`, `border-brand` automatically follow
+   whatever theme is active. Add a token here once; use it as a
+   utility everywhere.
+
+   Generated utilities include:
+     bg-base / bg-elevated / bg-card / bg-section-light …
+     text-primary / text-secondary / text-accent / text-on-light-primary …
+     border-subtle / border-brand / border-secondary …
+     ease-out / ease-soft / duration-base …
+   ════════════════════════════════════════════════════════════ */
+@theme inline {
+
+  /* Backgrounds */
+  --color-base:               var(--bg-base);
+  --color-elevated:           var(--bg-elevated);
+  --color-card:               var(--bg-card);
+  --color-overlay:            var(--bg-overlay);
+  --color-subtle:             var(--bg-subtle);
+  --color-muted:              var(--bg-muted);
+  --color-section-light:      var(--bg-section-light);
+  --color-section-light-card: var(--bg-section-light-card);
+
+  /* Text (as color utilities: text-primary, text-accent, …) */
+  --color-primary:            var(--text-primary);
+  --color-secondary:          var(--text-secondary);
+  --color-muted-fg:           var(--text-muted);
+  --color-disabled:           var(--text-disabled);
+  --color-link:               var(--text-link);
+  --color-accent:             var(--text-accent);
+  --color-inverse:            var(--text-inverse);
+  --color-on-light-primary:   var(--text-on-light-primary);
+  --color-on-light-secondary: var(--text-on-light-secondary);
+
+  /* Brand */
+  --color-brand:              var(--brand-primary);
+  --color-brand-hover:        var(--brand-primary-hover);
+  --color-brand-active:       var(--brand-primary-active);
+  --color-brand-subtle:       var(--brand-primary-subtle);
+  --color-brand-ink:          var(--brand-primary-ink);
+  --color-secondary-brand:    var(--brand-secondary);
+  --color-secondary-hover:    var(--brand-secondary-hover);
+  --color-secondary-active:   var(--brand-secondary-active);
+  --color-secondary-subtle:   var(--brand-secondary-subtle);
+
+  /* Borders (border-subtle, border-brand, …) */
+  --color-border-subtle:      var(--border-subtle);
+  --color-border-default:     var(--border-default);
+  --color-border-strong:      var(--border-strong);
+  --color-border-brand:       var(--border-brand);
+  --color-border-secondary:   var(--border-secondary);
+
+  /* Status */
+  --color-success:            var(--status-success);
+  --color-warning:            var(--status-warning);
+  --color-error:              var(--status-error);
+  --color-info:               var(--status-info);
+
+  /* Motion → ease-* and duration-* utilities */
+  --ease-out:                 var(--ease-out);
+  --ease-soft:                var(--ease-soft);
+  --ease-in-out:              var(--ease-in-out);
+  --duration-fast:            var(--dur-fast);
+  --duration-base:            var(--dur-base);
+  --duration-slow:            var(--dur-slow);
+
+  /* Fonts — Manrope display, system body (from your global.css) */
+  --font-display: "Manrope", sans-serif;
+  --font-body:    system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   BASE — bind global styles to semantics (no primitive leaks)
+   Put these in globals.css (or keep here). They replace the
+   hard-coded color rules in your current reset.
+   ════════════════════════════════════════════════════════════ */
+::selection      { background: var(--selection-bg); color: var(--selection-fg); }
+:focus-visible   { outline: 2px solid var(--focus-ring); outline-offset: 3px; border-radius: 4px; }
+
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

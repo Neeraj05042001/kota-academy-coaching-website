@@ -1,0 +1,313 @@
+/* ============================================================
+   KOTA ACADEMY — base.css
+   Reset · typography tokens · type utilities · base element styles.
+
+   Pairs with theme.css (colors, @theme mapping, base color bindings).
+   This file is theme-agnostic: the few color references it needs
+   are routed through SEMANTIC tokens (--text-primary, --bg-base …)
+   defined in theme.css, so nothing leaks a raw palette value.
+
+   Import order (app/globals.css):
+       @import "tailwindcss";
+       @import "../theme/theme.css";
+       @import "../theme/base.css";
+   ============================================================ */
+
+/* ── Font ───────────────────────────────────────────────────── */
+
+
+
+/* ── Typography Tokens ──────────────────────────────────────── */
+:root {
+
+  /* --- Font families --- */
+  --font-display: 'Manrope', sans-serif;
+  --font-body:    system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* --- Font weights --- */
+  --fw-light:     300;
+  --fw-regular:   400;
+  --fw-medium:    500;
+  --fw-semibold:  600;
+  --fw-bold:      700;
+  --fw-extrabold: 800;
+
+  /* --- Display scale (Manrope) --- */
+  --fs-display-2xl: 5rem;       /* 80px */
+  --fs-display-xl:  4rem;       /* 64px */
+  --fs-display-lg:  3rem;       /* 48px */
+  --fs-display-md:  2.5rem;     /* 40px */
+  --fs-display-sm:  2rem;       /* 32px */
+
+  /* --- Heading scale (Manrope) --- */
+  --fs-heading-xl:  1.75rem;    /* 28px */
+  --fs-heading-lg:  1.5rem;     /* 24px */
+  --fs-heading-md:  1.25rem;    /* 20px */
+  --fs-heading-sm:  1.125rem;   /* 18px */
+
+  /* --- Body scale (System UI) --- */
+  --fs-body-lg:     1.125rem;   /* 18px */
+  --fs-body-md:     1rem;       /* 16px */
+  --fs-body-sm:     0.875rem;   /* 14px */
+
+  /* --- Label / UI scale (System UI) --- */
+  --fs-label-lg:    0.875rem;   /* 14px */
+  --fs-label-sm:    0.75rem;    /* 12px */
+  --fs-caption:     0.6875rem;  /* 11px */
+
+  /* --- Line heights --- */
+  --lh-tight:    1.1;
+  --lh-snug:     1.2;
+  --lh-normal:   1.5;
+  --lh-relaxed:  1.75;
+  --lh-loose:    2;
+
+  /* --- Letter spacing --- */
+  --ls-tightest: -0.04em;
+  --ls-tighter:  -0.03em;
+  --ls-tight:    -0.02em;
+  --ls-snug:     -0.01em;
+  --ls-normal:    0em;
+  --ls-wide:      0.04em;
+  --ls-wider:     0.06em;
+  --ls-widest:    0.10em;
+}
+
+
+/* ── Modern CSS Reset ───────────────────────────────────────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    hanging-punctuation: first last;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: var(--fs-body-md);
+    font-weight: var(--fw-regular);
+    line-height: var(--lh-relaxed);
+    color: var(--text-primary);
+    background-color: var(--bg-base);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    min-height: 100dvh;
+  }
+
+  img, video, svg, canvas { display: block; max-width: 100%; }
+  img { height: auto; font-style: italic; }
+  input, button, textarea, select { font: inherit; color: inherit; }
+  button { cursor: pointer; background: none; border: none; }
+  a { color: var(--text-link); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  ul, ol { list-style: none; }
+  p, h1, h2, h3, h4, h5, h6 { overflow-wrap: break-word; }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: var(--fw-bold);
+    color: var(--text-primary);
+    line-height: var(--lh-snug);
+  }
+  p + p { margin-top: 1em; }
+  table { border-collapse: collapse; border-spacing: 0; }
+  textarea { resize: vertical; }
+  [hidden] { display: none !important; }
+}
+
+/* ── Base Typography Utilities ──────────────────────────────── */
+
+/* Display — Manrope, tight tracking */
+.display-2xl {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-2xl);
+  font-weight: var(--fw-extrabold);
+  letter-spacing: var(--ls-tightest);
+  line-height: var(--lh-tight);
+}
+.display-xl {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-xl);
+  font-weight: var(--fw-extrabold);
+  letter-spacing: var(--ls-tighter);
+  line-height: var(--lh-tight);
+}
+.display-lg {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tighter);
+  line-height: var(--lh-tight);
+}
+.display-md {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-md);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-snug);
+}
+.display-sm {
+  font-family: var(--font-display);
+  font-size: var(--fs-display-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-snug);
+}
+
+/* Headings — Manrope, semibold */
+.heading-xl {
+  font-family: var(--font-display);
+  font-size: var(--fs-heading-xl);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-snug);
+  line-height: var(--lh-snug);
+}
+.heading-lg {
+  font-family: var(--font-display);
+  font-size: var(--fs-heading-lg);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-snug);
+  line-height: var(--lh-snug);
+}
+.heading-md {
+  font-family: var(--font-display);
+  font-size: var(--fs-heading-md);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-normal);
+  line-height: var(--lh-normal);
+}
+.heading-sm {
+  font-family: var(--font-display);
+  font-size: var(--fs-heading-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-normal);
+  line-height: var(--lh-normal);
+}
+
+/* Body — System UI */
+.body-lg {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-relaxed);
+}
+.body-md {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-md);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-relaxed);
+}
+.body-sm {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+}
+
+/* Labels — System UI, uppercase */
+.label-lg {
+  font-family: var(--font-body);
+  font-size: var(--fs-label-lg);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  line-height: var(--lh-normal);
+}
+.label-sm {
+  font-family: var(--font-body);
+  font-size: var(--fs-label-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  line-height: var(--lh-normal);
+}
+.caption {
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-normal);
+  line-height: var(--lh-normal);
+  color: var(--text-muted);   /* semantic — from theme.css */
+}
+
+/* Eyebrow — used above section headings */
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--fs-label-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--text-muted);   /* semantic — from theme.css */
+}
+
+
+/* ── Text Color Utilities (routed through semantic tokens) ──── */
+.text-primary    { color: var(--text-primary);    }
+.text-secondary  { color: var(--text-secondary);  }
+.text-muted      { color: var(--text-muted);      }
+.text-disabled   { color: var(--text-disabled);   }
+.text-link       { color: var(--text-link);       }
+.text-accent     { color: var(--text-accent);     }
+.text-inverse    { color: var(--text-inverse);    }
+.text-brand      { color: var(--brand-primary);   }
+
+
+/* ── Responsive — Fluid type scale ──────────────────────────── */
+@media (max-width: 1024px) {
+  :root {
+    --fs-display-2xl: 4rem;      /* 64px */
+    --fs-display-xl:  3.25rem;   /* 52px */
+    --fs-display-lg:  2.5rem;    /* 40px */
+    --fs-display-md:  2rem;      /* 32px */
+    --fs-display-sm:  1.75rem;   /* 28px */
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --fs-display-2xl: 2.75rem;   /* 44px */
+    --fs-display-xl:  2.25rem;   /* 36px */
+    --fs-display-lg:  2rem;      /* 32px */
+    --fs-display-md:  1.625rem;  /* 26px */
+    --fs-display-sm:  1.375rem;  /* 22px */
+
+    --fs-heading-xl:  1.375rem;  /* 22px */
+    --fs-heading-lg:  1.25rem;   /* 20px */
+    --fs-heading-md:  1.125rem;  /* 18px */
+    --fs-heading-sm:  1rem;      /* 16px */
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --fs-display-2xl: 2.25rem;   /* 36px */
+    --fs-display-xl:  1.875rem;  /* 30px */
+    --fs-display-lg:  1.625rem;  /* 26px */
+    --fs-display-md:  1.375rem;  /* 22px */
+    --fs-display-sm:  1.25rem;   /* 20px */
+  }
+}
+
+body.ka-nav-locked {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+/* Nav height — exposed for hero's calc(100dvh - var(--nav-h)) */
+:root {
+  --nav-h: 80px;
+}
+[data-nav-state="condensed"] {
+  --nav-h: 64px;
+}

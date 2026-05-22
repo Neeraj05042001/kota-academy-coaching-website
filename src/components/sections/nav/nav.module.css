@@ -1,0 +1,695 @@
+/* ============================================================
+   KOTA ACADEMY — nav.module.css  v2
+   Adds:  Linear-style courses dropdown panel (morphing scale-in,
+          hover-trail row highlight, photo thumbnails, footer CTA)
+   Fixes: double underline (text-decoration:none on .link),
+          hides desktop CTA on mobile (only logo + burger remain)
+   ============================================================ */
+
+
+/* ════════════════════════════════════════════════════════════
+   NAV SHELL — scroll-aware (same as v1)
+   ════════════════════════════════════════════════════════════ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  -webkit-backdrop-filter: blur(0);
+  backdrop-filter: blur(0);
+  transition:
+    height var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-soft),
+    border-color var(--dur-base) var(--ease-soft),
+    box-shadow var(--dur-base) var(--ease-soft),
+    backdrop-filter var(--dur-base) var(--ease-soft);
+}
+.nav[data-state="condensed"] {
+  background: color-mix(in srgb, var(--ink-900) 78%, transparent);
+  border-bottom-color: var(--border-subtle);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 8px 30px -16px rgb(0 0 0 / 0.45);
+}
+
+.inner {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+@media (min-width: 640px) {
+  .inner { padding-left: 32px !important; padding-right: 32px !important; }
+}
+@media (min-width: 1024px) {
+  .inner { padding-left: 48px !important; padding-right: 48px !important; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   LOGO
+   ════════════════════════════════════════════════════════════ */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  transition: opacity var(--dur-base) var(--ease-soft);
+  text-decoration: none;   /* belt + braces against a:hover { underline } */
+}
+.logo:hover { opacity: 0.85; text-decoration: none; }
+
+.logoMark {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(150deg, var(--brand-primary), var(--brand-primary-active));
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  box-shadow:
+    0 0 0 1px rgb(198 246 36 / 0.4),
+    0 6px 18px -4px rgb(198 246 36 / 0.5),
+    inset 0 1px 0 rgb(255 255 255 / 0.4);
+}
+.logoMark svg { width: 16px; height: 16px; color: var(--brand-primary-ink); }
+
+.logoWord {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+  line-height: 1;
+}
+.logoWord span { color: var(--brand-primary); margin-left: 4px; }
+@media (min-width: 1024px) { .logoWord { font-size: 17px; } }
+
+
+/* ════════════════════════════════════════════════════════════
+   DESKTOP LINKS — single lime underline only (was double)
+   ════════════════════════════════════════════════════════════ */
+.links {
+  display: none;
+  align-items: center;
+  gap: 4px;
+}
+@media (min-width: 1024px) { .links { display: flex; } }
+
+.link {
+  position: relative;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: 8px;
+  text-decoration: none !important;   /* kill base.css's a:hover underline */
+  transition: color var(--dur-base) var(--ease-soft);
+}
+.link:hover { color: var(--text-primary); text-decoration: none !important; }
+
+/* Single lime underline indicator — grows from center */
+.link::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 2px;
+  height: 1.5px;
+  background: var(--brand-primary);
+  transform: scaleX(0);
+  transform-origin: center;
+  border-radius: 2px;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.link:hover::after,
+.link[data-active="true"]::after,
+.link[data-open="true"]::after {
+  transform: scaleX(1);
+}
+.link[data-active="true"] { color: var(--text-primary); }
+
+
+/* Chevron next to "Courses" — rotates when the panel is open */
+.linkChevron {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+}
+.linkChevron svg {
+  width: 12px;
+  height: 12px;
+  color: currentColor;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.link[data-open="true"] .linkChevron svg { transform: rotate(180deg); }
+
+
+/* ════════════════════════════════════════════════════════════
+   COURSES DROPDOWN PANEL — Linear-style
+   - Morphs in: scale 0.96 → 1, translateY 8 → 0, opacity 0 → 1
+   - Cubic-bezier ease matches Linear's documented curve
+   - Hover-trail row highlight: a sibling .panelTrail tracks
+     which row is hovered (set inline via JS-style or CSS hover)
+   - 200ms close delay handled in the React component via setTimeout
+   ════════════════════════════════════════════════════════════ */
+.panelWrap {
+  position: relative;   /* anchor for absolute panel */
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: -16px;
+  width: 720px;
+  max-width: calc(100vw - 32px);
+  padding: 12px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--ink-900) 92%, transparent);
+  border: 1px solid var(--border-subtle);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%);
+  box-shadow:
+    0 24px 70px -20px rgb(0 0 0 / 0.65),
+    0 2px 0 0 rgb(255 255 255 / 0.02) inset;
+
+  /* CLOSED: morphing-in initial state */
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  transform-origin: top left;
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 320ms;
+}
+.panel[data-open="true"] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  visibility: visible;
+  transition:
+    opacity 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0s;
+}
+
+/* Lime sliver connector — visual link between trigger and panel.
+   Sits in the gap; lights up only when panel is open. */
+.panel::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  left: 30px;
+  width: 36px;
+  height: 1.5px;
+  background: linear-gradient(90deg,
+    transparent,
+    color-mix(in srgb, var(--brand-primary) 70%, transparent),
+    transparent);
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 200ms var(--ease-soft) 100ms;
+}
+.panel[data-open="true"]::before { opacity: 1; }
+
+
+/* Course rows — flex; on hover the row gets a subtle bg fill.
+   The "trail" effect is just :hover with a quick transition. */
+.panelRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  text-decoration: none !important;
+  color: var(--text-primary);
+  transition:
+    background-color 180ms var(--ease-soft),
+    transform 220ms var(--ease-out);
+}
+.panelRow:hover {
+  background: color-mix(in srgb, var(--brand-primary) 8%, transparent);
+}
+.panelRow:hover .panelArrow { transform: translateX(4px); color: var(--brand-primary); }
+
+/* Photo thumbnail — small 64×64 with rounded corners and a hint
+   of the lime kiss on top via gradient overlay. */
+.panelThumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ink-700);
+  border: 1px solid var(--border-subtle);
+}
+.panelThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 380ms var(--ease-out);
+}
+.panelRow:hover .panelThumb img { transform: scale(1.08); }
+
+/* Lime kiss overlay on the thumbnail — ties it to the brand */
+.panelThumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg,
+    rgb(198 246 36 / 0.15) 0%,
+    transparent 50%,
+    rgb(0 2 11 / 0.35) 100%);
+  pointer-events: none;
+}
+
+.panelBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
+}
+
+.panelTitle {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+}
+
+.panelDesc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.panelArrow {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  align-self: center;
+  transition:
+    transform 220ms var(--ease-out),
+    color 180ms var(--ease-soft);
+}
+
+/* Panel footer — "View all courses" */
+.panelFooter {
+  margin-top: 6px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: 0 0 12px 12px;
+  text-decoration: none !important;
+  transition: color var(--dur-base) var(--ease-soft);
+}
+.panelFooter:hover { color: var(--brand-primary); }
+.panelFooter svg {
+  width: 14px;
+  height: 14px;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.panelFooter:hover svg { transform: translateX(3px); color: var(--brand-primary); }
+
+
+/* ════════════════════════════════════════════════════════════
+   RIGHT GROUP — phone + CTA + burger
+   FIX: Hide the desktop CTA on mobile (you wanted only burger).
+   ════════════════════════════════════════════════════════════ */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.phone {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: rgb(14 19 38 / 0.4);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none !important;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-soft),
+    background-color var(--dur-base) var(--ease-soft);
+}
+@media (min-width: 768px) { .phone { display: inline-flex; } }
+.phone:hover { transform: translateY(-1px); border-color: var(--border-default); background: rgb(20 27 56 / 0.6); }
+.phone svg { width: 14px; height: 14px; color: var(--brand-primary); }
+
+
+/* CTA — HIDDEN below 1024px now. The drawer footer carries it on mobile. */
+.cta {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--brand-primary), var(--brand-primary-active));
+  color: var(--brand-primary-ink);
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none !important;
+  box-shadow:
+    0 0 0 1px rgb(198 246 36 / 0.5),
+    0 6px 20px -6px rgb(198 246 36 / 0.45),
+    inset 0 1px 0 rgb(255 255 255 / 0.35);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    background var(--dur-base) var(--ease-soft);
+}
+@media (min-width: 1024px) { .cta { display: inline-flex; } }
+.cta:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, var(--brand-primary-hover), var(--brand-primary));
+  box-shadow:
+    0 0 0 1px rgb(198 246 36 / 0.7),
+    0 12px 28px -6px rgb(198 246 36 / 0.6),
+    inset 0 1px 0 rgb(255 255 255 / 0.45);
+}
+.cta svg { width: 14px; height: 14px; transition: transform var(--dur-base) var(--ease-out); }
+.cta:hover svg { transform: translateX(2px); }
+
+
+/* HAMBURGER */
+.burger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  background: rgb(14 19 38 / 0.4);
+  transition:
+    border-color var(--dur-base) var(--ease-soft),
+    background-color var(--dur-base) var(--ease-soft);
+}
+.burger:hover { border-color: var(--border-default); background: rgb(20 27 56 / 0.6); }
+@media (min-width: 1024px) { .burger { display: none; } }
+
+.burgerLines { position: relative; width: 18px; height: 12px; }
+.burgerLines span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.6px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-soft),
+    top var(--dur-base) var(--ease-out);
+}
+.burgerLines span:nth-child(1) { top: 0; }
+.burgerLines span:nth-child(2) { top: 5px; }
+.burgerLines span:nth-child(3) { top: 10px; }
+.burger[aria-expanded="true"] .burgerLines span:nth-child(1) { top: 5px; transform: rotate(45deg); }
+.burger[aria-expanded="true"] .burgerLines span:nth-child(2) { opacity: 0; }
+.burger[aria-expanded="true"] .burgerLines span:nth-child(3) { top: 5px; transform: rotate(-45deg); }
+
+
+/* ════════════════════════════════════════════════════════════
+   DRAWER — Mobile menu (with Courses accordion)
+   ════════════════════════════════════════════════════════════ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  background: rgb(0 2 11 / 0.6);
+  opacity: 0;
+  pointer-events: none;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transition: opacity var(--dur-base) var(--ease-soft);
+}
+.overlay[data-open="true"] { opacity: 1; pointer-events: auto; }
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 51;
+  width: min(86vw, 380px);
+  background: linear-gradient(180deg, var(--ink-900), var(--ink-850));
+  border-left: 1px solid var(--border-subtle);
+  transform: translateX(100%);
+  transition: transform var(--dur-base) var(--ease-out);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: max(env(safe-area-inset-bottom), 0px);
+}
+.drawer[data-open="true"] { transform: translateX(0); }
+@media (min-width: 1024px) { .drawer, .overlay { display: none; } }
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.drawerClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  background: rgb(14 19 38 / 0.5);
+  color: var(--text-primary);
+  transition:
+    background-color var(--dur-base) var(--ease-soft),
+    border-color var(--dur-base) var(--ease-soft),
+    transform var(--dur-base) var(--ease-out);
+}
+.drawerClose:hover { background: rgb(20 27 56 / 0.7); border-color: var(--border-default); transform: rotate(90deg); }
+.drawerClose svg { width: 16px; height: 16px; }
+
+.drawerLinks {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 12px;
+  overflow-y: auto;
+}
+
+.drawerLink {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-radius: 10px;
+  text-decoration: none !important;
+  opacity: 0;
+  transform: translateX(20px);
+  transition:
+    background-color var(--dur-base) var(--ease-soft),
+    color var(--dur-base) var(--ease-soft);
+}
+.drawer[data-open="true"] .drawerLink {
+  animation: ka-drawer-link-in 0.5s var(--ease-out) forwards;
+  animation-delay: calc(60ms * var(--i, 0) + 120ms);
+}
+.drawerLink:hover { background: rgb(20 27 56 / 0.7); color: var(--brand-primary); }
+.drawerLink:hover .arrow { transform: translateX(2px); color: var(--brand-primary); }
+.drawerLink .arrow {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  transition: transform var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-soft);
+}
+.drawerLink .lead {
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+}
+.drawerLink[data-active="true"] { color: var(--brand-primary); background: rgb(198 246 36 / 0.06); }
+.drawerLink .lhs { display: inline-flex; align-items: center; gap: 12px; }
+
+@keyframes ka-drawer-link-in {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Drawer accordion (Courses) ── */
+.drawerAccordion {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.drawer[data-open="true"] .drawerAccordion {
+  animation: ka-drawer-link-in 0.5s var(--ease-out) forwards;
+  animation-delay: calc(60ms * var(--i, 0) + 120ms);
+}
+
+.drawerAccordionTrigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px;
+  background: none;
+  border: none;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color var(--dur-base) var(--ease-soft),
+    color var(--dur-base) var(--ease-soft);
+}
+.drawerAccordionTrigger:hover { background: rgb(20 27 56 / 0.7); }
+.drawerAccordionTrigger .lhs { display: inline-flex; align-items: center; gap: 12px; }
+.drawerAccordionTrigger .chev {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.drawerAccordionTrigger[aria-expanded="true"] .chev { transform: rotate(180deg); color: var(--brand-primary); }
+
+.drawerSubList {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 320ms var(--ease-out);
+}
+.drawerSubList[data-open="true"] { grid-template-rows: 1fr; }
+.drawerSubListInner { overflow: hidden; }
+.drawerSubItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px 12px 48px;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: 10px;
+  text-decoration: none !important;
+  transition: color var(--dur-base) var(--ease-soft),
+    background-color var(--dur-base) var(--ease-soft);
+}
+.drawerSubItem:hover {
+  background: rgb(20 27 56 / 0.5);
+  color: var(--brand-primary);
+}
+.drawerSubItem .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+  transition: background-color var(--dur-base) var(--ease-soft);
+}
+.drawerSubItem:hover .dot { background: var(--brand-primary); }
+
+
+.drawerFooter {
+  flex-shrink: 0;
+  padding: 16px 20px 20px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgb(2 6 22 / 0.6);
+}
+.drawerCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  background: linear-gradient(180deg, var(--brand-primary), var(--brand-primary-active));
+  color: var(--brand-primary-ink);
+  text-decoration: none !important;
+  box-shadow:
+    0 0 0 1px rgb(198 246 36 / 0.5),
+    0 10px 24px -8px rgb(198 246 36 / 0.45),
+    inset 0 1px 0 rgb(255 255 255 / 0.35);
+}
+.drawerCta svg { width: 16px; height: 16px; }
+
+.drawerCall {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  background: rgb(14 19 38 / 0.5);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  text-decoration: none !important;
+}
+.drawerCall svg { width: 16px; height: 16px; color: var(--brand-primary); }
+
+
+/* ════════════════════════════════════════════════════════════
+   REDUCED MOTION
+   ════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .nav, .link::after, .linkChevron svg, .cta svg, .drawerClose,
+  .drawer, .overlay, .burgerLines span, .drawerLink, .drawerLink svg,
+  .panel, .panelRow, .panelArrow, .panelThumb img,
+  .drawerAccordionTrigger, .drawerAccordionTrigger .chev,
+  .drawerSubList {
+    transition: none !important;
+    animation: none !important;
+  }
+  .drawer[data-open="true"] .drawerLink,
+  .drawer[data-open="true"] .drawerAccordion {
+    opacity: 1; transform: none;
+  }
+}
