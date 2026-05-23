@@ -1203,7 +1203,7 @@ export default function ResultsSection() {
   return (
     <section
       aria-labelledby="results-heading"
-      className="relative flex justify-center overflow-hidden bg-[radial-gradient(circle_at_85%_25%,rgba(190,242,100,0.28),transparent_32%),radial-gradient(circle_at_10%_70%,rgba(125,211,252,0.18),transparent_30%),linear-gradient(135deg,#F6F8EE_0%,#F8FAF2_42%,#EEF5DE_100%)] pb-20 pt-16 sm:pb-24 sm:pt-20 lg:pb-28 lg:pt-24"
+      className="relative flex justify-center overflow-hidden bg-[radial-gradient(circle_at_85%_25%,rgba(190,242,100,0.28),transparent_32%),radial-gradient(circle_at_10%_70%,rgba(125,211,252,0.18),transparent_30%),linear-gradient(135deg,#F6F8EE_0%,#F8FAF2_42%,#EEF5DE_100%)] pb-1 pt-16 sm:pb-1 sm:pt-20 lg:pb-1 lg:pt-24"
     >
       <ResultsBackground />
 

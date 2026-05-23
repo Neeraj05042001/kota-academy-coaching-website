@@ -1,3 +1,4 @@
+import { CoursesSection } from "@/components/sections/courses";
 import CredibilityStrip from "@/components/sections/CreadibilityStrip";
 import { HeroSection } from "@/components/sections/hero/HeroSection";
 import { Navbar } from "@/components/sections/nav";
@@ -16,6 +17,7 @@ export default function HomePage() {
 
       {/* Results Section */}
       <ResultsSection />
+      <CoursesSection/>
     </main>
   );
 }
