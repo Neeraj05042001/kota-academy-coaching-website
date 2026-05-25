@@ -3,6 +3,7 @@ import CredibilityStrip from "@/components/sections/CreadibilityStrip";
 import { HeroSection } from "@/components/sections/hero/HeroSection";
 import { Navbar } from "@/components/sections/nav";
 import ResultsSection from "@/components/sections/ResultSection";
+import { UspSection } from "@/components/sections/usp";
 
 export default function HomePage() {
   return (
@@ -18,6 +19,7 @@ export default function HomePage() {
       {/* Results Section */}
       <ResultsSection />
       <CoursesSection/>
+      <UspSection/>
     </main>
   );
 }
