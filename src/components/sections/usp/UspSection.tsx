@@ -952,7 +952,7 @@ const underlineDraw = (reduceMotion: boolean) => ({
     : {
         pathLength: 1,
         opacity: 1,
-        transition: { duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.35 },
+        transition: { duration: 1.1, ease: [0.16, 1, 0.3, 1] as const, delay: 0.35 },
       },
 });
 
