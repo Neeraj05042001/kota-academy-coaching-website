@@ -358,7 +358,7 @@ const COURSES: Course[] = [
     href: "/courses/foundation",
     desc:
       "Extending the horizons of Kota Academy in fundamental excellence — our QUARK division: AARAMBH.",
-    image: "/courses/foundation.jpg",
+    image: "/images/courses/class-8-10-foundation.png",
     Icon: Sparkles,
   },
   {
@@ -366,7 +366,7 @@ const COURSES: Course[] = [
     href: "/courses/jee",
     desc:
       "For students aiming for admission to IITs, NITs, BITS — built on additional edge over the syllabus.",
-    image: "/courses/jee.jpg",
+    image: "/images/courses/jee-main-advanced.png",
     Icon: FlaskConical,
   },
   {
@@ -374,7 +374,7 @@ const COURSES: Course[] = [
     href: "/courses/neet",
     desc:
       "For students aiming for AIIMS and other prestigious medical colleges — our complete MEDICAL track.",
-    image: "/courses/neet.jpg",
+    image: "/images/courses/neet-ug-preparation.png",
     Icon: Stethoscope,
   },
 ];
