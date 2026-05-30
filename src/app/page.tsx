@@ -6,6 +6,7 @@ import { Navbar } from "@/components/sections/nav";
 import ResultsSection from "@/components/sections/ResultSection";
 import SupportStrip from "@/components/sections/SupportStrip";
 import { UspSection } from "@/components/sections/usp";
+import KotaAcademyWhySection from "@/components/sections/why-kota-academy/KotaAcademyWhySection";
 
 export default function HomePage() {
   return (
@@ -23,6 +24,7 @@ export default function HomePage() {
       {/* <CoursesSection/> */}
       <CoursesSection/>
       <UspSection/>
+      <KotaAcademyWhySection/>
       
     </main>
   );
