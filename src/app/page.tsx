@@ -1,10 +1,14 @@
 import { CoursesSection } from "@/components/sections/courses";
 // import CoursesSection from "@/components/sections/courses-2/CoursesSection";
 import CredibilityStrip from "@/components/sections/CreadibilityStrip";
+import KotaAcademyFacultySection from "@/components/sections/faculty-section/FacultySection";
+import FacultySection from "@/components/sections/faculty-section/FacultySection";
 import { HeroSection } from "@/components/sections/hero/HeroSection";
 import { Navbar } from "@/components/sections/nav";
 import ResultsSection from "@/components/sections/ResultSection";
+import KotaAcademyStudentJourney from "@/components/sections/student-journey/StudentJourney";
 import SupportStrip from "@/components/sections/SupportStrip";
+import KotaAcademyTestimonialsSection from "@/components/sections/testimonial/Testimonial";
 import { UspSection } from "@/components/sections/usp";
 import KotaAcademyWhySection from "@/components/sections/why-kota-academy/KotaAcademyWhySection";
 
@@ -23,8 +27,12 @@ export default function HomePage() {
       <ResultsSection />
       {/* <CoursesSection/> */}
       <CoursesSection/>
-      <UspSection/>
+      
       <KotaAcademyWhySection/>
+      <KotaAcademyStudentJourney />
+      {/* <UspSection/> */}
+      <KotaAcademyFacultySection/>
+      <KotaAcademyTestimonialsSection/>
       
     </main>
   );
