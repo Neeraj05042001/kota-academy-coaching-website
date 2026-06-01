@@ -31,7 +31,7 @@ export default function HomePage() {
       <KotaAcademyWhySection/>
       <KotaAcademyStudentJourney />
       {/* <UspSection/> */}
-      <KotaAcademyFacultySection/>
+      {/* <KotaAcademyFacultySection/> */}
       <KotaAcademyTestimonialsSection/>
       
     </main>

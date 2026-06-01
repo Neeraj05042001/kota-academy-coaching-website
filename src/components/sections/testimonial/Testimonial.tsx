@@ -696,6 +696,1263 @@
 // }
 
 
+// "use client";
+
+// import Image from "next/image";
+// import { useCallback, useEffect, useRef, useState } from "react";
+// import {
+//   AnimatePresence,
+//   motion,
+//   MotionConfig,
+//   type Variants,
+// } from "framer-motion";
+// import {
+//   ArrowRight,
+//   GraduationCap,
+//   Heart,
+//   Play,
+//   Quote,
+//   ShieldCheck,
+//   Star,
+//   UsersRound,
+//   Video,
+//   type LucideIcon,
+// } from "lucide-react";
+
+// /* -------------------------------------------------------------------------- */
+// /*  Data                                                                      */
+// /*  Student & Parent = demo (swap with verified reviews after approval).      */
+// /*  Google = real snippets + real combined rating from the GBP screenshots.   */
+// /* -------------------------------------------------------------------------- */
+
+// type ReviewType = "student" | "parent" | "google";
+
+// type Testimonial = {
+//   type: ReviewType;
+//   quote: string;
+//   author: string;
+//   context: string;
+//   focus: string;
+//   stars?: number; // defaults to 5
+// };
+
+// const reviewTabs: { id: ReviewType; label: string; mobileLabel: string }[] = [
+//   { id: "student", label: "Student Reviews", mobileLabel: "Students" },
+//   { id: "parent", label: "Parent Reviews", mobileLabel: "Parents" },
+//   { id: "google", label: "Google Reviews", mobileLabel: "Google" },
+// ];
+
+// const testimonials: Testimonial[] = [
+//   // ---- STUDENTS (demo) ----
+//   {
+//     type: "student",
+//     quote:
+//       "Concepts became much easier to revise because doubts were cleared right after every class.",
+//     author: "Aarav Sharma",
+//     context: "JEE Aspirant · Classroom Program",
+//     focus: "Doubt Support",
+//   },
+//   {
+//     type: "student",
+//     quote:
+//       "The weekly tests showed me exactly where I was weak and what to fix before the next one.",
+//     author: "Sneha Kapoor",
+//     context: "NEET Aspirant · Classroom Program",
+//     focus: "Weekly Testing",
+//   },
+//   {
+//     type: "student",
+//     quote:
+//       "Small batches mean the teachers actually know you — it never feels like you're just a roll number.",
+//     author: "Priya Verma",
+//     context: "JEE Aspirant · Two-Year Program",
+//     focus: "Small Batches",
+//   },
+//   // ---- PARENTS (demo) ----
+//   {
+//     type: "parent",
+//     quote:
+//       "Regular updates on attendance, tests and progress made the whole journey easy to follow as a parent.",
+//     author: "Mr. Rajesh Gupta",
+//     context: "Parent of a NEET Student",
+//     focus: "Parent Updates",
+//   },
+//   {
+//     type: "parent",
+//     quote:
+//       "The teachers explain patiently and give children the confidence to ask doubts without hesitation.",
+//     author: "Mrs. Anita Singh",
+//     context: "Parent of a JEE Student",
+//     focus: "Doubt Guidance",
+//   },
+//   {
+//     type: "parent",
+//     quote:
+//       "The environment is disciplined and focused — exactly what serious exam preparation needs.",
+//     author: "Mr. Sandeep Rana",
+//     context: "Parent of a Class XII Student",
+//     focus: "Discipline",
+//   },
+//   // ---- GOOGLE (real snippets from GBP) ----
+//   {
+//     type: "google",
+//     quote:
+//       "Nice coaching with good teachers and a great environment.",
+//     author: "Verified Google Review",
+//     context: "Kota Academy · Greater Noida",
+//     focus: "Teaching Quality",
+//   },
+//   {
+//     type: "google",
+//     quote:
+//       "Kota Academy provides very good quality of teaching faculties.",
+//     author: "Verified Google Review",
+//     context: "Kota Academy · Greater Noida",
+//     focus: "Faculty",
+//   },
+//   {
+//     type: "google",
+//     quote:
+//       "It is the best place to study — all the teachers are very good.",
+//     author: "Verified Google Review",
+//     context: "Kota Academy · Greater Noida",
+//     focus: "Student Experience",
+//   },
+// ];
+
+// const GOOGLE_RATING = 4.7; // combined, weighted across both branches
+// const GOOGLE_COUNT = 179; // 157 + 22
+
+// const storyChips: { label: string; icon: LucideIcon }[] = [
+//   { label: "Real Experiences", icon: UsersRound },
+//   { label: "Honest Feedback", icon: Video },
+//   { label: "Inspiring Journeys", icon: Heart },
+// ];
+
+// const videoImages = [
+//   "/images/kota-academy/classroom/classroom-image-1.jpeg",
+//   "/images/kota-academy/classroom/classroom-image-2.jpg",
+//   "/images/kota-academy/classroom/image11.jpg",
+// ];
+
+// /* monogram from a name */
+// const initials = (name: string) =>
+//   name
+//     .replace(/^(Mr\.|Mrs\.|Ms\.|Dr\.)\s*/i, "")
+//     .replace(/Verified Google Review/i, "G")
+//     .split(" ")
+//     .filter(Boolean)
+//     .slice(0, 2)
+//     .map((w) => w[0]?.toUpperCase())
+//     .join("");
+
+// /* -------------------------------------------------------------------------- */
+// /*  Motion                                                                    */
+// /* -------------------------------------------------------------------------- */
+
+// const EXPO = [0.16, 1, 0.3, 1] as const;
+// const fadeUp: Variants = {
+//   hidden: { opacity: 0, y: 22 },
+//   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EXPO } },
+// };
+// const stagger: Variants = {
+//   hidden: {},
+//   visible: { transition: { staggerChildren: 0.09, delayChildren: 0.06 } },
+// };
+
+// /* -------------------------------------------------------------------------- */
+// /*  Section                                                                   */
+// /* -------------------------------------------------------------------------- */
+
+// export default function TestimonialsSection() {
+//   const [tab, setTab] = useState<ReviewType>("student");
+//   const filtered = testimonials.filter((t) => t.type === tab);
+
+//   return (
+//     <MotionConfig reducedMotion="user">
+//       <section
+//         id="testimonials"
+//         className="relative overflow-hidden bg-[#F4F8EA] py-16 text-[#0B1B33] md:py-20 lg:py-24"
+//       >
+//         <DotGridBackground />
+
+//         <motion.div
+//           className="relative z-10 mx-auto w-full max-w-[1240px] px-5 sm:px-6 lg:px-8"
+//           initial="hidden"
+//           whileInView="visible"
+//           viewport={{ once: true, margin: "-90px" }}
+//           variants={stagger}
+//         >
+//           <Header />
+//           <Tabs tab={tab} setTab={setTab} />
+//           <Showcase tab={tab} items={filtered} />
+//           <VideoStories />
+//           <Reassurance />
+//         </motion.div>
+//       </section>
+//     </MotionConfig>
+//   );
+// }
+
+// function DotGridBackground() {
+//   return (
+//     <>
+//       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(47,125,23,0.16)_1px,transparent_1.4px)] bg-[size:26px_26px] opacity-30" />
+//       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(62,154,18,0.5)_1px,transparent_1.5px)] bg-[size:26px_26px] [mask-image:radial-gradient(48%_42%_at_8%_10%,black,transparent_70%)]" />
+//       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(62,154,18,0.45)_1px,transparent_1.5px)] bg-[size:26px_26px] [mask-image:radial-gradient(44%_42%_at_94%_60%,black,transparent_72%)]" />
+//       <div className="pointer-events-none absolute left-1/2 top-10 h-[320px] w-[420px] -translate-x-1/2 rounded-full bg-[#B5FF3D]/12 blur-[120px]" />
+//     </>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Header                                                                    */
+// /* -------------------------------------------------------------------------- */
+
+// function Header() {
+//   return (
+//     <motion.div variants={fadeUp} className="text-center">
+//       <div className="mb-5 flex items-center justify-center gap-3">
+//         <span className="h-px w-9 bg-[#4E9417]/60" />
+//         <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#2F7D17]">
+//           Testimonials
+//         </span>
+//         <span className="h-px w-9 bg-[#4E9417]/60" />
+//       </div>
+
+//       <h2 className="mx-auto max-w-[820px] text-balance text-[30px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#0B1B33] sm:text-[38px] md:text-[46px] lg:text-[50px]">
+//         What Students &amp; Parents Say About{" "}
+//         <span className="text-[#3E9A12]">Kota Academy</span>
+//       </h2>
+
+//       <p className="mx-auto mt-5 max-w-[640px] text-[15px] leading-7 text-[#4A5670] md:text-[16px]">
+//         Real voices from students and parents who experienced the difference —
+//         better teaching, consistent support, and focused preparation.
+//       </p>
+
+//       {/* live Google rating summary */}
+//       <div className="mx-auto mt-6 inline-flex items-center gap-3 rounded-full border border-[#E4E7DA] bg-white/70 px-4 py-2 shadow-[0_1px_2px_rgba(11,27,51,0.04)] backdrop-blur-sm">
+//         <GoogleMark className="h-4 w-4" />
+//         <span className="text-[14px] font-bold text-[#0B1B33]">
+//           {GOOGLE_RATING.toFixed(1)}
+//         </span>
+//         <Stars value={5} size="sm" />
+//         <span className="text-[13px] text-[#5A6678]">
+//           {GOOGLE_COUNT}+ Google reviews
+//         </span>
+//       </div>
+//     </motion.div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Tabs                                                                      */
+// /* -------------------------------------------------------------------------- */
+
+// function Tabs({
+//   tab,
+//   setTab,
+// }: {
+//   tab: ReviewType;
+//   setTab: (t: ReviewType) => void;
+// }) {
+//   return (
+//     <motion.div
+//       variants={fadeUp}
+//       className="mx-auto mt-8 grid max-w-[560px] grid-cols-3 gap-1.5 rounded-2xl border border-[#E4E7DA] bg-white/70 p-1.5 shadow-[0_1px_2px_rgba(11,27,51,0.04)] backdrop-blur-xl"
+//     >
+//       {reviewTabs.map((t) => {
+//         const active = tab === t.id;
+//         return (
+//           <button
+//             key={t.id}
+//             type="button"
+//             onClick={() => setTab(t.id)}
+//             className={`relative flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-[13px] font-semibold transition-colors duration-200 md:text-[14px] ${
+//               active ? "text-white" : "text-[#5A6678] hover:text-[#0B1B33]"
+//             }`}
+//           >
+//             {active && (
+//               <motion.span
+//                 layoutId="tabPill"
+//                 transition={{ type: "spring", stiffness: 380, damping: 32 }}
+//                 className="absolute inset-0 rounded-xl bg-[#0B1B33]"
+//               />
+//             )}
+//             <span className="relative z-10 flex items-center gap-2">
+//               {t.id === "google" ? (
+//                 <GoogleMark className="h-4 w-4" mono={active} />
+//               ) : t.id === "student" ? (
+//                 <GraduationCap
+//                   className={`h-4 w-4 ${active ? "text-[#B5FF3D]" : "text-[#3E8618]"}`}
+//                   strokeWidth={2.2}
+//                   aria-hidden
+//                 />
+//               ) : (
+//                 <UsersRound
+//                   className={`h-4 w-4 ${active ? "text-[#B5FF3D]" : "text-[#3E8618]"}`}
+//                   strokeWidth={2.2}
+//                   aria-hidden
+//                 />
+//               )}
+//               <span className="hidden sm:inline">{t.label}</span>
+//               <span className="sm:hidden">{t.mobileLabel}</span>
+//             </span>
+//           </button>
+//         );
+//       })}
+//     </motion.div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Showcase                                                                  */
+// /* -------------------------------------------------------------------------- */
+
+// function Showcase({ tab, items }: { tab: ReviewType; items: Testimonial[] }) {
+//   return (
+//     <motion.div variants={fadeUp} className="mt-8">
+//       {/* desktop / tablet grid with cross-fade on tab change */}
+//       <div className="hidden md:block">
+//         <AnimatePresence mode="wait">
+//           <motion.div
+//             key={tab}
+//             initial={{ opacity: 0, y: 14 }}
+//             animate={{ opacity: 1, y: 0 }}
+//             exit={{ opacity: 0, y: -10 }}
+//             transition={{ duration: 0.35, ease: EXPO }}
+//             className="grid grid-cols-3 gap-5"
+//           >
+//             {items.slice(0, 3).map((t, i) => (
+//               <ReviewCard key={`${t.author}-${i}`} t={t} index={i} />
+//             ))}
+//           </motion.div>
+//         </AnimatePresence>
+//       </div>
+
+//       {/* mobile carousel */}
+//       <MobileCarousel tab={tab} items={items} />
+//     </motion.div>
+//   );
+// }
+
+// function MobileCarousel({
+//   tab,
+//   items,
+// }: {
+//   tab: ReviewType;
+//   items: Testimonial[];
+// }) {
+//   const scrollerRef = useRef<HTMLDivElement | null>(null);
+//   const [active, setActive] = useState(0);
+
+//   const cardEls = useCallback(
+//     () =>
+//       Array.from(
+//         scrollerRef.current?.querySelectorAll<HTMLElement>("[data-card]") ?? []
+//       ),
+//     []
+//   );
+
+//   const onScroll = () => {
+//     const s = scrollerRef.current;
+//     if (!s) return;
+//     const center = s.getBoundingClientRect().left + s.clientWidth / 2;
+//     let best = 0;
+//     let bestDist = Infinity;
+//     cardEls().forEach((c, i) => {
+//       const r = c.getBoundingClientRect();
+//       const d = Math.abs(r.left + r.width / 2 - center);
+//       if (d < bestDist) {
+//         bestDist = d;
+//         best = i;
+//       }
+//     });
+//     setActive(best);
+//   };
+
+//   useEffect(() => {
+//     setActive(0);
+//     scrollerRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+//   }, [tab]);
+
+//   return (
+//     <div className="md:hidden">
+//       <div
+//         ref={scrollerRef}
+//         onScroll={onScroll}
+//         className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+//       >
+//         {items.map((t, i) => (
+//           <div
+//             key={`${t.author}-${i}`}
+//             data-card
+//             className="w-[86%] max-w-[400px] shrink-0 snap-center"
+//           >
+//             <ReviewCard t={t} index={i} />
+//           </div>
+//         ))}
+//       </div>
+
+//       <div className="mt-5 flex items-center justify-center gap-2.5">
+//         {items.map((t, i) => (
+//           <span
+//             key={`${t.author}-dot-${i}`}
+//             className={`h-2 rounded-full transition-all duration-300 ${
+//               active === i ? "w-6 bg-[#3E9A12]" : "w-2 bg-[#C6CFC0]"
+//             }`}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Review card                                                               */
+// /* -------------------------------------------------------------------------- */
+
+// function ReviewCard({ t, index }: { t: Testimonial; index: number }) {
+//   const isGoogle = t.type === "google";
+
+//   return (
+//     <motion.article
+//       variants={fadeUp}
+//       whileHover={{ y: -5 }}
+//       transition={{ duration: 0.25, ease: "easeOut" }}
+//       className="group relative flex h-full min-h-[300px] flex-col overflow-hidden rounded-3xl border border-[#E4E7DA] bg-white p-6 shadow-[0_1px_2px_rgba(11,27,51,0.04)] transition-[box-shadow,border-color] duration-300 hover:border-[#CBD8BB] hover:shadow-[0_24px_55px_-26px_rgba(16,120,40,0.4)]"
+//     >
+//       {/* soft quote glyph */}
+//       <Quote
+//         className="pointer-events-none absolute right-5 top-5 h-12 w-12 rotate-180 fill-[#EDF6DE] text-[#EDF6DE]"
+//         aria-hidden
+//       />
+
+//       <div className="relative z-10 flex items-center gap-2">
+//         <Stars value={t.stars ?? 5} delayBase={index} />
+//         {isGoogle && (
+//           <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-[#F2F5FB] px-2 py-0.5 text-[10px] font-bold text-[#5A6678]">
+//             <GoogleMark className="h-3 w-3" /> Google
+//           </span>
+//         )}
+//       </div>
+
+//       <p className="relative z-10 mt-5 text-[15.5px] font-medium leading-[1.7] tracking-[-0.005em] text-[#1F2B40] md:text-[16px]">
+//         {t.quote}
+//       </p>
+
+//       <div className="relative z-10 mt-auto pt-6">
+//         <div className="mb-4 h-px w-full bg-[#EEF0E6]" />
+//         <div className="flex items-center gap-3">
+//           <span
+//             className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[14px] font-bold ${
+//               isGoogle
+//                 ? "bg-[#F2F5FB] text-[#1466C2] ring-1 ring-inset ring-[#DCE6F5]"
+//                 : "bg-[#EDF8DD] text-[#2C7A12] ring-1 ring-inset ring-[#CDEBB0]"
+//             }`}
+//             aria-hidden
+//           >
+//             {initials(t.author)}
+//           </span>
+//           <div className="min-w-0">
+//             <h3 className="truncate text-[15px] font-bold leading-tight text-[#0B1B33]">
+//               {t.author}
+//             </h3>
+//             <p className="mt-0.5 truncate text-[12.5px] text-[#5A6678]">
+//               {t.context}
+//             </p>
+//           </div>
+//           <span className="ml-auto hidden shrink-0 rounded-full bg-[#F4F8EA] px-2.5 py-1 text-[11px] font-semibold text-[#3E8618] sm:inline">
+//             {t.focus}
+//           </span>
+//         </div>
+//       </div>
+//     </motion.article>
+//   );
+// }
+
+// function Stars({
+//   value,
+//   size = "md",
+//   delayBase = 0,
+// }: {
+//   value: number;
+//   size?: "sm" | "md";
+//   delayBase?: number;
+// }) {
+//   const dim = size === "sm" ? "h-3.5 w-3.5" : "h-[18px] w-[18px]";
+//   return (
+//     <span className="inline-flex items-center gap-0.5">
+//       {Array.from({ length: 5 }).map((_, i) => (
+//         <motion.span
+//           key={i}
+//           initial={{ opacity: 0, scale: 0.5 }}
+//           whileInView={{ opacity: 1, scale: 1 }}
+//           viewport={{ once: true }}
+//           transition={{
+//             delay: 0.15 + delayBase * 0.04 + i * 0.05,
+//             type: "spring",
+//             stiffness: 400,
+//             damping: 18,
+//           }}
+//           className="inline-flex"
+//         >
+//           <Star
+//             className={`${dim} ${i < value ? "fill-[#F5B642] text-[#F5B642]" : "fill-[#E7E9E0] text-[#E7E9E0]"}`}
+//             strokeWidth={1.6}
+//             aria-hidden
+//           />
+//         </motion.span>
+//       ))}
+//     </span>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Video stories panel                                                       */
+// /* -------------------------------------------------------------------------- */
+
+// function VideoStories() {
+//   return (
+//     <motion.div
+//       variants={fadeUp}
+//       className="relative mt-9 overflow-hidden rounded-[28px] border border-white/10 bg-[radial-gradient(circle_at_88%_50%,rgba(181,255,61,0.12),transparent_34%),radial-gradient(circle_at_8%_20%,rgba(13,90,110,0.16),transparent_36%),linear-gradient(120deg,#07111F_0%,#0B1426_50%,#0B2118_100%)] p-6 shadow-[0_28px_80px_-30px_rgba(7,17,31,0.55)] md:p-8 lg:p-9"
+//     >
+//       <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+//       <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_1.25fr_0.7fr] lg:items-center">
+//         <Collage />
+
+//         <div>
+//           <span className="inline-flex items-center gap-2 rounded-full bg-[#B5FF3D]/12 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-[#B5FF3D] ring-1 ring-inset ring-[#B5FF3D]/25">
+//             <Video className="h-3.5 w-3.5" strokeWidth={2.3} aria-hidden />
+//             Video Stories
+//           </span>
+
+//           <h3 className="mt-4 text-[28px] font-extrabold leading-tight tracking-[-0.03em] text-white md:text-[34px]">
+//             Student <span className="italic text-[#B5FF3D]">Success</span> Stories
+//           </h3>
+
+//           <p className="mt-3 max-w-[560px] text-[15px] leading-7 text-[#C7D1E0]">
+//             Real journeys, real results. Watch our students share their
+//             experiences, challenges, and how Kota Academy helped them reach their
+//             goals.
+//           </p>
+
+//           <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2.5">
+//             {storyChips.map((chip) => {
+//               const Icon = chip.icon;
+//               return (
+//                 <span key={chip.label} className="inline-flex items-center gap-2 text-white">
+//                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#B5FF3D]/14 text-[#B5FF3D]">
+//                     <Icon className="h-4 w-4" strokeWidth={2.3} aria-hidden />
+//                   </span>
+//                   <span className="text-[13px] font-medium">{chip.label}</span>
+//                 </span>
+//               );
+//             })}
+//           </div>
+//         </div>
+
+//         <div className="flex flex-col items-start lg:items-end">
+//           <a
+//             href="#"
+//             className="group inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 text-[15px] font-bold tracking-[-0.01em] text-[#0B1B33] shadow-[0_16px_36px_-14px_rgba(0,0,0,0.45)] transition-transform duration-300 hover:-translate-y-0.5"
+//           >
+//             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[linear-gradient(135deg,#B5FF3D,#56AD12)] text-white">
+//               <Play className="ml-0.5 h-4 w-4 fill-white" strokeWidth={2} aria-hidden />
+//             </span>
+//             Watch Stories
+//             <ArrowRight
+//               className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+//               strokeWidth={2.4}
+//               aria-hidden
+//             />
+//           </a>
+//           <p className="mt-3 text-[13px] text-[#8FA0B8] lg:text-right">
+//             Videos coming soon
+//           </p>
+//         </div>
+//       </div>
+//     </motion.div>
+//   );
+// }
+
+// function Collage() {
+//   return (
+//     <div className="relative mx-auto h-[220px] w-full max-w-[340px] lg:mx-0">
+//       <div className="absolute left-0 top-3 h-[170px] w-[170px] overflow-hidden rounded-[20px] border border-white/30 shadow-[0_18px_40px_rgba(0,0,0,0.32)]">
+//         <Image src={videoImages[0]} alt="Kota Academy student story" fill sizes="200px" className="object-cover" />
+//         <div className="absolute inset-0 bg-[#07142F]/25" />
+//       </div>
+//       <div className="absolute right-2 top-0 h-[105px] w-[120px] overflow-hidden rounded-2xl border border-white/30 shadow-[0_14px_30px_rgba(0,0,0,0.3)]">
+//         <Image src={videoImages[1]} alt="Kota Academy classroom" fill sizes="140px" className="object-cover" />
+//       </div>
+//       <div className="absolute bottom-0 right-0 h-[112px] w-[128px] overflow-hidden rounded-2xl border border-white/30 shadow-[0_14px_30px_rgba(0,0,0,0.3)]">
+//         <Image src={videoImages[2]} alt="Kota Academy student feedback" fill sizes="150px" className="object-cover" />
+//       </div>
+//       <button
+//         type="button"
+//         aria-label="Play student success story video"
+//         className="absolute left-[104px] top-[92px] z-20 flex h-16 w-16 items-center justify-center rounded-full border-4 border-white bg-[#07142F]/55 text-white shadow-[0_16px_34px_rgba(0,0,0,0.4)] backdrop-blur-md transition-transform duration-300 hover:scale-105"
+//       >
+//         <Play className="ml-0.5 h-6 w-6 fill-white" strokeWidth={2} aria-hidden />
+//       </button>
+//     </div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Reassurance                                                               */
+// /* -------------------------------------------------------------------------- */
+
+// function Reassurance() {
+//   return (
+//     <motion.div variants={fadeUp} className="mt-7 flex justify-center">
+//       <div className="inline-flex max-w-[760px] items-center gap-3 rounded-full border border-[#E4E7DA] bg-white/70 px-5 py-3 text-[#5A6678] shadow-[0_1px_2px_rgba(11,27,51,0.04)] backdrop-blur-sm">
+//         <ShieldCheck className="h-5 w-5 shrink-0 text-[#3E8618]" strokeWidth={2.2} aria-hidden />
+//         <p className="text-[13px] font-medium leading-5 md:text-[14px]">
+//           Reviews are collected from students, parents and public platforms like Google.
+//         </p>
+//       </div>
+//     </motion.div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Google "G" mark                                                           */
+// /* -------------------------------------------------------------------------- */
+
+// function GoogleMark({ className = "", mono = false }: { className?: string; mono?: boolean }) {
+//   if (mono) {
+//     return (
+//       <svg viewBox="0 0 24 24" className={className} aria-hidden fill="#B5FF3D">
+//         <path d="M12 11v3.2h4.5c-.2 1.2-1.5 3.5-4.5 3.5-2.7 0-4.9-2.2-4.9-5s2.2-5 4.9-5c1.5 0 2.6.6 3.2 1.2l2.2-2.1C16.6 4.6 14.5 3.7 12 3.7 6.9 3.7 2.8 7.8 2.8 12.9S6.9 22.1 12 22.1c4.9 0 8.2-3.4 8.2-8.3 0-.6-.1-1-.2-1.5H12z" />
+//       </svg>
+//     );
+//   }
+//   return (
+//     <svg viewBox="0 0 24 24" className={className} aria-hidden>
+//       <path fill="#4285F4" d="M22.5 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2.1-2 3.2-4.9 3.2-7.9z" />
+//       <path fill="#34A853" d="M12 23c2.9 0 5.4-1 7.2-2.6l-3.6-2.7c-1 .7-2.3 1.1-3.6 1.1-2.8 0-5.1-1.9-6-4.4H2.3v2.8A10.9 10.9 0 0 0 12 23z" />
+//       <path fill="#FBBC05" d="M6 14.4a6.5 6.5 0 0 1 0-4.2V7.4H2.3a10.9 10.9 0 0 0 0 9.8L6 14.4z" />
+//       <path fill="#EA4335" d="M12 5.4c1.6 0 3 .5 4.1 1.6l3.1-3.1A10.9 10.9 0 0 0 2.3 7.4L6 10.2c.9-2.5 3.2-4.4 6-4.4z" />
+//     </svg>
+//   );
+// }
+
+
+// "use client";
+
+// import Image from "next/image";
+// import { useCallback, useEffect, useRef, useState } from "react";
+// import {
+//   AnimatePresence,
+//   motion,
+//   MotionConfig,
+//   useReducedMotion,
+//   type Variants,
+// } from "framer-motion";
+// import {
+//   ArrowRight,
+//   GraduationCap,
+//   Heart,
+//   Play,
+//   Quote,
+//   ShieldCheck,
+//   Star,
+//   UsersRound,
+//   Video,
+//   type LucideIcon,
+// } from "lucide-react";
+
+// /* -------------------------------------------------------------------------- */
+// /*  Data                                                                      */
+// /*  Student & Parent = demo (swap with verified reviews after approval).      */
+// /*  Google = real snippets + real combined rating from the GBP screenshots.   */
+// /* -------------------------------------------------------------------------- */
+
+// type ReviewType = "student" | "parent" | "google";
+
+// type Testimonial = {
+//   type: ReviewType;
+//   quote: string;
+//   author: string;
+//   context: string;
+//   focus: string;
+//   stars?: number;
+// };
+
+// const reviewTabs: { id: ReviewType; label: string; mobileLabel: string }[] = [
+//   { id: "student", label: "Student Reviews", mobileLabel: "Students" },
+//   { id: "parent", label: "Parent Reviews", mobileLabel: "Parents" },
+//   { id: "google", label: "Google Reviews", mobileLabel: "Google" },
+// ];
+
+// const testimonials: Testimonial[] = [
+//   // ---- STUDENTS (demo) ----
+//   { type: "student", quote: "Concepts became much easier to revise because doubts were cleared right after every class.", author: "Aarav Sharma", context: "JEE Aspirant · Classroom Program", focus: "Doubt Support" },
+//   { type: "student", quote: "The weekly tests showed me exactly where I was weak and what to fix before the next one.", author: "Sneha Kapoor", context: "NEET Aspirant · Classroom Program", focus: "Weekly Testing" },
+//   { type: "student", quote: "Small batches mean the teachers actually know you — it never feels like you're just a roll number.", author: "Priya Verma", context: "JEE Aspirant · Two-Year Program", focus: "Small Batches" },
+//   { type: "student", quote: "Doubt sessions after class genuinely changed how confident I feel walking into an exam.", author: "Rohan Mehta", context: "NEET Aspirant · Classroom Program", focus: "Confidence" },
+//   { type: "student", quote: "The teachers break down tough topics so simply that revision before exams barely takes time now.", author: "Ananya Iyer", context: "JEE Aspirant · Two-Year Program", focus: "Concept Clarity" },
+//   { type: "student", quote: "Regular mentoring kept me on track even when I wanted to give up midway.", author: "Karan Bhatia", context: "JEE Aspirant · Classroom Program", focus: "Mentorship" },
+//   // ---- PARENTS (demo) ----
+//   { type: "parent", quote: "Regular updates on attendance, tests and progress made the whole journey easy to follow as a parent.", author: "Mr. Rajesh Gupta", context: "Parent of a NEET Student", focus: "Parent Updates" },
+//   { type: "parent", quote: "The teachers explain patiently and give children the confidence to ask doubts without hesitation.", author: "Mrs. Anita Singh", context: "Parent of a JEE Student", focus: "Doubt Guidance" },
+//   { type: "parent", quote: "The environment is disciplined and focused — exactly what serious exam preparation needs.", author: "Mr. Sandeep Rana", context: "Parent of a Class XII Student", focus: "Discipline" },
+//   { type: "parent", quote: "What reassured me most was how reachable the faculty always were whenever I had a concern.", author: "Mrs. Kavita Joshi", context: "Parent of a NEET Student", focus: "Accessibility" },
+//   { type: "parent", quote: "My daughter's consistency improved within months — the structure here clearly works.", author: "Mr. Deepak Nair", context: "Parent of a JEE Student", focus: "Consistency" },
+//   { type: "parent", quote: "Honest guidance about my son's strengths and gaps, never any false promises.", author: "Mrs. Pooja Agarwal", context: "Parent of a Class XI Student", focus: "Honest Guidance" },
+//   // ---- GOOGLE (real snippets from GBP) ----
+//   { type: "google", quote: "Nice coaching with good teachers and a great environment.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Teaching Quality" },
+//   { type: "google", quote: "Kota Academy provides very good quality of teaching faculties.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Faculty" },
+//   { type: "google", quote: "It is the best place to study — all the teachers are very good.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Student Experience" },
+//   { type: "google", quote: "Great environment, excellent teaching and detailed concepts.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Environment" },
+//   { type: "google", quote: "Teachers are kind and friendly with students.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Supportive Faculty" },
+//   { type: "google", quote: "Bharat sir (physics teacher) is the best teacher and an inspiration for all of us.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Mentorship" },
+// ];
+
+// const GOOGLE_RATING = 4.7;
+// const GOOGLE_COUNT = 179;
+
+// const storyChips: { label: string; icon: LucideIcon }[] = [
+//   { label: "Real Experiences", icon: UsersRound },
+//   { label: "Honest Feedback", icon: Video },
+//   { label: "Inspiring Journeys", icon: Heart },
+// ];
+
+// const videoImages = [
+//   "/images/kota-academy/classroom/classroom-image-1.jpeg",
+//   "/images/kota-academy/classroom/classroom-image-2.jpg",
+//   "/images/kota-academy/classroom/image11.jpg",
+// ];
+
+// const initials = (name: string) =>
+//   name
+//     .replace(/^(Mr\.|Mrs\.|Ms\.|Dr\.)\s*/i, "")
+//     .replace(/Verified Google Review/i, "G")
+//     .split(" ")
+//     .filter(Boolean)
+//     .slice(0, 2)
+//     .map((w) => w[0]?.toUpperCase())
+//     .join("");
+
+// /* -------------------------------------------------------------------------- */
+// /*  Motion                                                                    */
+// /* -------------------------------------------------------------------------- */
+
+// const EXPO = [0.16, 1, 0.3, 1] as const;
+// const fadeUp: Variants = {
+//   hidden: { opacity: 0, y: 22 },
+//   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EXPO } },
+// };
+// const stagger: Variants = {
+//   hidden: {},
+//   visible: { transition: { staggerChildren: 0.09, delayChildren: 0.06 } },
+// };
+
+// /* -------------------------------------------------------------------------- */
+// /*  Section                                                                   */
+// /* -------------------------------------------------------------------------- */
+
+// export default function TestimonialsSection() {
+//   const [tab, setTab] = useState<ReviewType>("student");
+//   const filtered = testimonials.filter((t) => t.type === tab);
+
+//   return (
+//     <MotionConfig reducedMotion="user">
+//       <section
+//         id="testimonials"
+//         className="relative overflow-hidden bg-[#F4F8EA] py-16 text-[#0B1B33] md:py-20 lg:py-24"
+//       >
+//         <DotGridBackground />
+
+//         <motion.div
+//           className="relative z-10 mx-auto w-full max-w-[1240px] px-5 sm:px-6 lg:px-8"
+//           initial="hidden"
+//           whileInView="visible"
+//           viewport={{ once: true, margin: "-90px" }}
+//           variants={stagger}
+//         >
+//           <Header />
+//           <Tabs tab={tab} setTab={setTab} />
+//         </motion.div>
+
+//         {/* marquee lives full-bleed (outside the max-w wrapper) so it can run edge to edge */}
+//         <motion.div
+//           initial="hidden"
+//           whileInView="visible"
+//           viewport={{ once: true, margin: "-60px" }}
+//           variants={fadeUp}
+//           className="relative z-10 mt-8"
+//         >
+//           <Showcase tab={tab} items={filtered} />
+//         </motion.div>
+
+//         <motion.div
+//           className="relative z-10 mx-auto w-full max-w-[1240px] px-5 sm:px-6 lg:px-8"
+//           initial="hidden"
+//           whileInView="visible"
+//           viewport={{ once: true, margin: "-90px" }}
+//           variants={stagger}
+//         >
+//           <VideoStories />
+//           <Reassurance />
+//         </motion.div>
+//       </section>
+//     </MotionConfig>
+//   );
+// }
+
+// function DotGridBackground() {
+//   return (
+//     <>
+//       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(47,125,23,0.16)_1px,transparent_1.4px)] bg-[size:26px_26px] opacity-30" />
+//       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(62,154,18,0.5)_1px,transparent_1.5px)] bg-[size:26px_26px] [mask-image:radial-gradient(48%_42%_at_8%_10%,black,transparent_70%)]" />
+//       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(62,154,18,0.45)_1px,transparent_1.5px)] bg-[size:26px_26px] [mask-image:radial-gradient(44%_42%_at_94%_60%,black,transparent_72%)]" />
+//       <div className="pointer-events-none absolute left-1/2 top-10 h-[320px] w-[420px] -translate-x-1/2 rounded-full bg-[#B5FF3D]/12 blur-[120px]" />
+//     </>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Header                                                                    */
+// /* -------------------------------------------------------------------------- */
+
+// function Header() {
+//   return (
+//     <motion.div variants={fadeUp} className="text-center">
+//       <div className="mb-5 flex items-center justify-center gap-3">
+//         <span className="h-px w-9 bg-[#4E9417]/60" />
+//         <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#2F7D17]">
+//           Testimonials
+//         </span>
+//         <span className="h-px w-9 bg-[#4E9417]/60" />
+//       </div>
+
+//       <h2 className="mx-auto max-w-[820px] text-balance text-[30px] font-extrabold leading-[1.06] tracking-[-0.025em] text-[#0B1B33] sm:text-[38px] md:text-[46px] lg:text-[50px]">
+//         What Students &amp; Parents Say About{" "}
+//         <span className="text-[#3E9A12]">Kota Academy</span>
+//       </h2>
+
+//       <p className="mx-auto mt-5 max-w-[640px] text-[15px] leading-7 text-[#4A5670] md:text-[16px]">
+//         Real voices from students and parents who experienced the difference —
+//         better teaching, consistent support, and focused preparation.
+//       </p>
+
+//       <div className="mx-auto mt-6 inline-flex items-center gap-3 rounded-full border border-[#E4E7DA] bg-white/70 px-4 py-2 shadow-[0_1px_2px_rgba(11,27,51,0.04)] backdrop-blur-sm">
+//         <GoogleMark className="h-4 w-4" />
+//         <span className="text-[14px] font-bold text-[#0B1B33]">
+//           {GOOGLE_RATING.toFixed(1)}
+//         </span>
+//         <Stars value={5} size="sm" animate={false} />
+//         <span className="text-[13px] text-[#5A6678]">{GOOGLE_COUNT}+ Google reviews</span>
+//       </div>
+//     </motion.div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Tabs                                                                      */
+// /* -------------------------------------------------------------------------- */
+
+// function Tabs({ tab, setTab }: { tab: ReviewType; setTab: (t: ReviewType) => void }) {
+//   return (
+//     <motion.div
+//       variants={fadeUp}
+//       className="mx-auto mt-8 grid max-w-[560px] grid-cols-3 gap-1.5 rounded-2xl border border-[#E4E7DA] bg-white/70 p-1.5 shadow-[0_1px_2px_rgba(11,27,51,0.04)] backdrop-blur-xl"
+//     >
+//       {reviewTabs.map((t) => {
+//         const active = tab === t.id;
+//         return (
+//           <button
+//             key={t.id}
+//             type="button"
+//             onClick={() => setTab(t.id)}
+//             className={`relative flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-[13px] font-semibold transition-colors duration-200 md:text-[14px] ${
+//               active ? "text-white" : "text-[#5A6678] hover:text-[#0B1B33]"
+//             }`}
+//           >
+//             {active && (
+//               <motion.span
+//                 layoutId="tabPill"
+//                 transition={{ type: "spring", stiffness: 380, damping: 32 }}
+//                 className="absolute inset-0 rounded-xl bg-[#0B1B33]"
+//               />
+//             )}
+//             <span className="relative z-10 flex items-center gap-2">
+//               {t.id === "google" ? (
+//                 <GoogleMark className="h-4 w-4" mono={active} />
+//               ) : t.id === "student" ? (
+//                 <GraduationCap className={`h-4 w-4 ${active ? "text-[#B5FF3D]" : "text-[#3E8618]"}`} strokeWidth={2.2} aria-hidden />
+//               ) : (
+//                 <UsersRound className={`h-4 w-4 ${active ? "text-[#B5FF3D]" : "text-[#3E8618]"}`} strokeWidth={2.2} aria-hidden />
+//               )}
+//               <span className="hidden sm:inline">{t.label}</span>
+//               <span className="sm:hidden">{t.mobileLabel}</span>
+//             </span>
+//           </button>
+//         );
+//       })}
+//     </motion.div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Showcase — desktop dual-row marquee; mobile carousel                      */
+// /* -------------------------------------------------------------------------- */
+
+// function Showcase({ tab, items }: { tab: ReviewType; items: Testimonial[] }) {
+//   const reduce = useReducedMotion();
+
+//   // split into two rows for opposite-direction drift
+//   const mid = Math.ceil(items.length / 2);
+//   const rowA = items.slice(0, mid);
+//   const rowB = items.slice(mid).length ? items.slice(mid) : items.slice(0, mid);
+
+//   return (
+//     <>
+//       {/* desktop / tablet */}
+//       <div className="hidden md:block">
+//         {reduce ? (
+//           // reduced-motion: static grid, no drift
+//           <div className="mx-auto grid max-w-[1240px] grid-cols-3 gap-5 px-6 lg:px-8">
+//             {items.slice(0, 6).map((t, i) => (
+//               <ReviewCard key={`${tab}-${t.author}-${i}`} t={t} />
+//             ))}
+//           </div>
+//         ) : (
+//           <AnimatePresence mode="popLayout" initial={false}>
+//             <motion.div
+//               key={tab}
+//               initial={{ opacity: 0 }}
+//               animate={{ opacity: 1 }}
+//               exit={{ opacity: 0 }}
+//               transition={{ duration: 0.3, ease: EXPO }}
+//               className="relative space-y-5 [mask-image:linear-gradient(90deg,transparent,black_7%,black_93%,transparent)]"
+//             >
+//               <MarqueeRow items={rowA} direction="left" duration={42} />
+//               <MarqueeRow items={rowB} direction="right" duration={48} />
+//             </motion.div>
+//           </AnimatePresence>
+//         )}
+//       </div>
+
+//       {/* mobile carousel */}
+//       <MobileCarousel tab={tab} items={items} />
+//     </>
+//   );
+// }
+
+// function MarqueeRow({
+//   items,
+//   direction,
+//   duration,
+// }: {
+//   items: Testimonial[];
+//   direction: "left" | "right";
+//   duration: number;
+// }) {
+//   // duplicate the set so the loop is seamless
+//   const loop = [...items, ...items];
+//   return (
+//     <div className="group/marquee flex w-max gap-5 will-change-transform">
+//       <motion.div
+//         className="flex gap-5 group-hover/marquee:[animation-play-state:paused]"
+//         style={{ animation: `tmarquee-${direction} ${duration}s linear infinite` }}
+//       >
+//         {loop.map((t, i) => (
+//           <div key={`${t.author}-${i}`} className="w-[340px] shrink-0">
+//             <ReviewCard t={t} />
+//           </div>
+//         ))}
+//       </motion.div>
+
+//       <style jsx>{`
+//         @keyframes tmarquee-left {
+//           to {
+//             transform: translateX(calc(-50% - 10px));
+//           }
+//         }
+//         @keyframes tmarquee-right {
+//           from {
+//             transform: translateX(calc(-50% - 10px));
+//           }
+//           to {
+//             transform: translateX(0);
+//           }
+//         }
+//       `}</style>
+//     </div>
+//   );
+// }
+
+// function MobileCarousel({ tab, items }: { tab: ReviewType; items: Testimonial[] }) {
+//   const scrollerRef = useRef<HTMLDivElement | null>(null);
+//   const [active, setActive] = useState(0);
+
+//   const cardEls = useCallback(
+//     () => Array.from(scrollerRef.current?.querySelectorAll<HTMLElement>("[data-card]") ?? []),
+//     []
+//   );
+
+//   const onScroll = () => {
+//     const s = scrollerRef.current;
+//     if (!s) return;
+//     const center = s.getBoundingClientRect().left + s.clientWidth / 2;
+//     let best = 0;
+//     let bestDist = Infinity;
+//     cardEls().forEach((c, i) => {
+//       const r = c.getBoundingClientRect();
+//       const d = Math.abs(r.left + r.width / 2 - center);
+//       if (d < bestDist) {
+//         bestDist = d;
+//         best = i;
+//       }
+//     });
+//     setActive(best);
+//   };
+
+//   useEffect(() => {
+//     setActive(0);
+//     scrollerRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+//   }, [tab]);
+
+//   return (
+//     <div className="md:hidden">
+//       <div
+//         ref={scrollerRef}
+//         onScroll={onScroll}
+//         className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+//       >
+//         {items.map((t, i) => (
+//           <div key={`${t.author}-${i}`} data-card className="w-[86%] max-w-[400px] shrink-0 snap-center">
+//             <ReviewCard t={t} />
+//           </div>
+//         ))}
+//       </div>
+
+//       <div className="mt-5 flex items-center justify-center gap-2.5">
+//         {items.map((t, i) => (
+//           <span
+//             key={`${t.author}-dot-${i}`}
+//             className={`h-2 rounded-full transition-all duration-300 ${
+//               active === i ? "w-6 bg-[#3E9A12]" : "w-2 bg-[#C6CFC0]"
+//             }`}
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Review card — upgraded material                                           */
+// /* -------------------------------------------------------------------------- */
+
+// function ReviewCard({ t }: { t: Testimonial }) {
+//   const isGoogle = t.type === "google";
+//   const accentEdge = isGoogle ? "from-[#52A6F0] to-[#1466C2]" : "from-[#9FE34A] to-[#3E9A12]";
+//   const avatar = isGoogle
+//     ? "bg-[#F2F5FB] text-[#1466C2] ring-[#DCE6F5]"
+//     : "bg-[#EDF8DD] text-[#2C7A12] ring-[#CDEBB0]";
+
+//   return (
+//     <article className="group relative flex h-full min-h-[280px] flex-col overflow-hidden rounded-3xl border border-[#E7EADD] bg-[linear-gradient(180deg,#FFFFFF,#FBFCF7)] p-6 shadow-[0_1px_2px_rgba(11,27,51,0.04),0_18px_40px_-28px_rgba(11,27,51,0.35)] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1.5 hover:border-[#CBD8BB] hover:shadow-[0_28px_60px_-26px_rgba(16,120,40,0.45)]">
+//       {/* top accent edge */}
+//       <span className={`absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r ${accentEdge}`} />
+//       {/* inner hairline for material depth */}
+//       <span className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/60" aria-hidden />
+//       {/* focal quote glyph */}
+//       <Quote
+//         className="pointer-events-none absolute -right-2 top-3 h-20 w-20 rotate-180 fill-[#F0F6E5] text-[#F0F6E5] transition-transform duration-500 group-hover:scale-105"
+//         aria-hidden
+//       />
+
+//       <div className="relative z-10 flex items-center gap-2">
+//         <Stars value={t.stars ?? 5} />
+//         {isGoogle && (
+//           <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-[#F2F5FB] px-2 py-0.5 text-[10px] font-bold text-[#5A6678]">
+//             <GoogleMark className="h-3 w-3" /> Google
+//           </span>
+//         )}
+//       </div>
+
+//       <p className="relative z-10 mt-5 text-[15.5px] font-medium leading-[1.7] tracking-[-0.005em] text-[#1F2B40]">
+//         {t.quote}
+//       </p>
+
+//       <div className="relative z-10 mt-auto pt-6">
+//         <div className="mb-4 h-px w-full bg-[#EEF0E6]" />
+//         <div className="flex items-center gap-3">
+//           <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[14px] font-bold ring-1 ring-inset ${avatar}`} aria-hidden>
+//             {initials(t.author)}
+//           </span>
+//           <div className="min-w-0">
+//             <h3 className="truncate text-[15px] font-bold leading-tight text-[#0B1B33]">{t.author}</h3>
+//             <p className="mt-0.5 truncate text-[12.5px] text-[#5A6678]">{t.context}</p>
+//           </div>
+//           <span className="ml-auto hidden shrink-0 rounded-full bg-[#F4F8EA] px-2.5 py-1 text-[11px] font-semibold text-[#3E8618] sm:inline">
+//             {t.focus}
+//           </span>
+//         </div>
+//       </div>
+//     </article>
+//   );
+// }
+
+// function Stars({
+//   value,
+//   size = "md",
+//   animate = true,
+// }: {
+//   value: number;
+//   size?: "sm" | "md";
+//   animate?: boolean;
+// }) {
+//   const dim = size === "sm" ? "h-3.5 w-3.5" : "h-[18px] w-[18px]";
+//   return (
+//     <span className="inline-flex items-center gap-0.5">
+//       {Array.from({ length: 5 }).map((_, i) =>
+//         animate ? (
+//           <motion.span
+//             key={i}
+//             initial={{ opacity: 0, scale: 0.5 }}
+//             whileInView={{ opacity: 1, scale: 1 }}
+//             viewport={{ once: true }}
+//             transition={{ delay: 0.1 + i * 0.05, type: "spring", stiffness: 400, damping: 18 }}
+//             className="inline-flex"
+//           >
+//             <Star className={`${dim} ${i < value ? "fill-[#F5B642] text-[#F5B642]" : "fill-[#E7E9E0] text-[#E7E9E0]"}`} strokeWidth={1.6} aria-hidden />
+//           </motion.span>
+//         ) : (
+//           <Star key={i} className={`${dim} ${i < value ? "fill-[#F5B642] text-[#F5B642]" : "fill-[#E7E9E0] text-[#E7E9E0]"}`} strokeWidth={1.6} aria-hidden />
+//         )
+//       )}
+//     </span>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Video stories                                                             */
+// /* -------------------------------------------------------------------------- */
+
+// function VideoStories() {
+//   return (
+//     <motion.div
+//       variants={fadeUp}
+//       className="relative mt-9 overflow-hidden rounded-[28px] border border-white/10 bg-[radial-gradient(circle_at_88%_50%,rgba(181,255,61,0.12),transparent_34%),radial-gradient(circle_at_8%_20%,rgba(13,90,110,0.16),transparent_36%),linear-gradient(120deg,#07111F_0%,#0B1426_50%,#0B2118_100%)] p-6 shadow-[0_28px_80px_-30px_rgba(7,17,31,0.55)] md:p-8 lg:p-9"
+//     >
+//       <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+//       <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_1.25fr_0.7fr] lg:items-center">
+//         <Collage />
+
+//         <div>
+//           <span className="inline-flex items-center gap-2 rounded-full bg-[#B5FF3D]/12 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.1em] text-[#B5FF3D] ring-1 ring-inset ring-[#B5FF3D]/25">
+//             <Video className="h-3.5 w-3.5" strokeWidth={2.3} aria-hidden />
+//             Video Stories
+//           </span>
+
+//           <h3 className="mt-4 text-[28px] font-extrabold leading-tight tracking-[-0.03em] text-white md:text-[34px]">
+//             Student <span className="italic text-[#B5FF3D]">Success</span> Stories
+//           </h3>
+
+//           <p className="mt-3 max-w-[560px] text-[15px] leading-7 text-[#C7D1E0]">
+//             Real journeys, real results. Watch our students share their experiences,
+//             challenges, and how Kota Academy helped them reach their goals.
+//           </p>
+
+//           <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2.5">
+//             {storyChips.map((chip) => {
+//               const Icon = chip.icon;
+//               return (
+//                 <span key={chip.label} className="inline-flex items-center gap-2 text-white">
+//                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#B5FF3D]/14 text-[#B5FF3D]">
+//                     <Icon className="h-4 w-4" strokeWidth={2.3} aria-hidden />
+//                   </span>
+//                   <span className="text-[13px] font-medium">{chip.label}</span>
+//                 </span>
+//               );
+//             })}
+//           </div>
+//         </div>
+
+//         <div className="flex flex-col items-start lg:items-end">
+//           <a
+//             href="#"
+//             className="group inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 text-[15px] font-bold tracking-[-0.01em] text-[#0B1B33] shadow-[0_16px_36px_-14px_rgba(0,0,0,0.45)] transition-transform duration-300 hover:-translate-y-0.5"
+//           >
+//             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[linear-gradient(135deg,#B5FF3D,#56AD12)] text-white">
+//               <Play className="ml-0.5 h-4 w-4 fill-white" strokeWidth={2} aria-hidden />
+//             </span>
+//             Watch Stories
+//             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.4} aria-hidden />
+//           </a>
+//           <p className="mt-3 text-[13px] text-[#8FA0B8] lg:text-right">Videos coming soon</p>
+//         </div>
+//       </div>
+//     </motion.div>
+//   );
+// }
+
+// function Collage() {
+//   return (
+//     <div className="relative mx-auto h-[220px] w-full max-w-[340px] lg:mx-0">
+//       <div className="absolute left-0 top-3 h-[170px] w-[170px] overflow-hidden rounded-[20px] border border-white/30 shadow-[0_18px_40px_rgba(0,0,0,0.32)]">
+//         <Image src={videoImages[0]} alt="Kota Academy student story" fill sizes="200px" className="object-cover" />
+//         <div className="absolute inset-0 bg-[#07142F]/25" />
+//       </div>
+//       <div className="absolute right-2 top-0 h-[105px] w-[120px] overflow-hidden rounded-2xl border border-white/30 shadow-[0_14px_30px_rgba(0,0,0,0.3)]">
+//         <Image src={videoImages[1]} alt="Kota Academy classroom" fill sizes="140px" className="object-cover" />
+//       </div>
+//       <div className="absolute bottom-0 right-0 h-[112px] w-[128px] overflow-hidden rounded-2xl border border-white/30 shadow-[0_14px_30px_rgba(0,0,0,0.3)]">
+//         <Image src={videoImages[2]} alt="Kota Academy student feedback" fill sizes="150px" className="object-cover" />
+//       </div>
+//       <button
+//         type="button"
+//         aria-label="Play student success story video"
+//         className="absolute left-[104px] top-[92px] z-20 flex h-16 w-16 items-center justify-center rounded-full border-4 border-white bg-[#07142F]/55 text-white shadow-[0_16px_34px_rgba(0,0,0,0.4)] backdrop-blur-md transition-transform duration-300 hover:scale-105"
+//       >
+//         <Play className="ml-0.5 h-6 w-6 fill-white" strokeWidth={2} aria-hidden />
+//       </button>
+//     </div>
+//   );
+// }
+
+// function Reassurance() {
+//   return (
+//     <motion.div variants={fadeUp} className="mt-7 flex justify-center">
+//       <div className="inline-flex max-w-[760px] items-center gap-3 rounded-full border border-[#E4E7DA] bg-white/70 px-5 py-3 text-[#5A6678] shadow-[0_1px_2px_rgba(11,27,51,0.04)] backdrop-blur-sm">
+//         <ShieldCheck className="h-5 w-5 shrink-0 text-[#3E8618]" strokeWidth={2.2} aria-hidden />
+//         <p className="text-[13px] font-medium leading-5 md:text-[14px]">
+//           Reviews are collected from students, parents and public platforms like Google.
+//         </p>
+//       </div>
+//     </motion.div>
+//   );
+// }
+
+// function GoogleMark({ className = "", mono = false }: { className?: string; mono?: boolean }) {
+//   if (mono) {
+//     return (
+//       <svg viewBox="0 0 24 24" className={className} aria-hidden fill="#B5FF3D">
+//         <path d="M12 11v3.2h4.5c-.2 1.2-1.5 3.5-4.5 3.5-2.7 0-4.9-2.2-4.9-5s2.2-5 4.9-5c1.5 0 2.6.6 3.2 1.2l2.2-2.1C16.6 4.6 14.5 3.7 12 3.7 6.9 3.7 2.8 7.8 2.8 12.9S6.9 22.1 12 22.1c4.9 0 8.2-3.4 8.2-8.3 0-.6-.1-1-.2-1.5H12z" />
+//       </svg>
+//     );
+//   }
+//   return (
+//     <svg viewBox="0 0 24 24" className={className} aria-hidden>
+//       <path fill="#4285F4" d="M22.5 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2.1-2 3.2-4.9 3.2-7.9z" />
+//       <path fill="#34A853" d="M12 23c2.9 0 5.4-1 7.2-2.6l-3.6-2.7c-1 .7-2.3 1.1-3.6 1.1-2.8 0-5.1-1.9-6-4.4H2.3v2.8A10.9 10.9 0 0 0 12 23z" />
+//       <path fill="#FBBC05" d="M6 14.4a6.5 6.5 0 0 1 0-4.2V7.4H2.3a10.9 10.9 0 0 0 0 9.8L6 14.4z" />
+//       <path fill="#EA4335" d="M12 5.4c1.6 0 3 .5 4.1 1.6l3.1-3.1A10.9 10.9 0 0 0 2.3 7.4L6 10.2c.9-2.5 3.2-4.4 6-4.4z" />
+//     </svg>
+//   );
+// }
+
+
 "use client";
 
 import Image from "next/image";
@@ -711,7 +1968,6 @@ import {
   GraduationCap,
   Heart,
   Play,
-  Quote,
   ShieldCheck,
   Star,
   UsersRound,
@@ -733,7 +1989,7 @@ type Testimonial = {
   author: string;
   context: string;
   focus: string;
-  stars?: number; // defaults to 5
+  stars?: number;
 };
 
 const reviewTabs: { id: ReviewType; label: string; mobileLabel: string }[] = [
@@ -744,84 +2000,30 @@ const reviewTabs: { id: ReviewType; label: string; mobileLabel: string }[] = [
 
 const testimonials: Testimonial[] = [
   // ---- STUDENTS (demo) ----
-  {
-    type: "student",
-    quote:
-      "Concepts became much easier to revise because doubts were cleared right after every class.",
-    author: "Aarav Sharma",
-    context: "JEE Aspirant · Classroom Program",
-    focus: "Doubt Support",
-  },
-  {
-    type: "student",
-    quote:
-      "The weekly tests showed me exactly where I was weak and what to fix before the next one.",
-    author: "Sneha Kapoor",
-    context: "NEET Aspirant · Classroom Program",
-    focus: "Weekly Testing",
-  },
-  {
-    type: "student",
-    quote:
-      "Small batches mean the teachers actually know you — it never feels like you're just a roll number.",
-    author: "Priya Verma",
-    context: "JEE Aspirant · Two-Year Program",
-    focus: "Small Batches",
-  },
+  { type: "student", quote: "Concepts became much easier to revise because doubts were cleared right after every class.", author: "Aarav Sharma", context: "JEE Aspirant · Classroom Program", focus: "Doubt Support" },
+  { type: "student", quote: "The weekly tests showed me exactly where I was weak and what to fix before the next one.", author: "Sneha Kapoor", context: "NEET Aspirant · Classroom Program", focus: "Weekly Testing" },
+  { type: "student", quote: "Small batches mean the teachers actually know you — it never feels like you're just a roll number.", author: "Priya Verma", context: "JEE Aspirant · Two-Year Program", focus: "Small Batches" },
+  { type: "student", quote: "Doubt sessions after class genuinely changed how confident I feel walking into an exam.", author: "Rohan Mehta", context: "NEET Aspirant · Classroom Program", focus: "Confidence" },
+  { type: "student", quote: "The teachers break down tough topics so simply that revision before exams barely takes time now.", author: "Ananya Iyer", context: "JEE Aspirant · Two-Year Program", focus: "Concept Clarity" },
+  { type: "student", quote: "Regular mentoring kept me on track even when I wanted to give up midway.", author: "Karan Bhatia", context: "JEE Aspirant · Classroom Program", focus: "Mentorship" },
   // ---- PARENTS (demo) ----
-  {
-    type: "parent",
-    quote:
-      "Regular updates on attendance, tests and progress made the whole journey easy to follow as a parent.",
-    author: "Mr. Rajesh Gupta",
-    context: "Parent of a NEET Student",
-    focus: "Parent Updates",
-  },
-  {
-    type: "parent",
-    quote:
-      "The teachers explain patiently and give children the confidence to ask doubts without hesitation.",
-    author: "Mrs. Anita Singh",
-    context: "Parent of a JEE Student",
-    focus: "Doubt Guidance",
-  },
-  {
-    type: "parent",
-    quote:
-      "The environment is disciplined and focused — exactly what serious exam preparation needs.",
-    author: "Mr. Sandeep Rana",
-    context: "Parent of a Class XII Student",
-    focus: "Discipline",
-  },
+  { type: "parent", quote: "Regular updates on attendance, tests and progress made the whole journey easy to follow as a parent.", author: "Mr. Rajesh Gupta", context: "Parent of a NEET Student", focus: "Parent Updates" },
+  { type: "parent", quote: "The teachers explain patiently and give children the confidence to ask doubts without hesitation.", author: "Mrs. Anita Singh", context: "Parent of a JEE Student", focus: "Doubt Guidance" },
+  { type: "parent", quote: "The environment is disciplined and focused — exactly what serious exam preparation needs.", author: "Mr. Sandeep Rana", context: "Parent of a Class XII Student", focus: "Discipline" },
+  { type: "parent", quote: "What reassured me most was how reachable the faculty always were whenever I had a concern.", author: "Mrs. Kavita Joshi", context: "Parent of a NEET Student", focus: "Accessibility" },
+  { type: "parent", quote: "My daughter's consistency improved within months — the structure here clearly works.", author: "Mr. Deepak Nair", context: "Parent of a JEE Student", focus: "Consistency" },
+  { type: "parent", quote: "Honest guidance about my son's strengths and gaps, never any false promises.", author: "Mrs. Pooja Agarwal", context: "Parent of a Class XI Student", focus: "Honest Guidance" },
   // ---- GOOGLE (real snippets from GBP) ----
-  {
-    type: "google",
-    quote:
-      "Nice coaching with good teachers and a great environment.",
-    author: "Verified Google Review",
-    context: "Kota Academy · Greater Noida",
-    focus: "Teaching Quality",
-  },
-  {
-    type: "google",
-    quote:
-      "Kota Academy provides very good quality of teaching faculties.",
-    author: "Verified Google Review",
-    context: "Kota Academy · Greater Noida",
-    focus: "Faculty",
-  },
-  {
-    type: "google",
-    quote:
-      "It is the best place to study — all the teachers are very good.",
-    author: "Verified Google Review",
-    context: "Kota Academy · Greater Noida",
-    focus: "Student Experience",
-  },
+  { type: "google", quote: "Nice coaching with good teachers and a great environment.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Teaching Quality" },
+  { type: "google", quote: "Kota Academy provides very good quality of teaching faculties.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Faculty" },
+  { type: "google", quote: "It is the best place to study — all the teachers are very good.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Student Experience" },
+  { type: "google", quote: "Great environment, excellent teaching and detailed concepts.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Environment" },
+  { type: "google", quote: "Teachers are kind and friendly with students.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Supportive Faculty" },
+  { type: "google", quote: "Bharat sir (physics teacher) is the best teacher and an inspiration for all of us.", author: "Verified Google Review", context: "Kota Academy · Greater Noida", focus: "Mentorship" },
 ];
 
-const GOOGLE_RATING = 4.7; // combined, weighted across both branches
-const GOOGLE_COUNT = 179; // 157 + 22
+const GOOGLE_RATING = 4.7;
+const GOOGLE_COUNT = 179;
 
 const storyChips: { label: string; icon: LucideIcon }[] = [
   { label: "Real Experiences", icon: UsersRound },
@@ -835,7 +2037,6 @@ const videoImages = [
   "/images/kota-academy/classroom/image11.jpg",
 ];
 
-/* monogram from a name */
 const initials = (name: string) =>
   name
     .replace(/^(Mr\.|Mrs\.|Ms\.|Dr\.)\s*/i, "")
@@ -885,7 +2086,26 @@ export default function TestimonialsSection() {
         >
           <Header />
           <Tabs tab={tab} setTab={setTab} />
+        </motion.div>
+
+        {/* testimonial marquee */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          variants={fadeUp}
+          className="relative z-10 mt-8"
+        >
           <Showcase tab={tab} items={filtered} />
+        </motion.div>
+
+        <motion.div
+          className="relative z-10 mx-auto w-full max-w-[1240px] px-5 sm:px-6 lg:px-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-90px" }}
+          variants={stagger}
+        >
           <VideoStories />
           <Reassurance />
         </motion.div>
@@ -930,16 +2150,13 @@ function Header() {
         better teaching, consistent support, and focused preparation.
       </p>
 
-      {/* live Google rating summary */}
       <div className="mx-auto mt-6 inline-flex items-center gap-3 rounded-full border border-[#E4E7DA] bg-white/70 px-4 py-2 shadow-[0_1px_2px_rgba(11,27,51,0.04)] backdrop-blur-sm">
         <GoogleMark className="h-4 w-4" />
         <span className="text-[14px] font-bold text-[#0B1B33]">
           {GOOGLE_RATING.toFixed(1)}
         </span>
-        <Stars value={5} size="sm" />
-        <span className="text-[13px] text-[#5A6678]">
-          {GOOGLE_COUNT}+ Google reviews
-        </span>
+        <Stars value={5} size="sm" animate={false} />
+        <span className="text-[13px] text-[#5A6678]">{GOOGLE_COUNT}+ Google reviews</span>
       </div>
     </motion.div>
   );
@@ -949,13 +2166,7 @@ function Header() {
 /*  Tabs                                                                      */
 /* -------------------------------------------------------------------------- */
 
-function Tabs({
-  tab,
-  setTab,
-}: {
-  tab: ReviewType;
-  setTab: (t: ReviewType) => void;
-}) {
+function Tabs({ tab, setTab }: { tab: ReviewType; setTab: (t: ReviewType) => void }) {
   return (
     <motion.div
       variants={fadeUp}
@@ -983,17 +2194,9 @@ function Tabs({
               {t.id === "google" ? (
                 <GoogleMark className="h-4 w-4" mono={active} />
               ) : t.id === "student" ? (
-                <GraduationCap
-                  className={`h-4 w-4 ${active ? "text-[#B5FF3D]" : "text-[#3E8618]"}`}
-                  strokeWidth={2.2}
-                  aria-hidden
-                />
+                <GraduationCap className={`h-4 w-4 ${active ? "text-[#B5FF3D]" : "text-[#3E8618]"}`} strokeWidth={2.2} aria-hidden />
               ) : (
-                <UsersRound
-                  className={`h-4 w-4 ${active ? "text-[#B5FF3D]" : "text-[#3E8618]"}`}
-                  strokeWidth={2.2}
-                  aria-hidden
-                />
+                <UsersRound className={`h-4 w-4 ${active ? "text-[#B5FF3D]" : "text-[#3E8618]"}`} strokeWidth={2.2} aria-hidden />
               )}
               <span className="hidden sm:inline">{t.label}</span>
               <span className="sm:hidden">{t.mobileLabel}</span>
@@ -1006,51 +2209,107 @@ function Tabs({
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Showcase                                                                  */
+/*  Showcase — desktop dual-row marquee; mobile carousel                      */
 /* -------------------------------------------------------------------------- */
 
 function Showcase({ tab, items }: { tab: ReviewType; items: Testimonial[] }) {
+  const mid = Math.ceil(items.length / 2);
+  const rowA = items.slice(0, mid);
+  const rowB = items.slice(mid).length >= 2 ? items.slice(mid) : items;
+
   return (
-    <motion.div variants={fadeUp} className="mt-8">
-      {/* desktop / tablet grid with cross-fade on tab change */}
-      <div className="hidden md:block">
-        <AnimatePresence mode="wait">
+    <>
+      {/* desktop / tablet — two opposite infinite rows (slow drift) */}
+      <div className="relative hidden md:block">
+        <EdgeFades />
+        <AnimatePresence mode="popLayout" initial={false}>
           <motion.div
             key={tab}
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.35, ease: EXPO }}
-            className="grid grid-cols-3 gap-5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: EXPO }}
+            className="space-y-4"
           >
-            {items.slice(0, 3).map((t, i) => (
-              <ReviewCard key={`${t.author}-${i}`} t={t} index={i} />
-            ))}
+            <MarqueeRow items={rowA} direction="left" duration={64} cardWidth={316} />
+            <MarqueeRow items={rowB} direction="right" duration={72} cardWidth={316} />
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* mobile carousel */}
+      {/* mobile — auto-advancing snap carousel with dots */}
       <MobileCarousel tab={tab} items={items} />
-    </motion.div>
+    </>
   );
 }
 
-function MobileCarousel({
-  tab,
+function EdgeFades() {
+  return (
+    <>
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-12 bg-gradient-to-r from-[#F4F8EA] to-transparent md:w-24" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-12 bg-gradient-to-l from-[#F4F8EA] to-transparent md:w-24" />
+    </>
+  );
+}
+
+function MarqueeRow({
   items,
+  direction,
+  duration,
+  cardWidth,
 }: {
-  tab: ReviewType;
   items: Testimonial[];
+  direction: "left" | "right";
+  duration: number;
+  cardWidth: number;
 }) {
+  const base = items.length >= 4 ? items : [...items, ...items];
+  const half = [...base, ...base];
+  const track = [...half, ...half];
+
+  return (
+    <div className="group/row flex overflow-hidden">
+      <div
+        className="flex w-max shrink-0 group-hover/row:[animation-play-state:paused] motion-reduce:[animation:none]"
+        style={{ animation: `tmarquee-${direction} ${duration}s linear infinite` }}
+      >
+        {track.map((t, i) => (
+          <div key={`${t.author}-${i}`} className="shrink-0 pr-4" style={{ width: cardWidth }}>
+            <ReviewCard t={t} />
+          </div>
+        ))}
+      </div>
+
+      <style jsx>{`
+        @keyframes tmarquee-left {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-50%);
+          }
+        }
+        @keyframes tmarquee-right {
+          from {
+            transform: translateX(-50%);
+          }
+          to {
+            transform: translateX(0);
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function MobileCarousel({ tab, items }: { tab: ReviewType; items: Testimonial[] }) {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
   const [active, setActive] = useState(0);
+  const pausedRef = useRef(false);
+  const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const cardEls = useCallback(
-    () =>
-      Array.from(
-        scrollerRef.current?.querySelectorAll<HTMLElement>("[data-card]") ?? []
-      ),
+    () => Array.from(scrollerRef.current?.querySelectorAll<HTMLElement>("[data-card]") ?? []),
     []
   );
 
@@ -1071,33 +2330,69 @@ function MobileCarousel({
     setActive(best);
   };
 
+  const goTo = (i: number) =>
+    cardEls()[i]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+
+  // pause auto-advance briefly on interaction, then resume
+  const pause = () => {
+    pausedRef.current = true;
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(() => {
+      pausedRef.current = false;
+    }, 6000);
+  };
+
+  // reset to first card when tab changes
   useEffect(() => {
     setActive(0);
     scrollerRef.current?.scrollTo({ left: 0, behavior: "smooth" });
   }, [tab]);
+
+  // auto-advance card by card
+  useEffect(() => {
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+
+    const id = setInterval(() => {
+      if (pausedRef.current) return;
+      setActive((prev) => {
+        const next = (prev + 1) % items.length;
+        cardEls()[next]?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        return next;
+      });
+    }, 3200);
+
+    return () => clearInterval(id);
+  }, [items.length, cardEls]);
 
   return (
     <div className="md:hidden">
       <div
         ref={scrollerRef}
         onScroll={onScroll}
+        onPointerDown={pause}
+        onTouchStart={pause}
         className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map((t, i) => (
-          <div
-            key={`${t.author}-${i}`}
-            data-card
-            className="w-[86%] max-w-[400px] shrink-0 snap-center"
-          >
-            <ReviewCard t={t} index={i} />
+          <div key={`${t.author}-${i}`} data-card className="w-[82%] max-w-[360px] shrink-0 snap-center">
+            <ReviewCard t={t} />
           </div>
         ))}
       </div>
 
       <div className="mt-5 flex items-center justify-center gap-2.5">
         {items.map((t, i) => (
-          <span
+          <button
             key={`${t.author}-dot-${i}`}
+            type="button"
+            aria-label={`View review ${i + 1}`}
+            onClick={() => {
+              pause();
+              goTo(i);
+            }}
             className={`h-2 rounded-full transition-all duration-300 ${
               active === i ? "w-6 bg-[#3E9A12]" : "w-2 bg-[#C6CFC0]"
             }`}
@@ -1109,107 +2404,77 @@ function MobileCarousel({
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Review card                                                               */
+/*  Review card — upgraded material                                           */
 /* -------------------------------------------------------------------------- */
 
-function ReviewCard({ t, index }: { t: Testimonial; index: number }) {
+function ReviewCard({ t }: { t: Testimonial }) {
   const isGoogle = t.type === "google";
+  const avatar = isGoogle
+    ? "bg-[#F2F5FB] text-[#1466C2] ring-[#DCE6F5]"
+    : "bg-[#EDF8DD] text-[#2C7A12] ring-[#CDEBB0]";
 
   return (
-    <motion.article
-      variants={fadeUp}
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.25, ease: "easeOut" }}
-      className="group relative flex h-full min-h-[300px] flex-col overflow-hidden rounded-3xl border border-[#E4E7DA] bg-white p-6 shadow-[0_1px_2px_rgba(11,27,51,0.04)] transition-[box-shadow,border-color] duration-300 hover:border-[#CBD8BB] hover:shadow-[0_24px_55px_-26px_rgba(16,120,40,0.4)]"
-    >
-      {/* soft quote glyph */}
-      <Quote
-        className="pointer-events-none absolute right-5 top-5 h-12 w-12 rotate-180 fill-[#EDF6DE] text-[#EDF6DE]"
-        aria-hidden
-      />
-
-      <div className="relative z-10 flex items-center gap-2">
-        <Stars value={t.stars ?? 5} delayBase={index} />
-        {isGoogle && (
-          <span className="ml-1 inline-flex items-center gap-1 rounded-full bg-[#F2F5FB] px-2 py-0.5 text-[10px] font-bold text-[#5A6678]">
-            <GoogleMark className="h-3 w-3" /> Google
-          </span>
-        )}
+    <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[#E7EADD] bg-white p-4 shadow-[0_1px_2px_rgba(11,27,51,0.04),0_10px_24px_-22px_rgba(11,27,51,0.35)] transition-[box-shadow,border-color,transform] duration-300 hover:-translate-y-1 hover:border-[#CBD8BB] hover:shadow-[0_20px_42px_-26px_rgba(16,120,40,0.45)]">
+      {/* header: avatar + identity, stars on the right */}
+      <div className="flex items-center gap-2.5">
+        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[12px] font-bold ring-1 ring-inset ${avatar}`} aria-hidden>
+          {initials(t.author)}
+        </span>
+        <div className="min-w-0 flex-1">
+          <h3 className="flex items-center gap-1.5 truncate text-[13.5px] font-bold leading-tight text-[#0B1B33]">
+            {t.author}
+            {isGoogle && <GoogleMark className="h-3.5 w-3.5 shrink-0" />}
+          </h3>
+          <p className="mt-0.5 truncate text-[11px] text-[#5A6678]">{t.context}</p>
+        </div>
+        <Stars value={t.stars ?? 5} size="sm" />
       </div>
 
-      <p className="relative z-10 mt-5 text-[15.5px] font-medium leading-[1.7] tracking-[-0.005em] text-[#1F2B40] md:text-[16px]">
-        {t.quote}
+      <p className="mt-2.5 text-[13px] font-medium leading-[1.55] tracking-[-0.005em] text-[#1F2B40]">
+        “{t.quote}”
       </p>
 
-      <div className="relative z-10 mt-auto pt-6">
-        <div className="mb-4 h-px w-full bg-[#EEF0E6]" />
-        <div className="flex items-center gap-3">
-          <span
-            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[14px] font-bold ${
-              isGoogle
-                ? "bg-[#F2F5FB] text-[#1466C2] ring-1 ring-inset ring-[#DCE6F5]"
-                : "bg-[#EDF8DD] text-[#2C7A12] ring-1 ring-inset ring-[#CDEBB0]"
-            }`}
-            aria-hidden
-          >
-            {initials(t.author)}
-          </span>
-          <div className="min-w-0">
-            <h3 className="truncate text-[15px] font-bold leading-tight text-[#0B1B33]">
-              {t.author}
-            </h3>
-            <p className="mt-0.5 truncate text-[12.5px] text-[#5A6678]">
-              {t.context}
-            </p>
-          </div>
-          <span className="ml-auto hidden shrink-0 rounded-full bg-[#F4F8EA] px-2.5 py-1 text-[11px] font-semibold text-[#3E8618] sm:inline">
-            {t.focus}
-          </span>
-        </div>
-      </div>
-    </motion.article>
+      <span className="mt-3 inline-flex w-fit items-center rounded-full bg-[#F4F8EA] px-2.5 py-0.5 text-[10px] font-semibold text-[#3E8618]">
+        {t.focus}
+      </span>
+    </article>
   );
 }
 
 function Stars({
   value,
   size = "md",
-  delayBase = 0,
+  animate = true,
 }: {
   value: number;
   size?: "sm" | "md";
-  delayBase?: number;
+  animate?: boolean;
 }) {
   const dim = size === "sm" ? "h-3.5 w-3.5" : "h-[18px] w-[18px]";
   return (
     <span className="inline-flex items-center gap-0.5">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, scale: 0.5 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{
-            delay: 0.15 + delayBase * 0.04 + i * 0.05,
-            type: "spring",
-            stiffness: 400,
-            damping: 18,
-          }}
-          className="inline-flex"
-        >
-          <Star
-            className={`${dim} ${i < value ? "fill-[#F5B642] text-[#F5B642]" : "fill-[#E7E9E0] text-[#E7E9E0]"}`}
-            strokeWidth={1.6}
-            aria-hidden
-          />
-        </motion.span>
-      ))}
+      {Array.from({ length: 5 }).map((_, i) =>
+        animate ? (
+          <motion.span
+            key={i}
+            initial={{ opacity: 0, scale: 0.5 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 + i * 0.05, type: "spring", stiffness: 400, damping: 18 }}
+            className="inline-flex"
+          >
+            <Star className={`${dim} ${i < value ? "fill-[#F5B642] text-[#F5B642]" : "fill-[#E7E9E0] text-[#E7E9E0]"}`} strokeWidth={1.6} aria-hidden />
+          </motion.span>
+        ) : (
+          <Star key={i} className={`${dim} ${i < value ? "fill-[#F5B642] text-[#F5B642]" : "fill-[#E7E9E0] text-[#E7E9E0]"}`} strokeWidth={1.6} aria-hidden />
+        )
+      )}
     </span>
   );
 }
 
 /* -------------------------------------------------------------------------- */
-/*  Video stories panel                                                       */
+/*  Video stories                                                             */
 /* -------------------------------------------------------------------------- */
 
 function VideoStories() {
@@ -1234,9 +2499,8 @@ function VideoStories() {
           </h3>
 
           <p className="mt-3 max-w-[560px] text-[15px] leading-7 text-[#C7D1E0]">
-            Real journeys, real results. Watch our students share their
-            experiences, challenges, and how Kota Academy helped them reach their
-            goals.
+            Real journeys, real results. Watch our students share their experiences,
+            challenges, and how Kota Academy helped them reach their goals.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2.5">
@@ -1263,15 +2527,9 @@ function VideoStories() {
               <Play className="ml-0.5 h-4 w-4 fill-white" strokeWidth={2} aria-hidden />
             </span>
             Watch Stories
-            <ArrowRight
-              className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
-              strokeWidth={2.4}
-              aria-hidden
-            />
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.4} aria-hidden />
           </a>
-          <p className="mt-3 text-[13px] text-[#8FA0B8] lg:text-right">
-            Videos coming soon
-          </p>
+          <p className="mt-3 text-[13px] text-[#8FA0B8] lg:text-right">Videos coming soon</p>
         </div>
       </div>
     </motion.div>
@@ -1302,10 +2560,6 @@ function Collage() {
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Reassurance                                                               */
-/* -------------------------------------------------------------------------- */
-
 function Reassurance() {
   return (
     <motion.div variants={fadeUp} className="mt-7 flex justify-center">
@@ -1318,10 +2572,6 @@ function Reassurance() {
     </motion.div>
   );
 }
-
-/* -------------------------------------------------------------------------- */
-/*  Google "G" mark                                                           */
-/* -------------------------------------------------------------------------- */
 
 function GoogleMark({ className = "", mono = false }: { className?: string; mono?: boolean }) {
   if (mono) {
