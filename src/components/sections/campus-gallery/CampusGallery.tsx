@@ -2476,7 +2476,7 @@ function MoreTile() {
         <p className="mt-3 text-[28px] font-extrabold leading-none text-[#0A2410]">+{moreCount}</p>
         <p className="mt-1.5 text-[12.5px] font-bold text-[#13340A]">More moments</p>
         <span className="mt-3 inline-flex items-center gap-1 text-[11px] font-bold text-[#13340A] transition-transform duration-300 group-hover:translate-x-0.5">
-          View full gallery
+          View Full Gallery
           <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.4} aria-hidden />
         </span>
       </div>
@@ -2534,8 +2534,12 @@ function MobileWall({ onOpen }: { onOpen: (i: number) => void }) {
         className="mt-3 flex items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#C8FF55,#5FB016)] px-4 py-3.5 text-[#0A2410] shadow-[0_16px_36px_-18px_rgba(78,156,19,0.7)]"
       >
         <ImageIcon className="h-5 w-5 text-[#0A2410]" strokeWidth={2} aria-hidden />
-        <span className="text-[14px] font-bold">
+        {/* <span className="text-[14px] font-bold">
           +{moreCount} more moments — view full gallery
+        </span> */}
+
+         <span className="text-[14px] font-bold">
+         View Full Gallery
         </span>
         <ArrowRight className="h-4 w-4 text-[#0A2410]" strokeWidth={2.4} aria-hidden />
       </Link>
