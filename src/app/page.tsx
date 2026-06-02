@@ -1,3 +1,4 @@
+import KotaAcademyCampusGallery from "@/components/sections/campus-gallery/CampusGallery";
 import { CoursesSection } from "@/components/sections/courses";
 // import CoursesSection from "@/components/sections/courses-2/CoursesSection";
 import CredibilityStrip from "@/components/sections/CreadibilityStrip";
@@ -33,6 +34,7 @@ export default function HomePage() {
       {/* <UspSection/> */}
       <KotaAcademyFacultySection/>
       <KotaAcademyTestimonialsSection/>
+      <KotaAcademyCampusGallery/>
       
     </main>
   );
