@@ -2156,7 +2156,7 @@ const galleryImages: GalleryImage[] = [
   },
   {
     id: "test-practice",
-    src: "/images/kota-academy/gallery/image6.jpeg",
+    src: "/images/kota-academy/gallery/image1.jpeg",
     alt: "Students writing a weekly test at Kota Academy",
     label: "Weekly Testing",
     caption: "Regular tests, tracked",
@@ -2165,7 +2165,7 @@ const galleryImages: GalleryImage[] = [
   },
   {
     id: "achievement-moments",
-    src: "/images/kota-academy/gallery/image1.jpeg",
+    src: "/images/kota-academy/gallery/image5.jpeg",
     alt: "Students felicitated at a Kota Academy achievement ceremony",
     label: "Achievement Day",
     caption: "Felicitating our toppers",
@@ -2202,7 +2202,7 @@ const galleryImages: GalleryImage[] = [
   },
   {
     id: "student-group",
-    src: "/images/kota-academy/gallery/image8.jpeg",
+    src: "/images/kota-academy/gallery/image4.jpeg",
     alt: "Kota Academy students together in uniform",
     label: "Student Life",
     caption: "Learning together, with discipline",
@@ -2273,11 +2273,12 @@ export default function CampusGallery() {
           variants={stagger}
         >
           <Header />
+          <JourneyRibbon />
           <DesktopWall onOpen={setLightboxIndex} />
           <MobileWall onOpen={setLightboxIndex} />
         </motion.div>
 
-        <Lightbox index={lightboxIndex} onClose={close} onPrev={prev} onNext={next} />
+        <Lightbox index={lightboxIndex} onClose={close} onPrev={prev} onNext={next} onSelect={setLightboxIndex} />
       </section>
     </MotionConfig>
   );
@@ -2324,6 +2325,28 @@ function Header() {
 }
 
 /* -------------------------------------------------------------------------- */
+/*  Journey ribbon — makes the wall's Campus→…→Achievement order intentional   */
+/* -------------------------------------------------------------------------- */
+
+function JourneyRibbon() {
+  const stages = ["Campus", "Classroom", "Faculty", "Testing", "Achievement"];
+  return (
+    <motion.div variants={fadeUp} className="mt-7 flex justify-center">
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-full border border-[#E4E7DA] bg-white/60 px-4 py-2 backdrop-blur-sm">
+        {stages.map((s, i) => (
+          <div key={s} className="flex items-center gap-3">
+            <span className="text-[12px] font-semibold tracking-[-0.005em] text-[#3C4860]">{s}</span>
+            {i !== stages.length - 1 && (
+              <span className="h-1 w-1 rounded-full bg-[#9BBE7F]" aria-hidden />
+            )}
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*  Desktop bento wall (lg+)                                                  */
 /* -------------------------------------------------------------------------- */
 
@@ -2334,27 +2357,25 @@ function GalleryImg({
   img,
   sizes,
   priority = false,
+  layoutId,
 }: {
   img: GalleryImage;
   sizes: string;
   priority?: boolean;
+  layoutId?: string;
 }) {
   const [failed, setFailed] = useState(false);
 
-  if (failed) {
-    return (
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[radial-gradient(circle_at_50%_35%,#13283C,#0A1726)] text-center">
-        <Camera className="h-6 w-6 text-white/35" strokeWidth={1.8} aria-hidden />
-        <span className="px-3 text-[11px] font-medium text-white/45">
-          {img.label}
-          <br />
-          photo coming soon
-        </span>
-      </div>
-    );
-  }
-
-  return (
+  const inner = failed ? (
+    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-[radial-gradient(circle_at_50%_35%,#13283C,#0A1726)] text-center">
+      <Camera className="h-6 w-6 text-white/35" strokeWidth={1.8} aria-hidden />
+      <span className="px-3 text-[11px] font-medium text-white/45">
+        {img.label}
+        <br />
+        photo coming soon
+      </span>
+    </div>
+  ) : (
     <Image
       src={img.src}
       alt={img.alt}
@@ -2365,6 +2386,15 @@ function GalleryImg({
       priority={priority}
     />
   );
+
+  if (layoutId) {
+    return (
+      <motion.div layoutId={layoutId} className="absolute inset-0">
+        {inner}
+      </motion.div>
+    );
+  }
+  return inner;
 }
 
 function DesktopWall({ onOpen }: { onOpen: (i: number) => void }) {
@@ -2398,13 +2428,18 @@ function Tile({
       aria-label={`Open ${img.label}`}
       className={`group relative overflow-hidden rounded-2xl bg-[#0B1B33] text-left outline-none ring-offset-2 transition-transform duration-300 hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-[#8AD31D] ${img.span}`}
     >
-      <GalleryImg img={img} sizes="(max-width: 1280px) 40vw, 30vw" priority={index === 0} />
+      <GalleryImg img={img} sizes="(max-width: 1280px) 40vw, 30vw" priority={index === 0} layoutId={`tile-${img.id}`} />
+
+      {/* inner hairline for material depth */}
+      <span className="pointer-events-none absolute inset-0 z-10 rounded-2xl ring-1 ring-inset ring-white/10" aria-hidden />
 
       {img.showLabelOnTile ? (
         <>
           {/* captioned hero/large tile */}
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(7,21,33,0.82)_100%)]" />
-          <div className="absolute inset-x-0 bottom-0 p-4 text-white">
+          <div className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(180deg,transparent_42%,rgba(7,21,33,0.85)_100%)]" />
+          {/* thin lime accent above caption */}
+          <div className="absolute inset-x-0 bottom-0 z-10 p-4 text-white">
+            <span className="mb-2 block h-0.5 w-7 rounded-full bg-[#B5FF3D]" aria-hidden />
             <h3 className="text-[15px] font-bold leading-tight tracking-[-0.01em] md:text-[16px]">
               {img.label}
             </h3>
@@ -2414,8 +2449,8 @@ function Tile({
       ) : (
         /* quiet supporting tile — label only on hover */
         <>
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_60%,rgba(7,21,33,0.7)_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          <div className="absolute inset-x-0 bottom-0 translate-y-1 p-4 text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(180deg,transparent_60%,rgba(7,21,33,0.72)_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div className="absolute inset-x-0 bottom-0 z-10 translate-y-1 p-4 text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
             <h3 className="text-[14px] font-bold leading-tight">{img.label}</h3>
           </div>
         </>
@@ -2466,7 +2501,7 @@ function MobileWall({ onOpen }: { onOpen: (i: number) => void }) {
         aria-label={`Open ${featured.label}`}
         className="group relative block aspect-[1.3/1] w-full overflow-hidden rounded-2xl bg-[#0B1B33] text-left"
       >
-        <GalleryImg img={featured} sizes="100vw" priority />
+        <GalleryImg img={featured} sizes="100vw" priority layoutId={`tile-${featured.id}`} />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(7,21,33,0.82)_100%)]" />
         <div className="absolute inset-x-0 bottom-0 p-4 text-white">
           <h3 className="text-[16px] font-bold leading-tight">{featured.label}</h3>
@@ -2484,7 +2519,7 @@ function MobileWall({ onOpen }: { onOpen: (i: number) => void }) {
             aria-label={`Open ${img.label}`}
             className="group relative aspect-[1.2/1] overflow-hidden rounded-2xl bg-[#0B1B33] text-left"
           >
-            <GalleryImg img={img} sizes="50vw" />
+            <GalleryImg img={img} sizes="50vw" layoutId={`tile-${img.id}`} />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(7,21,33,0.75)_100%)]" />
             <div className="absolute inset-x-0 bottom-0 p-2.5 text-white">
               <h3 className="text-[12px] font-bold leading-tight">{img.label}</h3>
@@ -2517,11 +2552,13 @@ function Lightbox({
   onClose,
   onPrev,
   onNext,
+  onSelect,
 }: {
   index: number | null;
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
+  onSelect: (i: number) => void;
 }) {
   const img = index === null ? null : galleryImages[index];
 
@@ -2567,9 +2604,9 @@ function Lightbox({
 
           <motion.div
             className="relative w-full max-w-[1040px] overflow-hidden rounded-2xl bg-[#07142F] shadow-[0_36px_110px_rgba(0,0,0,0.5)]"
-            initial={{ opacity: 0, scale: 0.96, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 16 }}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
             transition={{ duration: 0.28, ease: EXPO }}
             onClick={(e) => e.stopPropagation()}
             drag="x"
@@ -2580,30 +2617,24 @@ function Lightbox({
               else if (info.offset.x > 60) onPrev();
             }}
           >
-            <div className="relative aspect-[16/10] max-h-[80vh] cursor-grab touch-pan-y select-none active:cursor-grabbing sm:aspect-[16/9]">
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.div
-                  key={img.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.22, ease: EXPO }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    sizes="90vw"
-                    draggable={false}
-                    className="pointer-events-none object-cover"
-                    priority
-                  />
-                </motion.div>
-              </AnimatePresence>
-              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(5,16,31,0.8)_100%)]" />
+            <div className="relative aspect-[16/10] max-h-[72vh] cursor-grab touch-pan-y select-none active:cursor-grabbing sm:aspect-[16/9]">
+              {/* shared-element: morphs from the grid tile */}
+              <motion.div layoutId={`tile-${img.id}`} className="absolute inset-0">
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  sizes="90vw"
+                  draggable={false}
+                  className="pointer-events-none object-cover"
+                  priority
+                />
+              </motion.div>
+
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(5,16,31,0.82)_100%)]" />
               <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-white sm:p-7">
                 <div>
+                  <span className="mb-2 block h-0.5 w-7 rounded-full bg-[#B5FF3D]" aria-hidden />
                   <h3 className="text-[20px] font-bold tracking-[-0.02em] sm:text-[26px]">{img.label}</h3>
                   <p className="mt-1 text-[13px] text-white/80 sm:text-[15px]">{img.caption}</p>
                 </div>
@@ -2611,6 +2642,23 @@ function Lightbox({
                   {index + 1} / {galleryImages.length}
                 </div>
               </div>
+            </div>
+
+            {/* thumbnail filmstrip */}
+            <div className="flex gap-2 overflow-x-auto bg-[#06101D] p-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {galleryImages.map((g, i) => (
+                <button
+                  key={g.id}
+                  type="button"
+                  onClick={(e) => { e.stopPropagation(); onSelect(i); }}
+                  aria-label={`View ${g.label}`}
+                  className={`relative h-12 w-16 shrink-0 overflow-hidden rounded-lg ring-2 transition ${
+                    i === index ? "ring-[#B5FF3D]" : "ring-transparent opacity-55 hover:opacity-100"
+                  }`}
+                >
+                  <Image src={g.src} alt="" fill sizes="64px" className="object-cover" />
+                </button>
+              ))}
             </div>
           </motion.div>
         </motion.div>
