@@ -2273,7 +2273,7 @@ export default function CampusGallery() {
           variants={stagger}
         >
           <Header />
-          <JourneyRibbon />
+          {/* <JourneyRibbon /> */}
           <DesktopWall onOpen={setLightboxIndex} />
           <MobileWall onOpen={setLightboxIndex} />
         </motion.div>

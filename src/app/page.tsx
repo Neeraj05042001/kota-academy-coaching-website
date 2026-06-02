@@ -1,3 +1,4 @@
+import KotaAcademyBranchLocations from "@/components/sections/branch-location/BranchLocation";
 import KotaAcademyCampusGallery from "@/components/sections/campus-gallery/CampusGallery";
 import { CoursesSection } from "@/components/sections/courses";
 // import CoursesSection from "@/components/sections/courses-2/CoursesSection";
@@ -35,6 +36,7 @@ export default function HomePage() {
       <KotaAcademyFacultySection/>
       <KotaAcademyTestimonialsSection/>
       <KotaAcademyCampusGallery/>
+      <KotaAcademyBranchLocations/>
       
     </main>
   );
