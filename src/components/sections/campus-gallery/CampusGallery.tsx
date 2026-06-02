@@ -2499,11 +2499,8 @@ function MobileWall({ onOpen }: { onOpen: (i: number) => void }) {
         className="mt-3 flex items-center justify-center gap-2 rounded-2xl bg-[linear-gradient(135deg,#C8FF55,#5FB016)] px-4 py-3.5 text-[#0A2410] shadow-[0_16px_36px_-18px_rgba(78,156,19,0.7)]"
       >
         <ImageIcon className="h-5 w-5 text-[#0A2410]" strokeWidth={2} aria-hidden />
-        {/* <span className="text-[14px] font-bold">
-          +{moreCount} more moments — view full gallery
-        </span> */}
         <span className="text-[14px] font-bold">
-           View Full Gallery
+          +{moreCount} more moments — view full gallery
         </span>
         <ArrowRight className="h-4 w-4 text-[#0A2410]" strokeWidth={2.4} aria-hidden />
       </Link>
@@ -2575,11 +2572,37 @@ function Lightbox({
             exit={{ opacity: 0, scale: 0.96, y: 16 }}
             transition={{ duration: 0.28, ease: EXPO }}
             onClick={(e) => e.stopPropagation()}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.18}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -60) onNext();
+              else if (info.offset.x > 60) onPrev();
+            }}
           >
-            <div className="relative aspect-[16/10] max-h-[80vh] sm:aspect-[16/9]">
-              <Image src={img.src} alt={img.alt} fill sizes="90vw" className="object-cover" priority />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(5,16,31,0.8)_100%)]" />
-              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-white sm:p-7">
+            <div className="relative aspect-[16/10] max-h-[80vh] cursor-grab touch-pan-y select-none active:cursor-grabbing sm:aspect-[16/9]">
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.div
+                  key={img.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.22, ease: EXPO }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    sizes="90vw"
+                    draggable={false}
+                    className="pointer-events-none object-cover"
+                    priority
+                  />
+                </motion.div>
+              </AnimatePresence>
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,rgba(5,16,31,0.8)_100%)]" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-white sm:p-7">
                 <div>
                   <h3 className="text-[20px] font-bold tracking-[-0.02em] sm:text-[26px]">{img.label}</h3>
                   <p className="mt-1 text-[13px] text-white/80 sm:text-[15px]">{img.caption}</p>
