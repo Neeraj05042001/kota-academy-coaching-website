@@ -5,6 +5,7 @@ import { CoursesSection } from "@/components/sections/courses";
 import CredibilityStrip from "@/components/sections/CreadibilityStrip";
 import KotaAcademyFacultySection from "@/components/sections/faculty-section/FacultySection";
 import FacultySection from "@/components/sections/faculty-section/FacultySection";
+import FAQSection from "@/components/sections/faq/FAQSection";
 import { HeroSection } from "@/components/sections/hero/HeroSection";
 import { Navbar } from "@/components/sections/nav";
 import ResultsSection from "@/components/sections/ResultSection";
@@ -37,6 +38,7 @@ export default function HomePage() {
       <KotaAcademyTestimonialsSection/>
       <KotaAcademyCampusGallery/>
       <KotaAcademyBranchLocations/>
+      <FAQSection/>
       
     </main>
   );
