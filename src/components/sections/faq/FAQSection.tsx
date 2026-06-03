@@ -884,7 +884,7 @@ const stagger: Variants = {
 /* -------------------------------------------------------------------------- */
 
 export default function FAQSection() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [openId, setOpenId] = useState<string | null>(faqs[0]?.q ?? null);
   const [showAll, setShowAll] = useState(false);
 
   const INITIAL = 5;
@@ -914,21 +914,18 @@ export default function FAQSection() {
                 key={f.q}
                 faq={f}
                 index={i}
-                isOpen={open === i}
-                onToggle={() => setOpen(open === i ? null : i)}
+                isOpen={openId === f.q}
+                onToggle={() => setOpenId(openId === f.q ? null : f.q)}
               />
             ))}
 
             {hiddenCount > 0 && (
               <button
                 type="button"
-                onClick={() => {
-                  setShowAll((v) => !v);
-                  if (showAll) setOpen((o) => (o !== null && o >= INITIAL ? null : o));
-                }}
+                onClick={() => setShowAll((v) => !v)}
                 className="group mx-auto mt-2 inline-flex items-center gap-2 rounded-full border border-[#D4DEC6] bg-white px-5 py-2.5 text-[13.5px] font-semibold text-[#0B1B33] shadow-[0_1px_2px_rgba(11,27,51,0.04)] transition-colors duration-300 hover:border-[#9FD46A] hover:text-[#2F7D17]"
               >
-                {showAll ? "Show fewer questions" : `View ${hiddenCount} more questions`}
+                {showAll ? "Show fewer questions" : "View more questions"}
                 <ChevronDown
                   className={`h-4 w-4 transition-transform duration-300 ${showAll ? "rotate-180" : "group-hover:translate-y-0.5"}`}
                   strokeWidth={2.4}
@@ -1020,7 +1017,9 @@ function AccordionItem({
 
   return (
     <motion.div
-      variants={fadeUp}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: EXPO }}
       className={`relative overflow-hidden rounded-2xl border bg-white transition-colors duration-300 ${
         isOpen ? "border-[#9FD46A] shadow-[0_18px_44px_-26px_rgba(16,120,40,0.4)]" : "border-[#E4E7DA] hover:border-[#CBD8BB]"
       }`}
@@ -1122,7 +1121,8 @@ function HelpCTA() {
         </div>
 
         <div className="flex w-full shrink-0 flex-col gap-2.5 sm:w-auto sm:items-stretch lg:items-end">
-            <Link
+
+             <Link
             href="#contact"
             aria-label="Book free counselling"
             className="group inline-flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-[linear-gradient(135deg,#C8FF55,#5FB016)] px-5 py-3 text-[13.5px] font-bold text-[#0A2410] shadow-[0_16px_36px_-16px_rgba(95,176,22,0.8)] transition-transform duration-300 hover:-translate-y-0.5 sm:w-auto"
@@ -1141,7 +1141,7 @@ function HelpCTA() {
             <MessageCircle className="h-4 w-4 text-[#B5FF3D]" strokeWidth={2.3} aria-hidden />
             Ask on WhatsApp
           </a>
-          
+         
         </div>
       </div>
     </motion.div>
