@@ -6,6 +6,8 @@ import CredibilityStrip from "@/components/sections/CreadibilityStrip";
 import KotaAcademyFacultySection from "@/components/sections/faculty-section/FacultySection";
 import FacultySection from "@/components/sections/faculty-section/FacultySection";
 import FAQSection from "@/components/sections/faq/FAQSection";
+import CounsellingCTA from "@/components/sections/final-cta/FinalCTA";
+import KotaAcademyFooter from "@/components/sections/footer/Footer";
 import { HeroSection } from "@/components/sections/hero/HeroSection";
 import { Navbar } from "@/components/sections/nav";
 import ResultsSection from "@/components/sections/ResultSection";
@@ -39,6 +41,8 @@ export default function HomePage() {
       <KotaAcademyCampusGallery/>
       <KotaAcademyBranchLocations/>
       <FAQSection/>
+      <CounsellingCTA/>
+      <KotaAcademyFooter/>
       
     </main>
   );
