@@ -10,6 +10,7 @@ import CounsellingCTA from "@/components/sections/final-cta/FinalCTA";
 import KotaAcademyFooter from "@/components/sections/footer/Footer";
 import { HeroSection } from "@/components/sections/hero/HeroSection";
 import { Navbar } from "@/components/sections/nav";
+import KotaAcademyNavbar from "@/components/sections/nav/Navbar";
 import ResultsSection from "@/components/sections/ResultSection";
 import KotaAcademyStudentJourney from "@/components/sections/student-journey/StudentJourney";
 import SupportStrip from "@/components/sections/SupportStrip";
@@ -20,7 +21,8 @@ import KotaAcademyWhySection from "@/components/sections/why-kota-academy/KotaAc
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-base text-primary">
-      <Navbar />
+      {/* <Navbar /> */}
+      <KotaAcademyNavbar/>
       <HeroSection />
 
       {/* Credibility Strip */}
