@@ -1,3 +1,2 @@
-import { HeroPill } from "./HeroPill";
-import { HeroSection } from "./HeroSection";
-
+export { HeroPill } from "./HeroPill";
+export { HeroSection } from "./HeroSection";

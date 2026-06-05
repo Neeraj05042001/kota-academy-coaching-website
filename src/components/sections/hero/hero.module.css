@@ -1,10 +1,9 @@
 /* ============================================================
-   KOTA ACADEMY — hero.module.css  v4
-   This file now owns gutters, button widths, and the layout
-   bedrock — moved out of Tailwind utilities so it CAN'T fail
-   silently if a class doesn't scan / a parent overrides.
-   Tailwind utilities still drive everything cosmetic where they
-   work; CSS module owns what must be guaranteed.
+   KOTA ACADEMY — hero.module.css  v5
+   Same v4 bones (module owns layout bedrock; Tailwind drives
+   cosmetics). Refined: brand-true navy + lime atmosphere (no
+   violet), full-width mobile image plate, nav clearance, and a
+   calmer responsive scale.
    ============================================================ */
 
 @property --ka-pill-angle {
@@ -14,61 +13,62 @@
 }
 
 /* ════════════════════════════════════════════════════════════
-   BACKGROUND — navy base + violet-blue glow pooled around the
-   image. This is the section's foundational atmosphere.
+   BACKGROUND — navy base + a single lime glow pooled behind the
+   image (right) + a faint lime kiss (left) + navy underlight.
    ════════════════════════════════════════════════════════════ */
 .section {
-  /* Deep navy base (slightly elevated from --bg-base for warmth) */
   background:
-    /* Primary: violet-blue glow pooled on the RIGHT, behind image */
+    /* lime glow pooled on the RIGHT, behind the image */
     radial-gradient(
-      ellipse 70% 65% at 78% 42%,
-      rgb(82 71 196 / 0.22) 0%,
-      rgb(108 97 221 / 0.14) 25%,
-      rgb(20 27 56 / 0.30) 55%,
-      transparent 75%
+      ellipse 70% 65% at 80% 40%,
+      rgb(181 255 61 / 0.10) 0%,
+      rgb(181 255 61 / 0.05) 26%,
+      rgb(11 27 51 / 0.30) 56%,
+      transparent 78%
     ),
-    /* Secondary: subtle lime kiss on the LEFT */
+    /* faint lime kiss on the LEFT */
     radial-gradient(
-      ellipse 50% 55% at 12% 35%,
-      rgb(198 246 36 / 0.06) 0%,
+      ellipse 48% 55% at 12% 32%,
+      rgb(181 255 61 / 0.045) 0%,
       transparent 60%
     ),
-    /* Tertiary: cool violet-ink underlight from bottom */
+    /* navy underlight from the bottom */
     radial-gradient(
-      ellipse 100% 40% at 50% 100%,
-      rgb(30 26 82 / 0.35) 0%,
-      transparent 70%
+      ellipse 100% 42% at 50% 104%,
+      rgb(6 14 32 / 0.45) 0%,
+      transparent 72%
     ),
-    /* Base: deep navy */
+    /* deep navy base */
     linear-gradient(180deg, var(--ink-900) 0%, var(--ink-850) 100%);
+
+  /* clear the fixed navbar at the top; leave room for the
+     credibility strip to straddle the bottom seam */
+  padding-top: var(--nav-h, 90px);
+  padding-bottom: 72px;
 }
 
 /* ════════════════════════════════════════════════════════════
-   SHELL — the gutter container. Owns horizontal padding at every
-   breakpoint and max-width. Cannot be defeated by a parent.
+   SHELL — gutter container. Owns horizontal padding + max-width.
    ════════════════════════════════════════════════════════════ */
 .shell {
   width: 100%;
-  max-width: 1440px;
+  max-width: 1320px;
   margin-left: auto;
   margin-right: auto;
-  /* Mobile minimum gutter — guarantees content never touches the
-     viewport edge. Uses !important to win against any parent. */
   padding-left: 20px !important;
   padding-right: 20px !important;
 }
 @media (min-width: 640px) {
-  .shell {
-    padding-left: 32px !important;
-    padding-right: 32px !important;
-  }
+  .shell { padding-left: 32px !important; padding-right: 32px !important; }
 }
 @media (min-width: 1024px) {
-  .shell {
-    padding-left: 48px !important;
-    padding-right: 48px !important;
-  }
+  .shell { padding-left: 48px !important; padding-right: 48px !important; }
+}
+@media (min-width: 1536px) {
+  .shell { max-width: 1480px; padding-left: 64px !important; padding-right: 64px !important; }
+}
+@media (min-width: 1920px) {
+  .shell { max-width: 1640px; padding-left: 80px !important; padding-right: 80px !important; }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -78,20 +78,21 @@
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
-  gap: 48px 0;
-  padding-top: 40px;
-  padding-bottom: 64px;
+  gap: 40px 0;
+  padding-top: 24px;
+  padding-bottom: 0;
 }
 @media (min-width: 640px) {
-  .body { padding-top: 56px; }
+  .body { padding-top: 32px; gap: 44px 0; }
 }
 @media (min-width: 1024px) {
   .body {
-    grid-template-columns: 1fr 1.1fr;  /* image column slightly wider */
-    gap: 0 26px;
+    grid-template-columns: 1fr 1.08fr;  /* image column slightly wider */
+    gap: 0 32px;
     padding-top: 0;
-    padding-bottom: 0;
-    min-height: calc(100dvh - var(--nav-h, 88px));
+    /* fill the viewport on normal screens, but cap so a short content
+       block isn't stranded in a huge vertical void on tall/large displays */
+    min-height: min(calc(100dvh - var(--nav-h, 90px) - 72px), 800px);
   }
 }
 
@@ -102,15 +103,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 24px;
+  gap: 22px;
 }
 @media (min-width: 1024px) {
-  .left { gap: 28px; padding-top: 80px; padding-bottom: 80px; }
+  .left { gap: 26px; padding-top: 56px; padding-bottom: 56px; }
 }
 
 /* ════════════════════════════════════════════════════════════
-   BUTTONS — explicit widths. Mobile full-width (thumb-friendly),
-   sm+ sized to content.
+   BUTTONS — mobile full-width (thumb-friendly), sm+ sized to content
    ════════════════════════════════════════════════════════════ */
 .ctas {
   display: flex;
@@ -119,11 +119,7 @@
   width: 100%;
 }
 @media (min-width: 640px) {
-  .ctas {
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: auto;
-  }
+  .ctas { flex-direction: row; flex-wrap: wrap; width: auto; }
 }
 
 .btn {
@@ -131,9 +127,9 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 14px 26px;
-  border-radius: 10px;
-  font-size: 15px;
+  padding: 13px 24px;
+  border-radius: 12px;
+  font-size: 14.5px;
   font-weight: 600;
   width: 100%;
   white-space: nowrap;
@@ -148,28 +144,26 @@
   .btn { width: fit-content; }
 }
 
-/* Primary — solid lime, dark text. Now with stronger shadow + a
-   1px inset top highlight so it reads as raised, not flat. */
 .btnPrimary {
   background: linear-gradient(180deg, var(--brand-primary), var(--brand-primary-active));
   color: var(--brand-primary-ink);
   font-weight: 700;
   border: none;
   box-shadow:
-    0 0 0 1px rgb(198 246 36 / 0.5),
-    0 10px 30px -8px rgb(198 246 36 / 0.45),
-    inset 0 1px 0 rgb(255 255 255 / 0.35);
+    0 0 0 1px rgb(181 255 61 / 0.5),
+    0 10px 28px -8px rgb(181 255 61 / 0.42),
+    inset 0 1px 0 rgb(255 255 255 / 0.32);
 }
 .btnPrimary:hover {
   transform: translateY(-2px);
   background: linear-gradient(180deg, var(--brand-primary-hover), var(--brand-primary));
   box-shadow:
-    0 0 0 1px rgb(198 246 36 / 0.7),
-    0 18px 44px -8px rgb(198 246 36 / 0.6),
-    inset 0 1px 0 rgb(255 255 255 / 0.45);
+    0 0 0 1px rgb(181 255 61 / 0.7),
+    0 18px 42px -8px rgb(181 255 61 / 0.58),
+    inset 0 1px 0 rgb(255 255 255 / 0.42);
 }
+.btnPrimary:active { transform: translateY(0) scale(0.985); }
 
-/* Ghost — refined glass, with subtle violet-ink wash */
 .btnGhost {
   background: rgb(14 19 38 / 0.5);
   color: var(--text-primary);
@@ -182,6 +176,7 @@
   background: rgb(20 27 56 / 0.7);
   border-color: var(--border-default);
 }
+.btnGhost:active { transform: translateY(0) scale(0.985); }
 
 .btn svg {
   transition:
@@ -192,11 +187,10 @@
 .btnGhost:hover svg { transform: rotate(90deg); color: var(--brand-primary); }
 .btnGhost svg { color: var(--text-muted); }
 
-
 /* ════════════════════════════════════════════════════════════
    RIGHT COLUMN — image plate
-   Mobile/tablet: centered card (max-width 480px).
-   Desktop: fills the column, capped height, photo nearly full size.
+   Mobile: full-width plate (~90% of viewport), not a small card.
+   Tablet: capped + centered.   Desktop: fills the column.
    ════════════════════════════════════════════════════════════ */
 .right {
   width: 100%;
@@ -206,33 +200,26 @@
   padding: 0;
 }
 @media (min-width: 1024px) {
-  .right { padding: 32px 0; justify-content: stretch; }
+  .right { padding: 28px 0; justify-content: stretch; }
 }
 
 .frame {
   position: relative;
   width: 100%;
-  max-width: 420px;
+  max-width: 100%;        /* phones: fill the shell ≈ 90% of viewport */
   aspect-ratio: 4 / 5;
   margin-left: auto;
   margin-right: auto;
 }
 @media (min-width: 640px) {
-  .frame {
-    max-width: 480px;
-    /* centered on tablet — was left-aligned before */
-    margin-left: auto;
-    margin-right: auto;
-  }
+  .frame { max-width: 520px; }   /* tablet: larger than before, centered */
 }
 @media (min-width: 1024px) {
   .frame {
-    /* Desktop: fill the column. Cap height so it can't go silly.
-       Aspect ratio gives back a 1.45:1 landscape. */
     max-width: none;
     width: 100%;
-    max-height: 640px;
-    aspect-ratio: 1.05 / 1;
+    max-height: 660px;
+    aspect-ratio: 1.08 / 1;
     margin: 0;
   }
 }
@@ -258,10 +245,7 @@
   overflow: hidden;
 }
 @media (min-width: 1024px) {
-  .plateImg {
-    object-position: 50% 50%;  /* center crop on desktop */
-    border-radius: 0;
-  }
+  .plateImg { object-position: 50% 50%; border-radius: 0; }
 }
 
 .plateGrade {
@@ -271,7 +255,7 @@
   mix-blend-mode: soft-light;
   background:
     linear-gradient(180deg, rgb(0 2 11 / 0.30) 0%, transparent 30%, transparent 70%, rgb(0 2 11 / 0.45) 100%),
-    radial-gradient(ellipse 70% 55% at 50% 32%, rgb(198 246 36 / 0.08) 0%, transparent 60%);
+    radial-gradient(ellipse 70% 55% at 50% 32%, rgb(181 255 61 / 0.08) 0%, transparent 60%);
 }
 @media (min-width: 1024px) { .plateGrade { border-radius: 0; } }
 
@@ -283,18 +267,17 @@
 }
 @media (min-width: 1024px) { .plateVignette { border-radius: 0; } }
 
-/* Edge feather mask — applied to img + grade + vignette together.
-   Mobile: gentler 4-side feather (it's a framed card).
-   Desktop: stronger feather, edges melt into the section. */
+/* Edge feather. Mobile: gentle (image reads full, edges just kiss
+   the navy). Desktop: stronger feather, edges melt into section. */
 .plateImg,
 .plateGrade,
 .plateVignette {
   -webkit-mask-image:
-    linear-gradient(to right,  transparent 0%, #000 9%, #000 91%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, #000 7%, #000 88%, transparent 100%);
+    linear-gradient(to right,  transparent 0%, #000 3%, #000 97%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 3%, #000 96%, transparent 100%);
   mask-image:
-    linear-gradient(to right,  transparent 0%, #000 9%, #000 91%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, #000 7%, #000 88%, transparent 100%);
+    linear-gradient(to right,  transparent 0%, #000 3%, #000 97%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 3%, #000 96%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
@@ -312,7 +295,7 @@
 }
 
 /* ════════════════════════════════════════════════════════════
-   GLOW + ARCS — behind the photo plate
+   GLOW + ARCS — behind the photo plate (lime, no violet)
    ════════════════════════════════════════════════════════════ */
 .arcs {
   position: absolute;
@@ -339,15 +322,15 @@
   filter: blur(12px);
   background: radial-gradient(
     ellipse 60% 60% at 50% 50%,
-    rgb(108 97 221 / 0.22) 0%,
-    rgb(82 71 196 / 0.10) 35%,
+    rgb(181 255 61 / 0.16) 0%,
+    rgb(181 255 61 / 0.07) 35%,
     transparent 70%
   );
   animation: ka-breathe 11s var(--ease-soft) infinite;
 }
 
 /* ════════════════════════════════════════════════════════════
-   PILL — unchanged (Direction B + Direction C glow + shimmer)
+   PILL — segmented chip + conic glow border + shimmer
    ════════════════════════════════════════════════════════════ */
 .pill {
   position: relative;
@@ -423,6 +406,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pill::before, .pill::after,
-  .reveal, .plateReveal, .breathe, .spinSlow { animation: none; }
+  .reveal, .plateReveal, .breathe, .spinSlow,
+  .arcs, .glowPool, .plate { animation: none; }
   .reveal, .plateReveal { opacity: 1; transform: none; }
 }
