@@ -720,142 +720,1446 @@
 //   );
 // }
 
+// "use client";
+
+// import Image from "next/image";
+// import { ArrowRight, Plus, Star } from "lucide-react";
+// import { HeroPill } from "./HeroPill";
+// import s from "./hero.module.css";
+
+// /**
+//  * HeroSection — Kota Academy landing hero (v5).
+//  *
+//  * Same design language as v4 (CSS-module owns layout bedrock,
+//  * plate + arcs + glow image treatment). Refined:
+//  *   - Brand-true atmosphere: navy + lime, violet removed.
+//  *   - Full-width image plate on mobile (≈90% of viewport).
+//  *   - Recalibrated headline scale + section nav-clearance.
+//  *
+//  * Page wrapper must stay MINIMAL (no padding / competing bg):
+//  *   <main className="bg-base text-primary"><HeroSection /></main>
+//  * Define --nav-h globally (e.g. 90px) so the section clears the navbar.
+//  */
+// export function HeroSection() {
+//   return (
+//     <section className={`${s.section} relative w-full overflow-hidden`}>
+//       {/* faint dot-grid over the navy + lime background */}
+//       <div
+//         aria-hidden
+//         className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(rgb(255_255_255/0.08)_1px,transparent_1px)] [background-size:46px_46px] opacity-50 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_28%,#000,transparent_80%)]"
+//       />
+
+//       <div className={`${s.shell} relative z-10`}>
+//         <div className={s.body}>
+//           {/* ─────────── LEFT · copy ─────────── */}
+//           <div className={s.left}>
+//             <HeroPill revealIndex={0} />
+
+//             <h1
+//               className={`${s.reveal} font-display text-[clamp(2.4rem,5.2vw,5rem)] font-extrabold leading-[0.98] tracking-[-0.025em] text-primary`}
+//               style={{ "--i": 1 } as React.CSSProperties}
+//             >
+//               Where Discipline
+//               <br />
+//               Meets <span className="text-accent">Rank.</span>
+//             </h1>
+
+//             <p
+//               className={`${s.reveal} max-w-[440px] text-[15px] leading-[1.7] text-secondary sm:text-base`}
+//               style={{ "--i": 2 } as React.CSSProperties}
+//             >
+//               Expert faculty, personalised study plans, and a proven record of
+//               top rankers — premier IIT-JEE &amp; NEET coaching, built on a
+//               foundation strong enough to get you there.
+//             </p>
+
+//             <div
+//               className={`${s.reveal} ${s.ctas}`}
+//               style={{ "--i": 3 } as React.CSSProperties}
+//             >
+//               <a href="#counselling" className={`${s.btn} ${s.btnPrimary} group`}>
+//                 Book a Free Counselling
+//                 <ArrowRight className="size-4" strokeWidth={2.6} />
+//               </a>
+//               <a href="#courses" className={`${s.btn} ${s.btnGhost} group`}>
+//                 Explore Courses
+//                 <Plus className="size-4" strokeWidth={2.6} />
+//               </a>
+//             </div>
+
+//             <div
+//               className={`${s.reveal} flex items-center gap-3.5`}
+//               style={{ "--i": 4 } as React.CSSProperties}
+//             >
+//               <div className="flex">
+//                 {[0, 1, 2, 3].map((i) => (
+//                   <span
+//                     key={i}
+//                     className="-ml-2 size-9 rounded-full border-2 border-base bg-gradient-to-br from-subtle to-muted first:ml-0"
+//                     aria-hidden
+//                   />
+//                 ))}
+//               </div>
+//               <div className="flex flex-col gap-0.5">
+//                 <span
+//                   className="flex gap-0.5 text-warning"
+//                   aria-label="4.7 out of 5 stars"
+//                 >
+//                   {[0, 1, 2, 3, 4].map((i) => (
+//                     <Star key={i} className="size-3.5 fill-current" />
+//                   ))}
+//                 </span>
+//                 <span className="text-[12.5px] text-muted-fg">
+//                   <strong className="font-semibold text-primary">4.7/5</strong>
+//                   {" · Rated on Google"}
+//                 </span>
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* ─────────── RIGHT · image plate ─────────── */}
+//           <div className={s.right}>
+//             <div className={s.frame}>
+//               <svg aria-hidden viewBox="0 0 600 600" className={s.arcs}>
+//                 <circle cx="300" cy="300" r="270" fill="none" stroke="rgb(181 255 61 / 0.08)" strokeWidth="1" />
+//                 <circle cx="300" cy="300" r="200" fill="none" stroke="rgb(181 255 61 / 0.11)" strokeWidth="1" strokeDasharray="4 10" />
+//                 <circle cx="300" cy="300" r="134" fill="none" stroke="rgb(181 255 61 / 0.10)" strokeWidth="1" />
+//               </svg>
+
+//               <div aria-hidden className={s.glowPool} />
+
+//               <div className={`${s.plate} ${s.plateReveal}`}>
+//                 {/* Next/Image fill needs a positioned, overflow-hidden wrapper
+//                     that carries the mask + radius. */}
+//                 <div className={s.plateImg}>
+//                   {/* <Image
+//                     src="/cl-3.png"
+//                     alt="Kota Academy students in a classroom"
+//                     fill
+//                     priority
+//                     sizes="(max-width: 1024px) 90vw, 700px"
+//                     className="object-cover"
+//                   /> */}
+//                   <Image
+//   src="/cl-5.png"
+//   alt="Kota Academy students in a classroom"
+//   fill
+//   priority
+//   sizes="(max-width: 1024px) 92vw, 760px"
+//   className="object-cover"
+// />
+//                 </div>
+//                 <div aria-hidden className={s.plateGrade} />
+//                 <div aria-hidden className={s.plateVignette} />
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+
+
+
+
+// "use client";
+
+// import Image from "next/image";
+// import { useRef } from "react";
+// import {
+//   motion,
+//   MotionConfig,
+//   useReducedMotion,
+//   useScroll,
+//   useTransform,
+//   type Variants,
+// } from "framer-motion";
+// import { ArrowRight, Plus, Star } from "lucide-react";
+
+// /* ============================================================================
+//    HeroSection — Kota Academy (v8, single-file build)
+//    v8 changes:
+//    · Desktop image is now a SECTION-LEVEL BACKDROP — absolute, full hero
+//      height, bleeding to the right viewport edge, melting left into the copy.
+//      No more floating plate with navy gaps above/below.
+//    · Crop knobs (zoom + focal point) cut the duplicated subject out of the
+//      visible window instead of half-hiding her behind a fade.
+//    · Headline locked to exactly two lines: "Where Discipline / Meets Rank."
+//    · Nav clearance safety (+20px) so the pill never slips under the navbar.
+//    · Tablet image height capped.
+//    ----------------------------------------------------------------------------
+//    SWAP POINTS:
+//    · BATCH_LINE — demo batch date
+//    · AVATARS    — add `src` per entry when face crops are ready
+//    · IMG        — src, focal points, zoom per breakpoint (crop tuning knobs)
+// ============================================================================ */
+
+// /* ----------------------------- swap constants ----------------------------- */
+
+// const BATCH_LINE = {
+//   text: "New JEE / NEET batches start 1 July",
+//   sub: "Limited seats · max 30 per batch",
+// };
+
+// type Avatar = { initials: string; src?: string };
+// const AVATARS: Avatar[] = [
+//   { initials: "AR" }, // ← add src: "/images/students/ar.jpg" when ready
+//   { initials: "SK" },
+//   { initials: "PV" },
+//   { initials: "NM" },
+// ];
+
+// const IMG = {
+//   src: "/cl-5.png",
+//   alt: "Kota Academy students in a classroom",
+//   /* ---- crop tuning knobs ----
+//      posX biases which slice of the photo is visible (lower = more left).
+//      zoom enlarges the photo inside its window; raise it to push unwanted
+//      content (the duplicated subject on the right) out of the crop. */
+//   desktop: { pos: "10% 42%", zoom: 1.18, origin: "22% 50%" },
+//   mobile: { pos: "42% 36%", zoom: 1.06, origin: "45% 40%" },
+// };
+
+// /* --------------------------------- palette -------------------------------- */
+
+// const INK_900 = "#070F22";
+// const INK_850 = "#0A1730";
+// const LIME = "#B5FF3D";
+// const GOLD = "#F5B642";
+// const TEXT_PRIMARY = "#F4F7FB";
+// const TEXT_SECONDARY = "rgba(222,231,244,0.74)";
+// const TEXT_MUTED = "rgba(222,231,244,0.5)";
+
+// /* --------------------------------- motion --------------------------------- */
+
+// const EXPO = [0.16, 1, 0.3, 1] as const;
+
+// const stagger: Variants = {
+//   hidden: {},
+//   visible: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
+// };
+
+// const fadeUp: Variants = {
+//   hidden: { opacity: 0, y: 24 },
+//   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EXPO } },
+// };
+
+// const wordRise: Variants = {
+//   hidden: { y: "110%" },
+//   visible: { y: "0%", transition: { duration: 0.7, ease: EXPO } },
+// };
+
+// /* ================================ component ================================ */
+
+// export function HeroSection() {
+//   const sectionRef = useRef<HTMLElement>(null);
+//   const reduce = useReducedMotion();
+
+//   const { scrollYProgress } = useScroll({
+//     target: sectionRef,
+//     offset: ["start start", "end start"],
+//   });
+//   const plateY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 70]);
+
+//   return (
+//     <MotionConfig reducedMotion="user">
+//       <section
+//         ref={sectionRef}
+//         className="relative w-full overflow-hidden"
+//         style={{
+//           paddingTop: "calc(var(--nav-h, 90px) + 20px)",
+//           paddingBottom: 72,
+//           background: [
+//             `radial-gradient(ellipse 70% 65% at 80% 40%, rgba(181,255,61,0.10) 0%, rgba(181,255,61,0.05) 26%, rgba(11,27,51,0.30) 56%, transparent 78%)`,
+//             `radial-gradient(ellipse 48% 55% at 12% 32%, rgba(181,255,61,0.045) 0%, transparent 60%)`,
+//             `radial-gradient(ellipse 100% 42% at 50% 104%, rgba(6,14,32,0.45) 0%, transparent 72%)`,
+//             `linear-gradient(180deg, ${INK_900} 0%, ${INK_850} 100%)`,
+//           ].join(", "),
+//         }}
+//       >
+//         {/* faint dot-grid atmosphere */}
+//         <div
+//           aria-hidden
+//           className="pointer-events-none absolute inset-0 z-0"
+//           style={{
+//             backgroundImage:
+//               "radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)",
+//             backgroundSize: "46px 46px",
+//             opacity: 0.5,
+//             maskImage:
+//               "radial-gradient(ellipse 60% 50% at 50% 28%, #000, transparent 80%)",
+//             WebkitMaskImage:
+//               "radial-gradient(ellipse 60% 50% at 50% 28%, #000, transparent 80%)",
+//           }}
+//         />
+
+//         {/* ════════ DESKTOP IMAGE BACKDROP — full height, right-anchored ════════ */}
+//         <div
+//           aria-hidden={false}
+//           className="absolute bottom-0 right-0 top-0 z-0 hidden lg:block"
+//           style={{ width: "min(58vw, 1080px)" }}
+//         >
+//           {/* glow pool living inside the backdrop */}
+//           <motion.div
+//             aria-hidden
+//             className="pointer-events-none absolute left-[42%] top-1/2 -z-10 h-[64%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+//             style={{
+//               filter: "blur(16px)",
+//               background:
+//                 "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(181,255,61,0.13) 0%, rgba(181,255,61,0.05) 35%, transparent 70%)",
+//             }}
+//             animate={
+//               reduce ? undefined : { opacity: [0.7, 1, 0.7], scale: [1, 1.06, 1] }
+//             }
+//             transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+//           />
+
+//           <div className="absolute inset-0" style={maskStyle(MASK_DESKTOP)}>
+//             {/* parallax drift */}
+//             <motion.div className="absolute inset-0" style={{ y: plateY }}>
+//               {/* crop window: zoom pushes the duplicated subject out of frame */}
+//               <div
+//                 className="absolute inset-0"
+//                 style={{
+//                   transform: `scale(${IMG.desktop.zoom})`,
+//                   transformOrigin: IMG.desktop.origin,
+//                 }}
+//               >
+//                 <Image
+//                   src={IMG.src}
+//                   alt={IMG.alt}
+//                   fill
+//                   priority
+//                   sizes="(max-width: 1024px) 100vw, 60vw"
+//                   className="object-cover"
+//                   style={{ objectPosition: IMG.desktop.pos }}
+//                 />
+//               </div>
+//             </motion.div>
+
+//             {/* grading — binds the photo to the ink */}
+//             <div
+//               aria-hidden
+//               className="pointer-events-none absolute inset-0"
+//               style={{
+//                 background: [
+//                   /* long left wash into the copy column */
+//                   "linear-gradient(90deg, rgba(7,15,34,0.97) 0%, rgba(7,15,34,0.78) 14%, rgba(7,15,34,0.34) 34%, transparent 56%)",
+//                   /* gentle top + bottom anchoring */
+//                   "linear-gradient(180deg, rgba(0,2,11,0.5) 0%, transparent 24%, transparent 64%, rgba(0,2,11,0.66) 100%)",
+//                   /* lime kiss on the subjects */
+//                   "radial-gradient(ellipse 70% 55% at 58% 44%, rgba(181,255,61,0.07) 0%, transparent 62%)",
+//                 ].join(", "),
+//               }}
+//             />
+//           </div>
+//         </div>
+
+//         {/* ════════════════════════════ content grid ═══════════════════════════ */}
+//         <div className="relative z-10 mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12 2xl:max-w-[1480px] 2xl:px-16">
+//           <div
+//             className="grid items-center gap-y-10 pt-6 sm:gap-y-11 sm:pt-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-y-0 lg:pt-0"
+//             style={{
+//               minHeight:
+//                 "min(calc(100dvh - var(--nav-h, 90px) - 112px), 800px)",
+//             }}
+//           >
+//             {/* ───────────────────── LEFT · copy ───────────────────── */}
+//             <motion.div
+//               variants={stagger}
+//               initial="hidden"
+//               animate="visible"
+//               className="flex flex-col items-start gap-[22px] lg:gap-[26px] lg:py-12"
+//             >
+//               <HeroPill />
+
+//               <Headline />
+
+//               <motion.p
+//                 variants={fadeUp}
+//                 className="text-[15px] sm:text-base"
+//                 style={{ maxWidth: 440, lineHeight: 1.7, color: TEXT_SECONDARY }}
+//               >
+//                 Expert faculty, personalised study plans, and a proven record of
+//                 top rankers — premier IIT-JEE &amp; NEET coaching, built on a
+//                 foundation strong enough to get you there.
+//               </motion.p>
+
+//               <motion.div
+//                 variants={fadeUp}
+//                 className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap"
+//               >
+//                 <PrimaryCta />
+//                 <GhostCta />
+//               </motion.div>
+
+//               {/* urgency line — BATCH_LINE */}
+//               <motion.div
+//                 variants={fadeUp}
+//                 className="flex flex-wrap items-center gap-x-2.5 gap-y-1"
+//               >
+//                 <span className="relative flex h-2 w-2 shrink-0">
+//                   {!reduce && (
+//                     <span
+//                       className="absolute inline-flex h-full w-full animate-ping rounded-full"
+//                       style={{ background: LIME, opacity: 0.6 }}
+//                     />
+//                   )}
+//                   <span
+//                     className="relative inline-flex h-2 w-2 rounded-full"
+//                     style={{
+//                       background: LIME,
+//                       boxShadow: "0 0 10px rgba(181,255,61,0.9)",
+//                     }}
+//                   />
+//                 </span>
+//                 <span
+//                   className="text-[13px] font-semibold sm:text-[13.5px]"
+//                   style={{ color: TEXT_PRIMARY }}
+//                 >
+//                   {BATCH_LINE.text}
+//                 </span>
+//                 <span className="text-[12.5px]" style={{ color: TEXT_MUTED }}>
+//                   {BATCH_LINE.sub}
+//                 </span>
+//               </motion.div>
+
+//               {/* proof row */}
+//               <motion.div variants={fadeUp} className="flex items-center gap-3.5">
+//                 <div className="flex">
+//                   {AVATARS.map((a, i) => (
+//                     <span
+//                       key={a.initials + i}
+//                       className="relative -ml-2 flex size-9 items-center justify-center overflow-hidden rounded-full first:ml-0"
+//                       style={{
+//                         border: `2px solid ${INK_900}`,
+//                         background:
+//                           "linear-gradient(135deg, #16304F 0%, #0D1F3A 100%)",
+//                       }}
+//                     >
+//                       {a.src ? (
+//                         <Image
+//                           src={a.src}
+//                           alt=""
+//                           fill
+//                           sizes="36px"
+//                           className="object-cover"
+//                         />
+//                       ) : (
+//                         <span
+//                           className="text-[10px] font-bold tracking-wide"
+//                           style={{ color: "rgba(181,255,61,0.85)" }}
+//                           aria-hidden
+//                         >
+//                           {a.initials}
+//                         </span>
+//                       )}
+//                     </span>
+//                   ))}
+//                 </div>
+//                 <div className="flex flex-col gap-0.5">
+//                   <span className="flex gap-0.5" aria-label="4.7 out of 5 stars">
+//                     {[0, 1, 2, 3, 4].map((i) => (
+//                       <Star
+//                         key={i}
+//                         className="size-3.5 fill-current"
+//                         style={{ color: GOLD }}
+//                       />
+//                     ))}
+//                   </span>
+//                   <span className="text-[12.5px]" style={{ color: TEXT_MUTED }}>
+//                     <strong
+//                       className="font-semibold"
+//                       style={{ color: TEXT_PRIMARY }}
+//                     >
+//                       4.7/5
+//                     </strong>
+//                     {" · Rated on Google"}
+//                   </span>
+//                 </div>
+//               </motion.div>
+//             </motion.div>
+
+//             {/* ───────────── RIGHT · spacer (desktop) / image (mobile) ───────────── */}
+//             <div className="lg:pointer-events-none">
+//               {/* MOBILE / TABLET image — in flow, full-bleed, frameless */}
+//               <motion.div
+//                 initial={reduce ? false : { opacity: 0, scale: 1.04 }}
+//                 animate={{ opacity: 1, scale: 1 }}
+//                 transition={{ duration: 1.2, ease: EXPO, delay: 0.35 }}
+//                 className="relative -mx-5 sm:-mx-8 lg:hidden"
+//                 style={{
+//                   width: "calc(100% + 40px)",
+//                   aspectRatio: "4 / 4.2",
+//                   maxHeight: "min(116vw, 680px)",
+//                 }}
+//               >
+//                 <div className="absolute inset-0" style={maskStyle(MASK_MOBILE)}>
+//                   <div
+//                     className="absolute inset-0"
+//                     style={{
+//                       transform: `scale(${IMG.mobile.zoom})`,
+//                       transformOrigin: IMG.mobile.origin,
+//                     }}
+//                   >
+//                     <Image
+//                       src={IMG.src}
+//                       alt={IMG.alt}
+//                       fill
+//                       priority
+//                       sizes="100vw"
+//                       className="object-cover"
+//                       style={{ objectPosition: IMG.mobile.pos }}
+//                     />
+//                   </div>
+//                   <div
+//                     aria-hidden
+//                     className="pointer-events-none absolute inset-0"
+//                     style={{
+//                       background: [
+//                         "linear-gradient(180deg, rgba(0,2,11,0.42) 0%, transparent 30%, transparent 60%, rgba(0,2,11,0.68) 100%)",
+//                         "radial-gradient(ellipse 85% 85% at 55% 44%, transparent 46%, rgba(0,2,11,0.34) 78%, rgba(0,2,11,0.78) 100%)",
+//                         "radial-gradient(ellipse 70% 55% at 60% 40%, rgba(181,255,61,0.07) 0%, transparent 62%)",
+//                       ].join(", "),
+//                     }}
+//                   />
+//                 </div>
+
+//                 {/* mobile glow pool */}
+//                 <motion.div
+//                   aria-hidden
+//                   className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[68%] w-[78%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+//                   style={{
+//                     filter: "blur(13px)",
+//                     background:
+//                       "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(181,255,61,0.14) 0%, rgba(181,255,61,0.05) 35%, transparent 70%)",
+//                   }}
+//                   animate={
+//                     reduce
+//                       ? undefined
+//                       : { opacity: [0.7, 1, 0.7], scale: [1, 1.06, 1] }
+//                   }
+//                   transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+//                 />
+//               </motion.div>
+//             </div>
+//           </div>
+//         </div>
+//       </section>
+//     </MotionConfig>
+//   );
+// }
+
+// export default HeroSection;
+
+// /* ============================================================================
+//    Feather masks — frameless dissolves
+// ============================================================================ */
+
+// const MASK_MOBILE = [
+//   "linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%)",
+//   "linear-gradient(to bottom, transparent 0%, #000 9%, #000 88%, transparent 100%)",
+// ].join(", ");
+
+// /* Desktop backdrop: long dissolve into the copy on the left, clean bleed to
+//    the viewport edge on the right, soft top/bottom anchoring. */
+// const MASK_DESKTOP = [
+//   "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.25) 12%, #000 34%, #000 100%)",
+//   "linear-gradient(to bottom, transparent 0%, #000 12%, #000 84%, transparent 100%)",
+// ].join(", ");
+
+// const maskStyle = (mask: string): React.CSSProperties => ({
+//   maskImage: mask,
+//   WebkitMaskImage: mask,
+//   maskComposite: "intersect",
+//   WebkitMaskComposite: "source-in",
+// });
+
+// /* ============================================================================
+//    Headline — locked two-line lockup: "Where Discipline / Meets Rank."
+// ============================================================================ */
+
+// function Headline() {
+//   const reduce = useReducedMotion();
+
+//   const Word = ({ children }: { children: React.ReactNode }) => (
+//     <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+//       <motion.span variants={wordRise} className="inline-block">
+//         {children}
+//       </motion.span>
+//     </span>
+//   );
+
+//   return (
+//     <motion.h1
+//       variants={fadeUp}
+//       className="font-extrabold"
+//       style={{
+//         fontSize: "clamp(2.5rem, 4.6vw, 4.5rem)",
+//         lineHeight: 1.02,
+//         letterSpacing: "-0.025em",
+//         color: TEXT_PRIMARY,
+//         maxWidth: "17ch",
+//       }}
+//     >
+//       <motion.span
+//         variants={stagger}
+//         initial={reduce ? false : "hidden"}
+//         animate="visible"
+//         className="inline"
+//       >
+//         <Word>Where</Word>
+//         {"\u00A0"}
+//         <Word>Discipline</Word>{" "}
+//         {/* unbreakable unit — never splits across lines */}
+//         <span className="whitespace-nowrap">
+//           <Word>Meets</Word>
+//           {"\u00A0"}
+//           <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+//             <motion.span
+//               variants={wordRise}
+//               className="relative inline-block"
+//               style={{ color: LIME }}
+//             >
+//               Rank.
+//               <svg
+//                 viewBox="0 0 100 10"
+//                 preserveAspectRatio="none"
+//                 className="absolute left-0 w-full overflow-visible"
+//                 style={{ bottom: "-0.12em", height: "0.14em" }}
+//                 aria-hidden
+//               >
+//                 <motion.path
+//                   d="M3 7 Q 50 2 97 6"
+//                   fill="none"
+//                   stroke={LIME}
+//                   strokeWidth={6}
+//                   strokeLinecap="round"
+//                   opacity={0.55}
+//                   initial={{ pathLength: reduce ? 1 : 0 }}
+//                   animate={{ pathLength: 1 }}
+//                   transition={{ duration: 0.7, ease: "easeOut", delay: 1.0 }}
+//                 />
+//               </svg>
+//             </motion.span>
+//           </span>
+//         </span>
+//       </motion.span>
+//     </motion.h1>
+//   );
+// }
+
+// /* ============================================================================
+//    Eyebrow pill
+// ============================================================================ */
+
+// function HeroPill({
+//   tag = "SINCE 2017",
+//   label = "Trusted by students & families in Greater Noida",
+//   shortLabel = "Trusted across Greater Noida",
+//   href = "#results",
+// }: {
+//   tag?: string;
+//   label?: string;
+//   shortLabel?: string;
+//   href?: string;
+// }) {
+//   const reduce = useReducedMotion();
+
+//   return (
+//     <motion.a
+//       variants={fadeUp}
+//       href={href}
+//       className="group relative flex w-fit items-center gap-2.5 overflow-hidden rounded-full py-1 pl-1 pr-3 transition-transform duration-300 hover:-translate-y-0.5"
+//       style={{
+//         background: "rgba(14,23,46,0.6)",
+//         border: "1px solid rgba(255,255,255,0.1)",
+//         backdropFilter: "blur(10px)",
+//         WebkitBackdropFilter: "blur(10px)",
+//       }}
+//     >
+//       {!reduce && (
+//         <span
+//           aria-hidden
+//           className="pointer-events-none absolute -inset-px -z-10 overflow-hidden rounded-full"
+//         >
+//           <motion.span
+//             className="absolute left-1/2 top-1/2 h-[400%] w-[150%]"
+//             style={{
+//               x: "-50%",
+//               y: "-50%",
+//               background: `conic-gradient(from 0deg, transparent 0deg, ${LIME} 60deg, rgba(181,255,61,0.25) 130deg, transparent 220deg, transparent 360deg)`,
+//             }}
+//             animate={{ rotate: 360 }}
+//             transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+//           />
+//           <span
+//             className="absolute inset-px rounded-full"
+//             style={{ background: "rgba(10,20,40,0.96)" }}
+//           />
+//         </span>
+//       )}
+
+//       {!reduce && (
+//         <motion.span
+//           aria-hidden
+//           className="pointer-events-none absolute inset-y-0 w-[42%] -skew-x-12"
+//           style={{
+//             background:
+//               "linear-gradient(100deg, transparent, rgba(255,255,255,0.1), transparent)",
+//           }}
+//           initial={{ left: "-60%" }}
+//           animate={{ left: ["-60%", "-60%", "120%", "120%"] }}
+//           transition={{
+//             duration: 6,
+//             times: [0, 0.62, 0.84, 1],
+//             repeat: Infinity,
+//             ease: "easeInOut",
+//           }}
+//         />
+//       )}
+
+//       <span
+//         className="whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-bold uppercase leading-none tracking-[0.06em]"
+//         style={{
+//           background: `linear-gradient(180deg, #C8FF55, ${LIME})`,
+//           color: "#13230A",
+//         }}
+//       >
+//         {tag}
+//       </span>
+
+//       <span
+//         className="hidden whitespace-nowrap text-[12.5px] font-medium leading-none sm:inline"
+//         style={{ color: TEXT_SECONDARY }}
+//       >
+//         {label}
+//       </span>
+//       <span
+//         className="whitespace-nowrap text-[12px] font-medium leading-none sm:hidden"
+//         style={{ color: TEXT_SECONDARY }}
+//       >
+//         {shortLabel}
+//       </span>
+
+//       <ArrowRight
+//         className="size-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5"
+//         style={{ color: TEXT_MUTED }}
+//         strokeWidth={2.6}
+//         aria-hidden
+//       />
+//     </motion.a>
+//   );
+// }
+
+// /* ============================================================================
+//    CTAs
+// ============================================================================ */
+
+// function PrimaryCta() {
+//   return (
+//     <a
+//       href="#counselling"
+//       className="group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-xl px-6 py-[13px] text-[14.5px] font-bold transition-transform duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.985] sm:w-fit"
+//       style={{
+//         background: "linear-gradient(180deg, #C8FF55, #8FD92E)",
+//         color: "#13230A",
+//         boxShadow:
+//           "0 0 0 1px rgba(181,255,61,0.5), 0 10px 28px -8px rgba(181,255,61,0.42), inset 0 1px 0 rgba(255,255,255,0.32)",
+//       }}
+//     >
+//       <span
+//         aria-hidden
+//         className="pointer-events-none absolute inset-0 -translate-x-full transition-transform duration-700 group-hover:translate-x-[130%]"
+//         style={{
+//           background:
+//             "linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)",
+//         }}
+//       />
+//       <span className="relative z-10">Book a Free Counselling</span>
+//       <ArrowRight
+//         className="relative z-10 size-4 transition-transform duration-300 group-hover:translate-x-1"
+//         strokeWidth={2.6}
+//         aria-hidden
+//       />
+//     </a>
+//   );
+// }
+
+// function GhostCta() {
+//   return (
+//     <a
+//       href="#courses"
+//       className="group inline-flex w-full items-center justify-center gap-2.5 rounded-xl px-6 py-[13px] text-[14.5px] font-semibold transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.985] sm:w-fit"
+//       style={{
+//         background: "rgba(18,28,56,0.55)",
+//         color: TEXT_PRIMARY,
+//         border: "1px solid rgba(255,255,255,0.16)",
+//         backdropFilter: "blur(10px)",
+//         WebkitBackdropFilter: "blur(10px)",
+//       }}
+//     >
+//       Explore Courses
+//       <Plus
+//         className="size-4 transition-transform duration-300 group-hover:rotate-90"
+//         style={{ color: LIME }}
+//         strokeWidth={2.6}
+//         aria-hidden
+//       />
+//     </a>
+//   );
+// }
+
 "use client";
 
 import Image from "next/image";
+import { useRef } from "react";
+import {
+  motion,
+  MotionConfig,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  type Variants,
+} from "framer-motion";
 import { ArrowRight, Plus, Star } from "lucide-react";
-import { HeroPill } from "./HeroPill";
-import s from "./hero.module.css";
 
-/**
- * HeroSection — Kota Academy landing hero (v5).
- *
- * Same design language as v4 (CSS-module owns layout bedrock,
- * plate + arcs + glow image treatment). Refined:
- *   - Brand-true atmosphere: navy + lime, violet removed.
- *   - Full-width image plate on mobile (≈90% of viewport).
- *   - Recalibrated headline scale + section nav-clearance.
- *
- * Page wrapper must stay MINIMAL (no padding / competing bg):
- *   <main className="bg-base text-primary"><HeroSection /></main>
- * Define --nav-h globally (e.g. 90px) so the section clears the navbar.
- */
+/* ============================================================================
+   HeroSection — Kota Academy (v8, single-file build)
+   v8 changes:
+   · Desktop image is now a SECTION-LEVEL BACKDROP — absolute, full hero
+     height, bleeding to the right viewport edge, melting left into the copy.
+     No more floating plate with navy gaps above/below.
+   · Crop knobs (zoom + focal point) cut the duplicated subject out of the
+     visible window instead of half-hiding her behind a fade.
+   · Headline locked to exactly two lines: "Where Discipline / Meets Rank."
+   · Nav clearance safety (+20px) so the pill never slips under the navbar.
+   · Tablet image height capped.
+   ----------------------------------------------------------------------------
+   SWAP POINTS:
+   · BATCH_LINE — demo batch date
+   · AVATARS    — add `src` per entry when face crops are ready
+   · IMG        — src, focal points, zoom per breakpoint (crop tuning knobs)
+============================================================================ */
+
+/* ----------------------------- swap constants ----------------------------- */
+
+const BATCH_LINE = {
+  text: "New JEE / NEET batches start 1 July",
+  sub: "Limited seats · max 30 per batch",
+};
+
+type Avatar = { initials: string; src?: string };
+const AVATARS: Avatar[] = [
+  { initials: "AR" }, // ← add src: "/images/students/ar.jpg" when ready
+  { initials: "SK" },
+  { initials: "PV" },
+  { initials: "NM" },
+];
+
+const IMG = {
+  src: "/cl-5.png",
+  alt: "Kota Academy students in a classroom",
+  /* ---- crop tuning knobs ----
+     posX biases which slice of the photo is visible (lower = more left).
+     zoom enlarges the photo inside its window; raise it to push unwanted
+     content (the duplicated subject on the right) out of the crop.
+     DESKTOP = pair framing: window includes boy + girl, and must END in the
+     gap between the girl and her duplicate. If the duplicate peeks in at
+     wide viewports: nudge pos down in 4% steps OR raise zoom by ~0.04.
+     If the girl gets clipped at the right edge instead: do the opposite. */
+  desktop: { pos: "36% 42%", zoom: 1.06, origin: "42% 50%" },
+  mobile: { pos: "42% 36%", zoom: 1.06, origin: "45% 40%" },
+};
+
+/* --------------------------------- palette -------------------------------- */
+
+const INK_900 = "#070F22";
+const INK_850 = "#0A1730";
+const LIME = "#B5FF3D";
+const GOLD = "#F5B642";
+const TEXT_PRIMARY = "#F4F7FB";
+const TEXT_SECONDARY = "rgba(222,231,244,0.74)";
+const TEXT_MUTED = "rgba(222,231,244,0.5)";
+
+/* --------------------------------- motion --------------------------------- */
+
+const EXPO = [0.16, 1, 0.3, 1] as const;
+
+const stagger: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
+};
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EXPO } },
+};
+
+const wordRise: Variants = {
+  hidden: { y: "110%" },
+  visible: { y: "0%", transition: { duration: 0.7, ease: EXPO } },
+};
+
+/* ================================ component ================================ */
+
 export function HeroSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const plateY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 70]);
+
   return (
-    <section className={`${s.section} relative w-full overflow-hidden`}>
-      {/* faint dot-grid over the navy + lime background */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(rgb(255_255_255/0.08)_1px,transparent_1px)] [background-size:46px_46px] opacity-50 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_28%,#000,transparent_80%)]"
-      />
+    <MotionConfig reducedMotion="user">
+      <section
+        ref={sectionRef}
+        className="relative w-full overflow-hidden"
+        style={{
+          paddingTop: "calc(var(--nav-h, 90px) + 20px)",
+          paddingBottom: 72,
+          background: [
+            `radial-gradient(ellipse 70% 65% at 80% 40%, rgba(181,255,61,0.10) 0%, rgba(181,255,61,0.05) 26%, rgba(11,27,51,0.30) 56%, transparent 78%)`,
+            `radial-gradient(ellipse 48% 55% at 12% 32%, rgba(181,255,61,0.045) 0%, transparent 60%)`,
+            `radial-gradient(ellipse 100% 42% at 50% 104%, rgba(6,14,32,0.45) 0%, transparent 72%)`,
+            `linear-gradient(180deg, ${INK_900} 0%, ${INK_850} 100%)`,
+          ].join(", "),
+        }}
+      >
+        {/* faint dot-grid atmosphere */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)",
+            backgroundSize: "46px 46px",
+            opacity: 0.5,
+            maskImage:
+              "radial-gradient(ellipse 60% 50% at 50% 28%, #000, transparent 80%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 60% 50% at 50% 28%, #000, transparent 80%)",
+          }}
+        />
 
-      <div className={`${s.shell} relative z-10`}>
-        <div className={s.body}>
-          {/* ─────────── LEFT · copy ─────────── */}
-          <div className={s.left}>
-            <HeroPill revealIndex={0} />
+        {/* ════════ DESKTOP IMAGE BACKDROP — full height, right-anchored ════════ */}
+        <div
+          aria-hidden={false}
+          className="absolute bottom-0 right-0 top-0 z-0 hidden lg:block"
+          style={{ width: "min(58vw, 1080px)" }}
+        >
+          {/* glow pool living inside the backdrop */}
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute left-[42%] top-1/2 -z-10 h-[64%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{
+              filter: "blur(16px)",
+              background:
+                "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(181,255,61,0.13) 0%, rgba(181,255,61,0.05) 35%, transparent 70%)",
+            }}
+            animate={
+              reduce ? undefined : { opacity: [0.7, 1, 0.7], scale: [1, 1.06, 1] }
+            }
+            transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+          />
 
-            <h1
-              className={`${s.reveal} font-display text-[clamp(2.4rem,5.2vw,5rem)] font-extrabold leading-[0.98] tracking-[-0.025em] text-primary`}
-              style={{ "--i": 1 } as React.CSSProperties}
-            >
-              Where Discipline
-              <br />
-              Meets <span className="text-accent">Rank.</span>
-            </h1>
-
-            <p
-              className={`${s.reveal} max-w-[440px] text-[15px] leading-[1.7] text-secondary sm:text-base`}
-              style={{ "--i": 2 } as React.CSSProperties}
-            >
-              Expert faculty, personalised study plans, and a proven record of
-              top rankers — premier IIT-JEE &amp; NEET coaching, built on a
-              foundation strong enough to get you there.
-            </p>
-
-            <div
-              className={`${s.reveal} ${s.ctas}`}
-              style={{ "--i": 3 } as React.CSSProperties}
-            >
-              <a href="#counselling" className={`${s.btn} ${s.btnPrimary} group`}>
-                Book a Free Counselling
-                <ArrowRight className="size-4" strokeWidth={2.6} />
-              </a>
-              <a href="#courses" className={`${s.btn} ${s.btnGhost} group`}>
-                Explore Courses
-                <Plus className="size-4" strokeWidth={2.6} />
-              </a>
-            </div>
-
-            <div
-              className={`${s.reveal} flex items-center gap-3.5`}
-              style={{ "--i": 4 } as React.CSSProperties}
-            >
-              <div className="flex">
-                {[0, 1, 2, 3].map((i) => (
-                  <span
-                    key={i}
-                    className="-ml-2 size-9 rounded-full border-2 border-base bg-gradient-to-br from-subtle to-muted first:ml-0"
-                    aria-hidden
-                  />
-                ))}
+          <div className="absolute inset-0" style={maskStyle(MASK_DESKTOP)}>
+            {/* parallax drift */}
+            <motion.div className="absolute inset-0" style={{ y: plateY }}>
+              {/* crop window: zoom pushes the duplicated subject out of frame */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  transform: `scale(${IMG.desktop.zoom})`,
+                  transformOrigin: IMG.desktop.origin,
+                }}
+              >
+                <Image
+                  src={IMG.src}
+                  alt={IMG.alt}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  className="object-cover"
+                  style={{ objectPosition: IMG.desktop.pos }}
+                />
               </div>
-              <div className="flex flex-col gap-0.5">
-                <span
-                  className="flex gap-0.5 text-warning"
-                  aria-label="4.7 out of 5 stars"
-                >
-                  {[0, 1, 2, 3, 4].map((i) => (
-                    <Star key={i} className="size-3.5 fill-current" />
-                  ))}
-                </span>
-                <span className="text-[12.5px] text-muted-fg">
-                  <strong className="font-semibold text-primary">4.7/5</strong>
-                  {" · Rated on Google"}
-                </span>
-              </div>
-            </div>
+            </motion.div>
+
+            {/* grading — binds the photo to the ink */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background: [
+                  /* long left wash into the copy column */
+                  "linear-gradient(90deg, rgba(7,15,34,0.97) 0%, rgba(7,15,34,0.78) 14%, rgba(7,15,34,0.34) 34%, transparent 56%)",
+                  /* gentle top + bottom anchoring */
+                  "linear-gradient(180deg, rgba(0,2,11,0.5) 0%, transparent 24%, transparent 64%, rgba(0,2,11,0.66) 100%)",
+                  /* lime kiss on the subjects */
+                  "radial-gradient(ellipse 70% 55% at 58% 44%, rgba(181,255,61,0.07) 0%, transparent 62%)",
+                ].join(", "),
+              }}
+            />
           </div>
+        </div>
 
-          {/* ─────────── RIGHT · image plate ─────────── */}
-          <div className={s.right}>
-            <div className={s.frame}>
-              <svg aria-hidden viewBox="0 0 600 600" className={s.arcs}>
-                <circle cx="300" cy="300" r="270" fill="none" stroke="rgb(181 255 61 / 0.08)" strokeWidth="1" />
-                <circle cx="300" cy="300" r="200" fill="none" stroke="rgb(181 255 61 / 0.11)" strokeWidth="1" strokeDasharray="4 10" />
-                <circle cx="300" cy="300" r="134" fill="none" stroke="rgb(181 255 61 / 0.10)" strokeWidth="1" />
-              </svg>
+        {/* ════════════════════════════ content grid ═══════════════════════════ */}
+        <div className="relative z-10 mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12 2xl:max-w-[1480px] 2xl:px-16">
+          <div
+            className="grid items-center gap-y-10 pt-6 sm:gap-y-11 sm:pt-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-y-0 lg:pt-0"
+            style={{
+              minHeight:
+                "min(calc(100dvh - var(--nav-h, 90px) - 112px), 800px)",
+            }}
+          >
+            {/* ───────────────────── LEFT · copy ───────────────────── */}
+            <motion.div
+              variants={stagger}
+              initial="hidden"
+              animate="visible"
+              className="flex flex-col items-start gap-[22px] lg:gap-[26px] lg:py-12"
+            >
+              <HeroPill />
 
-              <div aria-hidden className={s.glowPool} />
+              <Headline />
 
-              <div className={`${s.plate} ${s.plateReveal}`}>
-                {/* Next/Image fill needs a positioned, overflow-hidden wrapper
-                    that carries the mask + radius. */}
-                <div className={s.plateImg}>
-                  {/* <Image
-                    src="/cl-3.png"
-                    alt="Kota Academy students in a classroom"
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 90vw, 700px"
-                    className="object-cover"
-                  /> */}
-                  <Image
-  src="/cl-5.png"
-  alt="Kota Academy students in a classroom"
-  fill
-  priority
-  sizes="(max-width: 1024px) 92vw, 760px"
-  className="object-cover"
-/>
+              <motion.p
+                variants={fadeUp}
+                className="text-[15px] sm:text-base"
+                style={{ maxWidth: 440, lineHeight: 1.7, color: TEXT_SECONDARY }}
+              >
+                Expert faculty, personalised study plans, and a proven record of
+                top rankers — premier IIT-JEE &amp; NEET coaching, built on a
+                foundation strong enough to get you there.
+              </motion.p>
+
+              <motion.div
+                variants={fadeUp}
+                className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap"
+              >
+                <PrimaryCta />
+                <GhostCta />
+              </motion.div>
+
+              {/* urgency line — BATCH_LINE */}
+              <motion.div
+                variants={fadeUp}
+                className="flex flex-wrap items-center gap-x-2.5 gap-y-1"
+              >
+                <span className="relative flex h-2 w-2 shrink-0">
+                  {!reduce && (
+                    <span
+                      className="absolute inline-flex h-full w-full animate-ping rounded-full"
+                      style={{ background: LIME, opacity: 0.6 }}
+                    />
+                  )}
+                  <span
+                    className="relative inline-flex h-2 w-2 rounded-full"
+                    style={{
+                      background: LIME,
+                      boxShadow: "0 0 10px rgba(181,255,61,0.9)",
+                    }}
+                  />
+                </span>
+                <span
+                  className="text-[13px] font-semibold sm:text-[13.5px]"
+                  style={{ color: TEXT_PRIMARY }}
+                >
+                  {BATCH_LINE.text}
+                </span>
+                <span className="text-[12.5px]" style={{ color: TEXT_MUTED }}>
+                  {BATCH_LINE.sub}
+                </span>
+              </motion.div>
+
+              {/* proof row */}
+              <motion.div variants={fadeUp} className="flex items-center gap-3.5">
+                <div className="flex">
+                  {AVATARS.map((a, i) => (
+                    <span
+                      key={a.initials + i}
+                      className="relative -ml-2 flex size-9 items-center justify-center overflow-hidden rounded-full first:ml-0"
+                      style={{
+                        border: `2px solid ${INK_900}`,
+                        background:
+                          "linear-gradient(135deg, #16304F 0%, #0D1F3A 100%)",
+                      }}
+                    >
+                      {a.src ? (
+                        <Image
+                          src={a.src}
+                          alt=""
+                          fill
+                          sizes="36px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <span
+                          className="text-[10px] font-bold tracking-wide"
+                          style={{ color: "rgba(181,255,61,0.85)" }}
+                          aria-hidden
+                        >
+                          {a.initials}
+                        </span>
+                      )}
+                    </span>
+                  ))}
                 </div>
-                <div aria-hidden className={s.plateGrade} />
-                <div aria-hidden className={s.plateVignette} />
-              </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="flex gap-0.5" aria-label="4.7 out of 5 stars">
+                    {[0, 1, 2, 3, 4].map((i) => (
+                      <Star
+                        key={i}
+                        className="size-3.5 fill-current"
+                        style={{ color: GOLD }}
+                      />
+                    ))}
+                  </span>
+                  <span className="text-[12.5px]" style={{ color: TEXT_MUTED }}>
+                    <strong
+                      className="font-semibold"
+                      style={{ color: TEXT_PRIMARY }}
+                    >
+                      4.7/5
+                    </strong>
+                    {" · Rated on Google"}
+                  </span>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            {/* ───────────── RIGHT · spacer (desktop) / image (mobile) ───────────── */}
+            <div className="lg:pointer-events-none">
+              {/* MOBILE / TABLET image — in flow, full-bleed, frameless */}
+              <motion.div
+                initial={reduce ? false : { opacity: 0, scale: 1.04 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.2, ease: EXPO, delay: 0.35 }}
+                className="relative -mx-5 sm:-mx-8 lg:hidden"
+                style={{
+                  width: "calc(100% + 40px)",
+                  aspectRatio: "4 / 4.2",
+                  maxHeight: "min(116vw, 680px)",
+                }}
+              >
+                <div className="absolute inset-0" style={maskStyle(MASK_MOBILE)}>
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      transform: `scale(${IMG.mobile.zoom})`,
+                      transformOrigin: IMG.mobile.origin,
+                    }}
+                  >
+                    <Image
+                      src={IMG.src}
+                      alt={IMG.alt}
+                      fill
+                      priority
+                      sizes="100vw"
+                      className="object-cover"
+                      style={{ objectPosition: IMG.mobile.pos }}
+                    />
+                  </div>
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      background: [
+                        "linear-gradient(180deg, rgba(0,2,11,0.42) 0%, transparent 30%, transparent 60%, rgba(0,2,11,0.68) 100%)",
+                        "radial-gradient(ellipse 85% 85% at 55% 44%, transparent 46%, rgba(0,2,11,0.34) 78%, rgba(0,2,11,0.78) 100%)",
+                        "radial-gradient(ellipse 70% 55% at 60% 40%, rgba(181,255,61,0.07) 0%, transparent 62%)",
+                      ].join(", "),
+                    }}
+                  />
+                </div>
+
+                {/* mobile glow pool */}
+                <motion.div
+                  aria-hidden
+                  className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[68%] w-[78%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                  style={{
+                    filter: "blur(13px)",
+                    background:
+                      "radial-gradient(ellipse 60% 60% at 50% 50%, rgba(181,255,61,0.14) 0%, rgba(181,255,61,0.05) 35%, transparent 70%)",
+                  }}
+                  animate={
+                    reduce
+                      ? undefined
+                      : { opacity: [0.7, 1, 0.7], scale: [1, 1.06, 1] }
+                  }
+                  transition={{ duration: 11, repeat: Infinity, ease: "easeInOut" }}
+                />
+              </motion.div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </MotionConfig>
+  );
+}
+
+export default HeroSection;
+
+/* ============================================================================
+   Feather masks — frameless dissolves
+============================================================================ */
+
+const MASK_MOBILE = [
+  "linear-gradient(to right, transparent 0%, #000 9%, #000 91%, transparent 100%)",
+  "linear-gradient(to bottom, transparent 0%, #000 9%, #000 88%, transparent 100%)",
+].join(", ");
+
+/* Desktop backdrop: long dissolve into the copy on the left, clean bleed to
+   the viewport edge on the right, soft top/bottom anchoring. */
+const MASK_DESKTOP = [
+  "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.25) 12%, #000 34%, #000 100%)",
+  "linear-gradient(to bottom, transparent 0%, #000 12%, #000 84%, transparent 100%)",
+].join(", ");
+
+const maskStyle = (mask: string): React.CSSProperties => ({
+  maskImage: mask,
+  WebkitMaskImage: mask,
+  maskComposite: "intersect",
+  WebkitMaskComposite: "source-in",
+});
+
+/* ============================================================================
+   Headline — locked two-line lockup: "Where Discipline / Meets Rank."
+============================================================================ */
+
+function Headline() {
+  const reduce = useReducedMotion();
+
+  const Word = ({ children }: { children: React.ReactNode }) => (
+    <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+      <motion.span variants={wordRise} className="inline-block">
+        {children}
+      </motion.span>
+    </span>
+  );
+
+  return (
+    <motion.h1
+      variants={fadeUp}
+      className="font-extrabold"
+      style={{
+        fontSize: "clamp(2.5rem, 4.6vw, 4.5rem)",
+        lineHeight: 1.02,
+        letterSpacing: "-0.025em",
+        color: TEXT_PRIMARY,
+        maxWidth: "17ch",
+      }}
+    >
+      <motion.span
+        variants={stagger}
+        initial={reduce ? false : "hidden"}
+        animate="visible"
+        className="inline"
+      >
+        <Word>Where</Word>
+        {"\u00A0"}
+        <Word>Discipline</Word>{" "}
+        {/* unbreakable unit — never splits across lines */}
+        <span className="whitespace-nowrap">
+          <Word>Meets</Word>
+          {"\u00A0"}
+          <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
+            <motion.span
+              variants={wordRise}
+              className="relative inline-block"
+              style={{ color: LIME }}
+            >
+              Rank.
+              <svg
+                viewBox="0 0 100 10"
+                preserveAspectRatio="none"
+                className="absolute left-0 w-full overflow-visible"
+                style={{ bottom: "-0.12em", height: "0.14em" }}
+                aria-hidden
+              >
+                <motion.path
+                  d="M3 7 Q 50 2 97 6"
+                  fill="none"
+                  stroke={LIME}
+                  strokeWidth={6}
+                  strokeLinecap="round"
+                  opacity={0.55}
+                  initial={{ pathLength: reduce ? 1 : 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 0.7, ease: "easeOut", delay: 1.0 }}
+                />
+              </svg>
+            </motion.span>
+          </span>
+        </span>
+      </motion.span>
+    </motion.h1>
+  );
+}
+
+/* ============================================================================
+   Eyebrow pill
+============================================================================ */
+
+function HeroPill({
+  tag = "SINCE 2017",
+  label = "Trusted by students & families in Greater Noida",
+  shortLabel = "Trusted across Greater Noida",
+  href = "#results",
+}: {
+  tag?: string;
+  label?: string;
+  shortLabel?: string;
+  href?: string;
+}) {
+  const reduce = useReducedMotion();
+
+  return (
+    <motion.a
+      variants={fadeUp}
+      href={href}
+      className="group relative flex w-fit items-center gap-2.5 overflow-hidden rounded-full py-1 pl-1 pr-3 transition-transform duration-300 hover:-translate-y-0.5"
+      style={{
+        background: "rgba(14,23,46,0.6)",
+        border: "1px solid rgba(255,255,255,0.1)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+      }}
+    >
+      {!reduce && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -inset-px -z-10 overflow-hidden rounded-full"
+        >
+          <motion.span
+            className="absolute left-1/2 top-1/2 h-[400%] w-[150%]"
+            style={{
+              x: "-50%",
+              y: "-50%",
+              background: `conic-gradient(from 0deg, transparent 0deg, ${LIME} 60deg, rgba(181,255,61,0.25) 130deg, transparent 220deg, transparent 360deg)`,
+            }}
+            animate={{ rotate: 360 }}
+            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+          />
+          <span
+            className="absolute inset-px rounded-full"
+            style={{ background: "rgba(10,20,40,0.96)" }}
+          />
+        </span>
+      )}
+
+      {!reduce && (
+        <motion.span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 w-[42%] -skew-x-12"
+          style={{
+            background:
+              "linear-gradient(100deg, transparent, rgba(255,255,255,0.1), transparent)",
+          }}
+          initial={{ left: "-60%" }}
+          animate={{ left: ["-60%", "-60%", "120%", "120%"] }}
+          transition={{
+            duration: 6,
+            times: [0, 0.62, 0.84, 1],
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      )}
+
+      <span
+        className="whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-bold uppercase leading-none tracking-[0.06em]"
+        style={{
+          background: `linear-gradient(180deg, #C8FF55, ${LIME})`,
+          color: "#13230A",
+        }}
+      >
+        {tag}
+      </span>
+
+      <span
+        className="hidden whitespace-nowrap text-[12.5px] font-medium leading-none sm:inline"
+        style={{ color: TEXT_SECONDARY }}
+      >
+        {label}
+      </span>
+      <span
+        className="whitespace-nowrap text-[12px] font-medium leading-none sm:hidden"
+        style={{ color: TEXT_SECONDARY }}
+      >
+        {shortLabel}
+      </span>
+
+      <ArrowRight
+        className="size-3.5 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5"
+        style={{ color: TEXT_MUTED }}
+        strokeWidth={2.6}
+        aria-hidden
+      />
+    </motion.a>
+  );
+}
+
+/* ============================================================================
+   CTAs
+============================================================================ */
+
+function PrimaryCta() {
+  return (
+    <a
+      href="#counselling"
+      className="group relative inline-flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-xl px-6 py-[13px] text-[14.5px] font-bold transition-transform duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.985] sm:w-fit"
+      style={{
+        background: "linear-gradient(180deg, #C8FF55, #8FD92E)",
+        color: "#13230A",
+        boxShadow:
+          "0 0 0 1px rgba(181,255,61,0.5), 0 10px 28px -8px rgba(181,255,61,0.42), inset 0 1px 0 rgba(255,255,255,0.32)",
+      }}
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -translate-x-full transition-transform duration-700 group-hover:translate-x-[130%]"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)",
+        }}
+      />
+      <span className="relative z-10">Book a Free Counselling</span>
+      <ArrowRight
+        className="relative z-10 size-4 transition-transform duration-300 group-hover:translate-x-1"
+        strokeWidth={2.6}
+        aria-hidden
+      />
+    </a>
+  );
+}
+
+function GhostCta() {
+  return (
+    <a
+      href="#courses"
+      className="group inline-flex w-full items-center justify-center gap-2.5 rounded-xl px-6 py-[13px] text-[14.5px] font-semibold transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.985] sm:w-fit"
+      style={{
+        background: "rgba(18,28,56,0.55)",
+        color: TEXT_PRIMARY,
+        border: "1px solid rgba(255,255,255,0.16)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+      }}
+    >
+      Explore Courses
+      <Plus
+        className="size-4 transition-transform duration-300 group-hover:rotate-90"
+        style={{ color: LIME }}
+        strokeWidth={2.6}
+        aria-hidden
+      />
+    </a>
   );
 }
