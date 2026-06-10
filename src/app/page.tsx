@@ -8,7 +8,8 @@ import FacultySection from "@/components/sections/faculty-section/FacultySection
 import FAQSection from "@/components/sections/faq/FAQSection";
 import CounsellingCTA from "@/components/sections/final-cta/FinalCTA";
 import KotaAcademyFooter from "@/components/sections/footer/Footer";
-import { HeroSection } from "@/components/sections/hero/HeroSection";
+import { HeroSection } from "@/components/sections/hero";
+// import { HeroSection } from "@/components/sections/hero/HeroSection";
 
 import KotaAcademyNavbar from "@/components/sections/nav/Navbar";
 import ResultsSection from "@/components/sections/ResultSection";
@@ -16,13 +17,15 @@ import KotaAcademyStudentJourney from "@/components/sections/student-journey/Stu
 import SupportStrip from "@/components/sections/SupportStrip";
 import KotaAcademyTestimonialsSection from "@/components/sections/testimonial/Testimonial";
 import { UspSection } from "@/components/sections/usp";
-import KotaAcademyWhySection from "@/components/sections/why-kota-academy/KotaAcademyWhySection";
+import WhyKotaAcademy from "@/components/sections/why-kota-academy/KotaAcademyWhySection";
+// import KotaAcademyWhySection from "@/components/sections/why-kota-academy/KotaAcademyWhySection";
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-base text-primary">
       {/* <Navbar /> */}
-      <KotaAcademyNavbar/>
+      <KotaAcademyNavbar />
+      {/* <HeroSection /> */}
       <HeroSection />
 
       {/* Credibility Strip */}
@@ -33,19 +36,19 @@ export default function HomePage() {
       {/* Results Section */}
       <ResultsSection />
       {/* <CoursesSection/> */}
-      <CoursesSection/>
-      
-      <KotaAcademyWhySection/>
+      <CoursesSection />
+
+      {/* <KotaAcademyWhySection/> */}
+      <WhyKotaAcademy />
       <KotaAcademyStudentJourney />
       {/* <UspSection/> */}
-      <KotaAcademyFacultySection/>
-      <KotaAcademyTestimonialsSection/>
-      <KotaAcademyCampusGallery/>
-      <KotaAcademyBranchLocations/>
-      <FAQSection/>
-      <CounsellingCTA/>
-      <KotaAcademyFooter/>
-      
+      <KotaAcademyFacultySection />
+      <KotaAcademyTestimonialsSection />
+      <KotaAcademyCampusGallery />
+      <KotaAcademyBranchLocations />
+      <FAQSection />
+      <CounsellingCTA />
+      <KotaAcademyFooter />
     </main>
   );
 }

@@ -832,14 +832,22 @@ export function HeroSection() {
                 {/* Next/Image fill needs a positioned, overflow-hidden wrapper
                     that carries the mask + radius. */}
                 <div className={s.plateImg}>
-                  <Image
-                    src="/hero--image.webp"
+                  {/* <Image
+                    src="/cl-3.png"
                     alt="Kota Academy students in a classroom"
                     fill
                     priority
                     sizes="(max-width: 1024px) 90vw, 700px"
                     className="object-cover"
-                  />
+                  /> */}
+                  <Image
+  src="/cl-5.png"
+  alt="Kota Academy students in a classroom"
+  fill
+  priority
+  sizes="(max-width: 1024px) 92vw, 760px"
+  className="object-cover"
+/>
                 </div>
                 <div aria-hidden className={s.plateGrade} />
                 <div aria-hidden className={s.plateVignette} />

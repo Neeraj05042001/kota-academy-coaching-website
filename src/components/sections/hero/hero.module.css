@@ -1,9 +1,10 @@
 /* ============================================================
-   KOTA ACADEMY — hero.module.css  v5
-   Same v4 bones (module owns layout bedrock; Tailwind drives
-   cosmetics). Refined: brand-true navy + lime atmosphere (no
-   violet), full-width mobile image plate, nav clearance, and a
-   calmer responsive scale.
+   KOTA ACADEMY — hero.module.css  v6
+   Premium responsive hero image treatment:
+   - Navy + lime atmosphere
+   - Desktop image melts into background from left/right edges
+   - Mobile image remains a contained premium card
+   - Better image fitting across desktop, tablet, and mobile
    ============================================================ */
 
 @property --ka-pill-angle {
@@ -13,43 +14,38 @@
 }
 
 /* ════════════════════════════════════════════════════════════
-   BACKGROUND — navy base + a single lime glow pooled behind the
-   image (right) + a faint lime kiss (left) + navy underlight.
+   BACKGROUND
    ════════════════════════════════════════════════════════════ */
+
 .section {
   background:
-    /* lime glow pooled on the RIGHT, behind the image */
     radial-gradient(
       ellipse 70% 65% at 80% 40%,
-      rgb(181 255 61 / 0.10) 0%,
+      rgb(181 255 61 / 0.1) 0%,
       rgb(181 255 61 / 0.05) 26%,
-      rgb(11 27 51 / 0.30) 56%,
+      rgb(11 27 51 / 0.3) 56%,
       transparent 78%
     ),
-    /* faint lime kiss on the LEFT */
     radial-gradient(
       ellipse 48% 55% at 12% 32%,
       rgb(181 255 61 / 0.045) 0%,
       transparent 60%
     ),
-    /* navy underlight from the bottom */
     radial-gradient(
       ellipse 100% 42% at 50% 104%,
       rgb(6 14 32 / 0.45) 0%,
       transparent 72%
     ),
-    /* deep navy base */
     linear-gradient(180deg, var(--ink-900) 0%, var(--ink-850) 100%);
 
-  /* clear the fixed navbar at the top; leave room for the
-     credibility strip to straddle the bottom seam */
   padding-top: var(--nav-h, 90px);
   padding-bottom: 72px;
 }
 
 /* ════════════════════════════════════════════════════════════
-   SHELL — gutter container. Owns horizontal padding + max-width.
+   SHELL
    ════════════════════════════════════════════════════════════ */
+
 .shell {
   width: 100%;
   max-width: 1320px;
@@ -58,22 +54,41 @@
   padding-left: 20px !important;
   padding-right: 20px !important;
 }
+
 @media (min-width: 640px) {
-  .shell { padding-left: 32px !important; padding-right: 32px !important; }
+  .shell {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
 }
+
 @media (min-width: 1024px) {
-  .shell { padding-left: 48px !important; padding-right: 48px !important; }
+  .shell {
+    padding-left: 48px !important;
+    padding-right: 48px !important;
+  }
 }
+
 @media (min-width: 1536px) {
-  .shell { max-width: 1480px; padding-left: 64px !important; padding-right: 64px !important; }
+  .shell {
+    max-width: 1480px;
+    padding-left: 64px !important;
+    padding-right: 64px !important;
+  }
 }
+
 @media (min-width: 1920px) {
-  .shell { max-width: 1640px; padding-left: 80px !important; padding-right: 80px !important; }
+  .shell {
+    max-width: 1640px;
+    padding-left: 80px !important;
+    padding-right: 80px !important;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
-   BODY GRID — single column on mobile, two on lg+
+   BODY GRID
    ════════════════════════════════════════════════════════════ */
+
 .body {
   display: grid;
   grid-template-columns: 1fr;
@@ -82,44 +97,59 @@
   padding-top: 24px;
   padding-bottom: 0;
 }
+
 @media (min-width: 640px) {
-  .body { padding-top: 32px; gap: 44px 0; }
+  .body {
+    padding-top: 32px;
+    gap: 44px 0;
+  }
 }
+
 @media (min-width: 1024px) {
   .body {
-    grid-template-columns: 1fr 1.08fr;  /* image column slightly wider */
-    gap: 0 32px;
+    grid-template-columns: 0.92fr 1.18fr;
+    gap: 0 36px;
     padding-top: 0;
-    /* fill the viewport on normal screens, but cap so a short content
-       block isn't stranded in a huge vertical void on tall/large displays */
-    min-height: min(calc(100dvh - var(--nav-h, 90px) - 72px), 800px);
+    min-height: min(calc(100dvh - var(--nav-h, 90px) - 72px), 820px);
   }
 }
 
 /* ════════════════════════════════════════════════════════════
-   LEFT COLUMN — copy
+   LEFT COLUMN
    ════════════════════════════════════════════════════════════ */
+
 .left {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 22px;
 }
+
 @media (min-width: 1024px) {
-  .left { gap: 26px; padding-top: 56px; padding-bottom: 56px; }
+  .left {
+    gap: 26px;
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
-   BUTTONS — mobile full-width (thumb-friendly), sm+ sized to content
+   BUTTONS
    ════════════════════════════════════════════════════════════ */
+
 .ctas {
   display: flex;
   flex-direction: column;
   gap: 12px;
   width: 100%;
 }
+
 @media (min-width: 640px) {
-  .ctas { flex-direction: row; flex-wrap: wrap; width: auto; }
+  .ctas {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: auto;
+  }
 }
 
 .btn {
@@ -140,12 +170,19 @@
     background-color var(--dur-base) var(--ease-soft),
     border-color var(--dur-base) var(--ease-soft);
 }
+
 @media (min-width: 640px) {
-  .btn { width: fit-content; }
+  .btn {
+    width: fit-content;
+  }
 }
 
 .btnPrimary {
-  background: linear-gradient(180deg, var(--brand-primary), var(--brand-primary-active));
+  background: linear-gradient(
+    180deg,
+    var(--brand-primary),
+    var(--brand-primary-active)
+  );
   color: var(--brand-primary-ink);
   font-weight: 700;
   border: none;
@@ -154,15 +191,23 @@
     0 10px 28px -8px rgb(181 255 61 / 0.42),
     inset 0 1px 0 rgb(255 255 255 / 0.32);
 }
+
 .btnPrimary:hover {
   transform: translateY(-2px);
-  background: linear-gradient(180deg, var(--brand-primary-hover), var(--brand-primary));
+  background: linear-gradient(
+    180deg,
+    var(--brand-primary-hover),
+    var(--brand-primary)
+  );
   box-shadow:
     0 0 0 1px rgb(181 255 61 / 0.7),
     0 18px 42px -8px rgb(181 255 61 / 0.58),
     inset 0 1px 0 rgb(255 255 255 / 0.42);
 }
-.btnPrimary:active { transform: translateY(0) scale(0.985); }
+
+.btnPrimary:active {
+  transform: translateY(0) scale(0.985);
+}
 
 .btnGhost {
   background: rgb(14 19 38 / 0.5);
@@ -171,27 +216,42 @@
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
+
 .btnGhost:hover {
   transform: translateY(-2px);
   background: rgb(20 27 56 / 0.7);
   border-color: var(--border-default);
 }
-.btnGhost:active { transform: translateY(0) scale(0.985); }
+
+.btnGhost:active {
+  transform: translateY(0) scale(0.985);
+}
 
 .btn svg {
   transition:
     transform var(--dur-base) var(--ease-out),
     color var(--dur-base) var(--ease-soft);
 }
-.btnPrimary:hover svg { transform: translateX(4px); }
-.btnGhost:hover svg { transform: rotate(90deg); color: var(--brand-primary); }
-.btnGhost svg { color: var(--text-muted); }
+
+.btnPrimary:hover svg {
+  transform: translateX(4px);
+}
+
+.btnGhost:hover svg {
+  transform: rotate(90deg);
+  color: var(--brand-primary);
+}
+
+.btnGhost svg {
+  color: var(--text-muted);
+}
 
 /* ════════════════════════════════════════════════════════════
-   RIGHT COLUMN — image plate
-   Mobile: full-width plate (~90% of viewport), not a small card.
-   Tablet: capped + centered.   Desktop: fills the column.
+   RIGHT COLUMN — IMAGE PLATE
+   Mobile: premium contained card.
+   Desktop: cinematic image that melts into the navy background.
    ════════════════════════════════════════════════════════════ */
+
 .right {
   width: 100%;
   display: flex;
@@ -199,34 +259,51 @@
   justify-content: center;
   padding: 0;
 }
+
 @media (min-width: 1024px) {
-  .right { padding: 28px 0; justify-content: stretch; }
+  .right {
+    justify-content: stretch;
+    padding: 18px 0 22px;
+  }
 }
 
 .frame {
   position: relative;
   width: 100%;
-  max-width: 100%;        /* phones: fill the shell ≈ 90% of viewport */
-  aspect-ratio: 4 / 5;
+  max-width: min(92vw, 520px);
+  aspect-ratio: 4 / 4.75;
   margin-left: auto;
   margin-right: auto;
 }
+
 @media (min-width: 640px) {
-  .frame { max-width: 520px; }   /* tablet: larger than before, centered */
+  .frame {
+    max-width: 560px;
+    aspect-ratio: 4 / 4.65;
+  }
 }
+
 @media (min-width: 1024px) {
   .frame {
-    max-width: none;
     width: 100%;
-    max-height: 660px;
-    aspect-ratio: 1.08 / 1;
+    max-width: none;
+    aspect-ratio: 1.18 / 1;
+    max-height: 690px;
     margin: 0;
   }
 }
 
+@media (min-width: 1440px) {
+  .frame {
+    aspect-ratio: 1.22 / 1;
+    max-height: 720px;
+  }
+}
+
 /* ════════════════════════════════════════════════════════════
-   PLATE LAYERS — masks, grade, vignette
+   PLATE LAYERS
    ════════════════════════════════════════════════════════════ */
+
 .plate {
   position: absolute;
   inset: 0;
@@ -237,66 +314,267 @@
 .plateImg {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 42% 18%;
-  border-radius: 18px;
   overflow: hidden;
-}
-@media (min-width: 1024px) {
-  .plateImg { object-position: 50% 50%; border-radius: 0; }
+  border-radius: 24px;
+  isolation: isolate;
+  background: rgb(6 17 31 / 0.3);
 }
 
+.plateImg img {
+  object-fit: cover;
+  object-position: 50% 42%;
+}
+
+@media (min-width: 1024px) {
+  .plateImg {
+    border-radius: 0;
+  }
+
+  .plateImg img {
+    object-position: 52% 48%;
+  }
+}
+
+/* Mobile keeps image readable and card-like */
+@media (max-width: 1023px) {
+  .plateImg {
+    box-shadow:
+      0 0 0 1px rgb(181 255 61 / 0.22),
+      0 22px 60px rgb(0 0 0 / 0.34),
+      0 0 42px rgb(181 255 61 / 0.12);
+  }
+}
+
+/* Image grading layer */
 .plateGrade {
   position: absolute;
   inset: 0;
-  border-radius: 18px;
-  mix-blend-mode: soft-light;
+  pointer-events: none;
+  border-radius: 24px;
+  mix-blend-mode: normal;
   background:
-    linear-gradient(180deg, rgb(0 2 11 / 0.30) 0%, transparent 30%, transparent 70%, rgb(0 2 11 / 0.45) 100%),
-    radial-gradient(ellipse 70% 55% at 50% 32%, rgb(181 255 61 / 0.08) 0%, transparent 60%);
+    linear-gradient(
+      90deg,
+      rgb(3 10 22 / 0.76) 0%,
+      rgb(3 10 22 / 0.54) 22%,
+      rgb(3 10 22 / 0.2) 46%,
+      transparent 68%
+    ),
+    linear-gradient(
+      180deg,
+      rgb(0 2 11 / 0.32) 0%,
+      transparent 32%,
+      transparent 68%,
+      rgb(0 2 11 / 0.54) 100%
+    ),
+    radial-gradient(
+      ellipse 70% 55% at 64% 42%,
+      rgb(181 255 61 / 0.08) 0%,
+      transparent 62%
+    );
 }
-@media (min-width: 1024px) { .plateGrade { border-radius: 0; } }
 
+@media (min-width: 1024px) {
+  .plateGrade {
+    border-radius: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgb(3 10 22 / 0.96) 0%,
+        rgb(3 10 22 / 0.82) 18%,
+        rgb(3 10 22 / 0.36) 42%,
+        transparent 66%
+      ),
+      linear-gradient(
+        180deg,
+        rgb(0 2 11 / 0.38) 0%,
+        transparent 34%,
+        transparent 66%,
+        rgb(0 2 11 / 0.62) 100%
+      ),
+      radial-gradient(
+        ellipse 75% 60% at 66% 42%,
+        rgb(181 255 61 / 0.09) 0%,
+        transparent 64%
+      );
+  }
+}
+
+/* Vignette layer */
 .plateVignette {
   position: absolute;
   inset: 0;
-  border-radius: 18px;
-  background: radial-gradient(ellipse 85% 88% at 50% 50%, transparent 50%, rgb(0 2 11 / 0.45) 100%);
+  pointer-events: none;
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      ellipse 82% 86% at 58% 50%,
+      transparent 42%,
+      rgb(0 2 11 / 0.28) 74%,
+      rgb(0 2 11 / 0.72) 100%
+    );
 }
-@media (min-width: 1024px) { .plateVignette { border-radius: 0; } }
 
-/* Edge feather. Mobile: gentle (image reads full, edges just kiss
-   the navy). Desktop: stronger feather, edges melt into section. */
+@media (min-width: 1024px) {
+  .plateVignette {
+    border-radius: 0;
+    background:
+      linear-gradient(
+        to right,
+        rgb(3 10 22 / 0.95),
+        transparent 18%,
+        transparent 82%,
+        rgb(3 10 22 / 0.76)
+      ),
+      radial-gradient(
+        ellipse 88% 88% at 60% 52%,
+        transparent 44%,
+        rgb(0 2 11 / 0.34) 74%,
+        rgb(0 2 11 / 0.84) 100%
+      );
+  }
+}
+
+/* Edge feather masks:
+   Mobile: gentle fade.
+   Desktop: stronger 10–14% fade into navy background. */
 .plateImg,
 .plateGrade,
 .plateVignette {
   -webkit-mask-image:
-    linear-gradient(to right,  transparent 0%, #000 3%, #000 97%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, #000 3%, #000 96%, transparent 100%);
+    linear-gradient(
+      to right,
+      transparent 0%,
+      #000 4%,
+      #000 96%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 4%,
+      #000 94%,
+      transparent 100%
+    );
   mask-image:
-    linear-gradient(to right,  transparent 0%, #000 3%, #000 97%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, #000 3%, #000 96%, transparent 100%);
+    linear-gradient(
+      to right,
+      transparent 0%,
+      #000 4%,
+      #000 96%,
+      transparent 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 4%,
+      #000 94%,
+      transparent 100%
+    );
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
+
 @media (min-width: 1024px) {
   .plateImg,
   .plateGrade,
   .plateVignette {
     -webkit-mask-image:
-      linear-gradient(to right,  transparent 0%, #000 12%, #000 90%, transparent 100%),
-      linear-gradient(to bottom, transparent 0%, #000 8%,  #000 90%, transparent 100%);
+      linear-gradient(
+        to right,
+        transparent 0%,
+        rgb(0 0 0 / 0.18) 5%,
+        #000 14%,
+        #000 86%,
+        rgb(0 0 0 / 0.22) 94%,
+        transparent 100%
+      ),
+      linear-gradient(
+        to bottom,
+        transparent 0%,
+        #000 8%,
+        #000 88%,
+        transparent 100%
+      );
     mask-image:
-      linear-gradient(to right,  transparent 0%, #000 12%, #000 90%, transparent 100%),
-      linear-gradient(to bottom, transparent 0%, #000 8%,  #000 90%, transparent 100%);
+      linear-gradient(
+        to right,
+        transparent 0%,
+        rgb(0 0 0 / 0.18) 5%,
+        #000 14%,
+        #000 86%,
+        rgb(0 0 0 / 0.22) 94%,
+        transparent 100%
+      ),
+      linear-gradient(
+        to bottom,
+        transparent 0%,
+        #000 8%,
+        #000 88%,
+        transparent 100%
+      );
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+}
+
+/* Real blur only on extreme edges.
+   This creates the “fade into background” feeling without ruining the subject. */
+.plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0.72;
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      #000 0%,
+      transparent 10%,
+      transparent 90%,
+      #000 100%
+    ),
+    linear-gradient(
+      to bottom,
+      #000 0%,
+      transparent 10%,
+      transparent 90%,
+      #000 100%
+    );
+  mask-image:
+    linear-gradient(
+      to right,
+      #000 0%,
+      transparent 10%,
+      transparent 90%,
+      #000 100%
+    ),
+    linear-gradient(
+      to bottom,
+      #000 0%,
+      transparent 10%,
+      transparent 90%,
+      #000 100%
+    );
+  -webkit-mask-composite: source-over;
+  mask-composite: add;
+}
+
+@media (max-width: 1023px) {
+  .plate::before {
+    opacity: 0.28;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 }
 
 /* ════════════════════════════════════════════════════════════
-   GLOW + ARCS — behind the photo plate (lime, no violet)
+   GLOW + ARCS
    ════════════════════════════════════════════════════════════ */
+
 .arcs {
   position: absolute;
   left: 50%;
@@ -330,12 +608,14 @@
 }
 
 /* ════════════════════════════════════════════════════════════
-   PILL — segmented chip + conic glow border + shimmer
+   PILL
    ════════════════════════════════════════════════════════════ */
+
 .pill {
   position: relative;
   isolation: isolate;
 }
+
 .pill::before {
   content: "";
   position: absolute;
@@ -350,12 +630,15 @@
     transparent 220deg,
     transparent 360deg
   );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   animation: ka-pill-spin 5s linear infinite;
   z-index: -1;
 }
+
 .pill::after {
   content: "";
   position: absolute;
@@ -364,32 +647,81 @@
   left: -60%;
   width: 42%;
   border-radius: inherit;
-  background: linear-gradient(100deg, transparent, rgb(255 255 255 / 0.1), transparent);
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgb(255 255 255 / 0.1),
+    transparent
+  );
   transform: skewX(-18deg);
   animation: ka-pill-shimmer 6s var(--ease-soft) infinite;
   pointer-events: none;
   z-index: 1;
 }
-@keyframes ka-pill-spin    { to { --ka-pill-angle: 360deg; } }
-@keyframes ka-pill-shimmer { 0%, 64%, 100% { left: -60%; } 82% { left: 118%; } }
 
 /* ════════════════════════════════════════════════════════════
-   ENTRANCE + AMBIENT
+   ANIMATIONS
    ════════════════════════════════════════════════════════════ */
+
+@keyframes ka-pill-spin {
+  to {
+    --ka-pill-angle: 360deg;
+  }
+}
+
+@keyframes ka-pill-shimmer {
+  0%,
+  64%,
+  100% {
+    left: -60%;
+  }
+
+  82% {
+    left: 118%;
+  }
+}
+
 @keyframes ka-fade-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 @keyframes ka-plate-in {
-  from { opacity: 0; transform: scale(1.03); }
-  to   { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
+
 @keyframes ka-breathe {
-  0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
-  50%      { opacity: 1;   transform: translate(-50%, -50%) scale(1.08); }
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
+  }
 }
+
 @keyframes ka-spin-slow {
-  to { transform: translate(-50%, -50%) rotate(360deg); }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 .reveal {
@@ -397,16 +729,36 @@
   animation: ka-fade-up 0.8s var(--ease-out) forwards;
   animation-delay: calc(120ms * var(--i, 0));
 }
+
 .plateReveal {
   opacity: 0;
   animation: ka-plate-in 1.1s var(--ease-out) 0.35s forwards;
 }
-.breathe  { animation: ka-breathe 11s var(--ease-soft) infinite; }
-.spinSlow { animation: ka-spin-slow 48s linear infinite; }
+
+.breathe {
+  animation: ka-breathe 11s var(--ease-soft) infinite;
+}
+
+.spinSlow {
+  animation: ka-spin-slow 48s linear infinite;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .pill::before, .pill::after,
-  .reveal, .plateReveal, .breathe, .spinSlow,
-  .arcs, .glowPool, .plate { animation: none; }
-  .reveal, .plateReveal { opacity: 1; transform: none; }
+  .pill::before,
+  .pill::after,
+  .reveal,
+  .plateReveal,
+  .breathe,
+  .spinSlow,
+  .arcs,
+  .glowPool,
+  .plate {
+    animation: none;
+  }
+
+  .reveal,
+  .plateReveal {
+    opacity: 1;
+    transform: none;
+  }
 }
