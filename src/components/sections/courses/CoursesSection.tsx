@@ -1663,31 +1663,782 @@
 //   );
 // }
 
+// "use client";
+
+// /**
+//  * CoursesSection — Kota Academy (v2 redesign)
+//  * ---------------------------------------------------------------------------
+//  * Audit fixes vs v1:
+//  * · Rainbow CTAs (green/blue/brown/purple) → ONE brand CTA (lime gradient).
+//  *   Program differentiation moved to icons + class-range chips, never color.
+//  * · Photo banners (mixed art direction, text baked into images) → designed
+//  *   PROGRAM TILES: navy stage, dot-grid, program icon, ghost glyph, and the
+//  *   class-range chip promoted to the primary routing element.
+//  *   (Structure keeps an optional `image` slot — if consistent program
+//  *   photography arrives later, the navy-graded treatment can slot back in.)
+//  * · "View Features" accordion → 3 always-visible checklist rows (the site's
+//  *   pillar-card language). No hidden selling points, no uneven grids.
+//  * · Trust strip (duplicate of the faculty section's) → PROGRAM FINDER band:
+//  *   class → program routing links. Serves this section's actual job.
+//  * · "Most Popular" → gold (#F5B642, achievement color) + breathing glow
+//  *   (CARD_GLOW heritage), so it never competes with lime CTAs.
+//  * · Phones: single-column stack (was a 2-col crush).
+//  * · All load-bearing colors/gradients inline (Tailwind v4 hardening rule).
+//  * ---------------------------------------------------------------------------
+//  */
+
+// import Link from "next/link";
+// import {
+//   ArrowRight,
+//   Check,
+//   GraduationCap,
+//   BookOpen,
+//   Sparkles,
+//   Stethoscope,
+//   Target,
+//   TrendingUp,
+//   Compass,
+//   type LucideIcon,
+// } from "lucide-react";
+// import { motion, useReducedMotion, type Variants } from "framer-motion";
+
+// /* --------------------------------- palette -------------------------------- */
+
+// const NAVY = "#0B1B33";
+// const LIME = "#B5FF3D";
+// const GREEN_DEEP = "#3E9A12";
+// const EYEBROW_GREEN = "#2F7D17";
+
+// /* ---------------------------------- types ---------------------------------- */
+
+// export type Course = {
+//   id: string;
+//   title: string;
+//   audience: string;
+//   description: string;
+//   href: string;
+//   icon: LucideIcon;
+//   /** optional distinct glyph for the large watermark — use when the tile icon
+//    *  would read as ring circles at scale (e.g. Target) */
+//   ghostIcon?: LucideIcon;
+//   badge?: string;
+//   /** 3 visible selling points (checklist rows) */
+//   features: string[];
+//   exploreLabel: string;
+//   /** optional — when consistent program photography exists, render it on the
+//    *  tile with the navy-graded treatment instead of the ghost glyph */
+//   image?: string;
+// };
+
+// /* ---------------------------------- data ----------------------------------- */
+
+// // const courses: Course[] = [
+// //   {
+// //     title: "JEE Main & Advanced",
+// //     audience: "Class 11, 12 & Droppers",
+// //     description:
+// //       "Complete JEE preparation with concept clarity, advanced practice, tests & performance tracking.",
+// //     href: "/courses/jee-main-advanced",
+// //     icon: Target,
+// //     badge: "Most Popular",
+// //     exploreLabel: "Explore JEE Program",
+// //     highlights: [
+// // "Concept-first classes & advanced practice",
+// // "Weekly NTA-pattern tests",
+// // "Daily doubt support",
+// // "Performance tracking & mentoring",
+// //     ],
+// //   },
+// //   {
+// //     title: "NEET UG Preparation",
+// //     audience: "Class 11, 12 & Droppers",
+// //     description:
+// //       "Focused NEET preparation with NCERT mastery, regular tests, and expert doubt support.",
+// //     href: "/courses/neet-ug-preparation",
+// //     icon: Stethoscope,
+// //     exploreLabel: "Explore NEET Program",
+// //     highlights: [
+// // "NCERT mastery with Biology focus",
+// // "Regular NEET-pattern tests",
+// // "Expert doubt support",
+// // "Chapter-wise practice sheets",
+// //     ],
+// //   },
+// //   {
+// //     title: "Class 11–12 Boards",
+// //     audience: "CBSE / State Board Prep",
+// //     description:
+// //       "Strengthen concepts, improve scores, and excel in school and board examinations.",
+// //     href: "/courses/class-11-12-boards",
+// //     icon: BookOpen,
+// //     exploreLabel: "Explore Boards Program",
+// //     highlights: [
+// // "Chapter-wise concept & practice",
+// // "Answer-writing training",
+// // "Board-pattern test series",
+// // "Score improvement tracking",
+// //     ],
+// //   },
+// //   {
+// //     title: "Class 8–10 Foundation",
+// //     audience: "Class 8, 9 & 10 Students",
+// //     description:
+// //       "Build strong Maths, Science & Reasoning fundamentals to stay ahead for future exams.",
+// //     href: "/courses/class-8-10-foundation",
+// //     icon: GraduationCap,
+// //     exploreLabel: "Explore Foundation Program",
+// //     highlights: [
+// //       "Strong Maths & Science basics",
+// //       "Olympiad & NTSE support",
+// //       "Regular assessments",
+// //       "Future-exam readiness",
+// //     ],
+// //   },
+// // ];
+
+// /* program finder — class → program routing (replaces the duplicate trust strip) */
+// const finder: { label: string; links: { name: string; href: string }[] }[] = [
+//   {
+//     label: "Class 8–10",
+//     links: [{ name: "Foundation", href: "/courses/class-8-10-foundation" }],
+//   },
+//   {
+//     label: "Class 11–12",
+//     links: [
+//       { name: "JEE", href: "/courses/jee-main-advanced" },
+//       { name: "NEET", href: "/courses/neet-ug-preparation" },
+//       { name: "Boards", href: "/courses/class-11-12-boards" },
+//     ],
+//   },
+//   {
+//     label: "Dropper",
+//     links: [
+//       { name: "JEE", href: "/courses/jee-main-advanced" },
+//       { name: "NEET", href: "/courses/neet-ug-preparation" },
+//     ],
+//   },
+// ];
+
+// const courses: Course[] = [
+//   {
+//     id: "jee",
+//     title: "JEE Main & Advanced",
+//     audience: "Class 11–12 + Droppers",
+//     description:
+//       "Complete JEE preparation with concept clarity, advanced practice, and performance tracking.",
+//     href: "/courses/jee-main-advanced",
+//     icon: Target,
+//     ghostIcon: TrendingUp,
+//     badge: "Most Popular",
+//     exploreLabel: "Explore JEE Program",
+//     features: [
+//       "Concept-first classes & advanced practice",
+//       "Weekly NTA-pattern tests",
+//       "Daily doubt support",
+//       "Performance tracking & mentoring",
+//     ],
+//   },
+//   {
+//     id: "neet",
+//     title: "NEET UG Preparation",
+//     audience: "Class 11–12 + Droppers",
+//     description:
+//       "Focused NEET preparation with NCERT mastery, regular testing, and expert doubt support.",
+//     href: "/courses/neet-ug-preparation",
+//     icon: Stethoscope,
+//     exploreLabel: "Explore NEET Program",
+//     features: [
+//       "NCERT mastery with Biology focus",
+//       "Regular NEET-pattern tests",
+//       "Expert doubt support",
+//       "Chapter-wise practice sheets",
+//     ],
+//   },
+//   {
+//     id: "boards",
+//     title: "Class 11–12 Boards",
+//     audience: "CBSE / State Boards",
+//     description:
+//       "Strengthen concepts, improve scores, and excel in school and board examinations.",
+//     href: "/courses/class-11-12-boards",
+//     icon: BookOpen,
+//     exploreLabel: "Explore Boards Program",
+//     features: [
+//       "Chapter-wise concept & practice",
+//       "Answer-writing training",
+//       "Board-pattern test series",
+//       "Score improvement tracking",
+//     ],
+//   },
+//   {
+//     id: "foundation",
+//     title: "Class 8–10 Foundation",
+//     audience: "Class 8, 9 & 10",
+//     description:
+//       "Build strong Maths, Science & Reasoning fundamentals to stay ahead for future exams.",
+//     href: "/courses/class-8-10-foundation",
+//     icon: GraduationCap,
+//     exploreLabel: "Explore Foundation Program",
+//     features: [
+//       "Strong Maths & Science basics",
+//       "Olympiad & NTSE support",
+//       "Regular assessments",
+//       "Future-exam readiness",
+//     ],
+//   },
+// ];
+
+// /* class → program routing (replaces the duplicated trust strip) */
+// // const finder: { who: string; targets: { label: string; href: string }[] }[] = [
+// //   {
+// //     who: "Class 8–10",
+// //     targets: [{ label: "Foundation", href: "/courses/class-8-10-foundation" }],
+// //   },
+// //   {
+// //     who: "Class 11–12",
+// //     targets: [
+// //       { label: "JEE", href: "/courses/jee-main-advanced" },
+// //       { label: "NEET", href: "/courses/neet-ug-preparation" },
+// //       { label: "Boards", href: "/courses/class-11-12-boards" },
+// //     ],
+// //   },
+// //   {
+// //     who: "Droppers",
+// //     targets: [
+// //       { label: "JEE", href: "/courses/jee-main-advanced" },
+// //       { label: "NEET", href: "/courses/neet-ug-preparation" },
+// //     ],
+// //   },
+// // ];
+
+// /* --------------------------------- motion ---------------------------------- */
+
+// const EASE = [0.22, 1, 0.36, 1] as const;
+
+// const container: Variants = {
+//   hidden: {},
+//   visible: { transition: { staggerChildren: 0.08 } },
+// };
+
+// const fadeUp: Variants = {
+//   hidden: { opacity: 0, y: 20 },
+//   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } },
+// };
+
+// /* ================================== card =================================== */
+
+// function CourseCard({ course }: { course: Course }) {
+//   const reduce = useReducedMotion();
+//   const Icon = course.icon;
+//   const Ghost = course.ghostIcon ?? course.icon;
+//   const popular = Boolean(course.badge);
+
+//   return (
+//     <motion.article
+//       variants={fadeUp}
+//       /* breathing glow on the Most Popular card — CARD_GLOW heritage */
+//       animate={
+//         popular && !reduce
+//           ? {
+//               boxShadow: [
+//                 "0 10px 30px rgba(15,23,42,0.06), 0 0 0px rgba(245,182,66,0)",
+//                 "0 10px 30px rgba(15,23,42,0.06), 0 0 34px rgba(245,182,66,0.22)",
+//                 "0 10px 30px rgba(15,23,42,0.06), 0 0 0px rgba(245,182,66,0)",
+//               ],
+//             }
+//           : undefined
+//       }
+//       transition={
+//         popular
+//           ? { duration: 4.5, repeat: Infinity, ease: "easeInOut" }
+//           : undefined
+//       }
+//       className="group relative flex h-full flex-col overflow-hidden rounded-3xl transition-transform duration-300 hover:-translate-y-1.5"
+//       style={{
+//         background: "#FFFFFF",
+//         border: popular
+//           ? "1px solid rgba(245,182,66,0.45)"
+//           : "1px solid rgba(11,27,51,0.1)",
+//         boxShadow: "0 10px 30px rgba(15,23,42,0.06)",
+//       }}
+//     >
+//       {/* top hairline that ignites lime on hover — site card language */}
+//       <span
+//         aria-hidden
+//         className="pointer-events-none absolute inset-x-6 top-0 z-20 h-px opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+//         style={{
+//           background: `linear-gradient(90deg, transparent, ${LIME}, transparent)`,
+//         }}
+//       />
+
+//       {/* ---------- program tile (the card's identity block) ---------- */}
+//       <div
+//         className="relative shrink-0 overflow-hidden px-5 pb-4 pt-5"
+//         style={{
+//           background: `radial-gradient(circle at 82% 18%, rgba(181,255,61,0.16), transparent 50%), linear-gradient(135deg, ${NAVY} 0%, #13294B 100%)`,
+//         }}
+//       >
+//         {/* dot-grid texture */}
+//         <div
+//           aria-hidden
+//           className="absolute inset-0"
+//           style={{
+//             backgroundImage:
+//               "radial-gradient(circle at 1px 1px, rgba(181,255,61,0.22) 1px, transparent 0)",
+//             backgroundSize: "20px 20px",
+//             maskImage: "linear-gradient(120deg, transparent 35%, #000 100%)",
+//             WebkitMaskImage:
+//               "linear-gradient(120deg, transparent 35%, #000 100%)",
+//           }}
+//         />
+//         {/* ghost watermark — Ghost glyph, never ring-like at scale */}
+//         <Ghost
+//           aria-hidden
+//           className="absolute -bottom-8 -right-6 h-36 w-36 transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-[-4deg]"
+//           strokeWidth={1.2}
+//           style={{ color: "rgba(181,255,61,0.13)" }}
+//         />
+
+//         <div className="relative z-10">
+//           <div className="flex items-start justify-between gap-2">
+//             {/* icon tile */}
+//             <div
+//               className="flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300 group-hover:shadow-[0_8px_20px_-6px_rgba(95,176,22,0.6)]"
+//               style={{
+//                 background: "rgba(181,255,61,0.12)",
+//                 boxShadow: "inset 0 0 0 1px rgba(181,255,61,0.3)",
+//               }}
+//             >
+//               <Icon
+//                 className="h-[22px] w-[22px]"
+//                 strokeWidth={1.9}
+//                 style={{ color: LIME }}
+//                 aria-hidden
+//               />
+//             </div>
+
+//             {/* Most Popular — gold, never competing with lime CTAs */}
+//             {course.badge ? (
+//               <span
+//                 className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.08em]"
+//                 style={{
+//                   background: "linear-gradient(145deg, #FFD37A, #E8A52E)",
+//                   color: "#2A1D04",
+//                   boxShadow: "0 6px 16px -4px rgba(245,182,66,0.55)",
+//                 }}
+//               >
+//                 <Sparkles className="h-3 w-3" aria-hidden />
+//                 {course.badge}
+//               </span>
+//             ) : null}
+//           </div>
+
+//           {/* title lives on the tile — the stage always has a job */}
+//           <h3 className="mt-4 text-lg font-extrabold leading-tight tracking-tight text-white sm:text-[20px]">
+//             {course.title}
+//           </h3>
+
+//           {/* class-range chip — the routing element */}
+//           <span
+//             className="mt-2.5 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-bold"
+//             style={{
+//               background: "rgba(181,255,61,0.94)",
+//               color: "#13230A",
+//               boxShadow: "0 6px 18px -6px rgba(181,255,61,0.6)",
+//             }}
+//           >
+//             {course.audience}
+//           </span>
+//         </div>
+//       </div>
+
+//       {/* ------------------------------- body ------------------------------- */}
+//       <div className="flex flex-1 flex-col px-5 pb-5 pt-4">
+//         <p className="text-[13px] leading-relaxed text-slate-600">
+//           {course.description}
+//         </p>
+
+//         {/* checklist — always visible, no accordion */}
+//         <ul
+//           className="mt-4 grid gap-2 border-t border-dashed pt-3.5"
+//           style={{ borderColor: "rgba(11,27,51,0.1)" }}
+//         >
+//           {course.features.map((f) => (
+//             <li
+//               key={f}
+//               className="flex items-start gap-2 text-[13px] font-medium leading-snug"
+//               style={{ color: NAVY }}
+//             >
+//               <Check
+//                 className="mt-[2px] h-[15px] w-[15px] flex-none"
+//                 strokeWidth={2.6}
+//                 style={{ color: "#5FB016" }}
+//                 aria-hidden
+//               />
+//               {f}
+//             </li>
+//           ))}
+//         </ul>
+
+//         {/* single brand CTA — identical treatment on every card */}
+//         <div className="mt-auto pt-5">
+//           <Link
+//             href={course.href}
+//             aria-label={course.exploreLabel}
+//             className="group/cta relative inline-flex min-h-[44px] w-full items-center justify-center gap-2 overflow-hidden rounded-xl px-4 text-[13.5px] font-bold transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+//             style={{
+//               background:
+//                 "linear-gradient(135deg, #C8FF55 0%, #8FE021 55%, #5FB016 100%)",
+//               color: "#13230A",
+//               boxShadow:
+//                 "0 12px 26px -10px rgba(120,200,30,0.55), inset 0 1px 0 rgba(255,255,255,0.35)",
+//             }}
+//           >
+//             <span
+//               aria-hidden
+//               className="pointer-events-none absolute inset-0 -translate-x-full transition-transform duration-700 group-hover/cta:translate-x-[130%]"
+//               style={{
+//                 background:
+//                   "linear-gradient(90deg, transparent, rgba(255,255,255,0.45), transparent)",
+//               }}
+//             />
+//             <span className="relative z-10">{course.exploreLabel}</span>
+//             <ArrowRight
+//               className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1"
+//               aria-hidden
+//             />
+//           </Link>
+//         </div>
+//       </div>
+//     </motion.article>
+//   );
+// }
+
+// /* ================================ header =================================== */
+
+// function CoursesHeader() {
+//   return (
+//     <motion.div
+//       variants={container}
+//       initial="hidden"
+//       whileInView="visible"
+//       viewport={{ once: true, amount: 0.4 }}
+//       className="mx-auto flex max-w-3xl flex-col items-center text-center"
+//     >
+//       <motion.div
+//         variants={fadeUp}
+//         className="mb-3 inline-flex items-center gap-3"
+//       >
+//         <span
+//           className="h-px w-8"
+//           style={{ background: "rgba(78,148,23,0.45)" }}
+//         />
+//         <span
+//           className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] sm:text-xs"
+//           style={{ color: EYEBROW_GREEN }}
+//         >
+//           <GraduationCap className="h-3.5 w-3.5" aria-hidden />
+//           Our Programs
+//         </span>
+//         <span
+//           className="h-px w-8"
+//           style={{ background: "rgba(78,148,23,0.45)" }}
+//         />
+//       </motion.div>
+
+//       <motion.h2
+//         id="courses-heading"
+//         variants={fadeUp}
+//         className="text-2xl font-extrabold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl"
+//         style={{ color: "#0B1628" }}
+//       >
+//         Courses Designed for{" "}
+//         <span style={{ color: GREEN_DEEP }}>Every Aspiration</span>
+//       </motion.h2>
+
+//       <motion.p
+//         variants={fadeUp}
+//         className="mt-3 max-w-xl text-sm leading-6 text-slate-600 sm:text-base"
+//       >
+//         Choose the right preparation path for JEE, NEET, Boards, or early
+//         foundation learning.
+//       </motion.p>
+//     </motion.div>
+//   );
+// }
+
+// /* ============================ program finder =============================== */
+// /*  Replaces the trust strip (which duplicated the faculty section's items).  */
+// /*  This is routing UI: class → program, every target is a link.              */
+
+// // function ProgramFinder() {
+// //   return (
+// //     <motion.div
+// //       variants={fadeUp}
+// //       initial="hidden"
+// //       whileInView="visible"
+// //       viewport={{ once: true, amount: 0.3 }}
+// //       className="relative mx-auto mt-8 max-w-7xl sm:mt-10"
+// //     >
+// //       {/* gradient hairline frame — system language */}
+// //       <div
+// //         className="rounded-3xl p-px"
+// //         style={{
+// //           background:
+// //             "linear-gradient(120deg, rgba(181,255,61,0.55), rgba(11,27,51,0.1) 35%, rgba(11,27,51,0.1) 65%, rgba(181,255,61,0.45))",
+// //         }}
+// //       >
+// //         <div
+// //           className="relative overflow-hidden rounded-[calc(1.5rem-1px)] backdrop-blur-sm"
+// //           style={{ background: "rgba(255,255,255,0.8)" }}
+// //         >
+// //           <span
+// //             aria-hidden
+// //             className="pointer-events-none absolute inset-0"
+// //             style={{
+// //               background:
+// //                 "radial-gradient(520px 130px at 50% -35%, rgba(181,255,61,0.15), transparent)",
+// //             }}
+// //           />
+
+// //           <div className="relative z-10 flex flex-col gap-4 px-5 py-5 sm:px-7 lg:flex-row lg:items-center lg:gap-8 lg:py-5">
+// //             {/* label */}
+// //             <div className="flex shrink-0 items-center gap-2.5">
+// //               <span
+// //                 className="flex h-9 w-9 items-center justify-center rounded-xl"
+// //                 style={{
+// //                   background: "#EAF7DC",
+// //                   color: "#2C7A12",
+// //                   boxShadow: "inset 0 0 0 1px rgba(95,176,22,0.3)",
+// //                 }}
+// //               >
+// //                 <Compass className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden />
+// //               </span>
+// //               <span
+// //                 className="text-[13.5px] font-extrabold tracking-tight"
+// //                 style={{ color: NAVY }}
+// //               >
+// //                 Find your path
+// //               </span>
+// //             </div>
+
+// //             {/* routes */}
+// //             <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-3">
+// //               {finder.map((row, i) => (
+// //                 <div key={row.who} className="relative flex items-center gap-2.5">
+// //                   {/* gradient separator between groups (sm+) */}
+// //                   {i > 0 && (
+// //                     <span
+// //                       aria-hidden
+// //                       className="absolute -left-4 top-1/2 hidden h-7 w-px -translate-y-1/2 sm:block"
+// //                       style={{
+// //                         background:
+// //                           "linear-gradient(180deg, transparent, rgba(11,27,51,0.15), transparent)",
+// //                       }}
+// //                     />
+// //                   )}
+// //                   <span className="text-[12.5px] font-bold uppercase tracking-[0.08em] text-slate-500">
+// //                     {row.who}
+// //                   </span>
+// //                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" aria-hidden />
+// //                   <span className="flex flex-wrap gap-1.5">
+// //                     {row.targets.map((t) => (
+// //                       <Link
+// //                         key={t.label}
+// //                         href={t.href}
+// //                         className="rounded-full px-3 py-1.5 text-[12.5px] font-bold transition-all duration-200 hover:-translate-y-0.5"
+// //                         style={{
+// //                           background: "rgba(181,255,61,0.18)",
+// //                           color: "#2C5A0E",
+// //                           boxShadow: "inset 0 0 0 1px rgba(95,176,22,0.3)",
+// //                         }}
+// //                       >
+// //                         {t.label}
+// //                       </Link>
+// //                     ))}
+// //                   </span>
+// //                 </div>
+// //               ))}
+// //             </div>
+// //           </div>
+// //         </div>
+// //       </div>
+// //     </motion.div>
+// //   );
+// // }
+
+// function ProgramFinder() {
+//   return (
+//     <motion.div
+//       variants={fadeUp}
+//       initial="hidden"
+//       whileInView="visible"
+//       viewport={{ once: true, amount: 0.3 }}
+//       className="relative mx-auto mt-8 max-w-7xl sm:mt-10"
+//     >
+//       {/* gradient hairline frame */}
+//       <div
+//         className="rounded-3xl p-px"
+//         style={{
+//           background:
+//             "linear-gradient(120deg, rgba(181,255,61,0.55), rgba(11,27,51,0.1) 35%, rgba(11,27,51,0.1) 65%, rgba(181,255,61,0.45))",
+//         }}
+//       >
+//         <div
+//           className="relative overflow-hidden rounded-[calc(1.5rem-1px)] backdrop-blur-sm"
+//           style={{ background: "rgba(255,255,255,0.8)" }}
+//         >
+//           <span
+//             aria-hidden
+//             className="pointer-events-none absolute inset-0"
+//             style={{
+//               background:
+//                 "radial-gradient(500px 130px at 50% -40%, rgba(181,255,61,0.15), transparent)",
+//             }}
+//           />
+
+//           <div className="relative z-10 flex flex-col items-center gap-x-8 gap-y-4 px-5 py-5 sm:py-4 lg:flex-row lg:justify-center">
+//             <p
+//               className="text-[12px] font-extrabold uppercase tracking-[0.16em]"
+//               style={{ color: EYEBROW_GREEN }}
+//             >
+//               Find your path
+//             </p>
+
+//             <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-3">
+//               {finder.map((seg, i) => (
+//                 <div
+//                   key={seg.label}
+//                   className="relative flex items-center gap-2.5"
+//                 >
+//                   {i > 0 && (
+//                     <span
+//                       aria-hidden
+//                       className="absolute -left-4 hidden h-7 w-px sm:block"
+//                       style={{
+//                         background:
+//                           "linear-gradient(180deg, transparent, rgba(11,27,51,0.18), transparent)",
+//                       }}
+//                     />
+//                   )}
+//                   <span
+//                     className="text-[12.5px] font-bold"
+//                     style={{ color: NAVY }}
+//                   >
+//                     {seg.label}
+//                   </span>
+//                   <ArrowRight
+//                     className="h-3.5 w-3.5"
+//                     style={{ color: "#5FB016" }}
+//                     strokeWidth={2.4}
+//                     aria-hidden
+//                   />
+//                   <span className="flex items-center gap-1.5">
+//                     {seg.links.map((l) => (
+//                       <Link
+//                         key={seg.label + l.name}
+//                         href={l.href}
+//                         className="rounded-full px-2.5 py-1 text-[12px] font-bold transition-all duration-300 hover:-translate-y-0.5"
+//                         style={{
+//                           background: "#EAF7DC",
+//                           color: "#2C7A12",
+//                           boxShadow: "inset 0 0 0 1px rgba(95,176,22,0.3)",
+//                         }}
+//                       >
+//                         {l.name}
+//                       </Link>
+//                     ))}
+//                   </span>
+//                 </div>
+//               ))}
+//             </div>
+
+//             <Link
+//               href="#counselling"
+//               className="group inline-flex items-center gap-1.5 text-[12.5px] font-bold transition-colors duration-300"
+//               style={{ color: NAVY }}
+//             >
+//               Not sure?{" "}
+//               <span style={{ color: "#2C7A12" }}>Book free counselling</span>
+//               <ArrowRight
+//                 className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+//                 style={{ color: "#5FB016" }}
+//                 aria-hidden
+//               />
+//             </Link>
+//           </div>
+//         </div>
+//       </div>
+//     </motion.div>
+//   );
+// }
+// /* ================================ section ================================== */
+
+// export default function CoursesSection() {
+//   return (
+//     <section
+//       aria-labelledby="courses-heading"
+//       className="relative overflow-hidden px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20"
+//       style={{
+//         background:
+//           "radial-gradient(circle at 12% 12%, rgba(190,242,100,0.18), transparent 30%), radial-gradient(circle at 88% 28%, rgba(245,182,66,0.08), transparent 32%), linear-gradient(135deg, #F8FAF2 0%, #F6F9EE 46%, #EEF5DE 100%)",
+//       }}
+//     >
+//       {/* faint dotted texture */}
+//       <div
+//         aria-hidden
+//         className="pointer-events-none absolute inset-0 opacity-[0.12]"
+//         style={{
+//           backgroundImage:
+//             "radial-gradient(circle at 1px 1px, rgba(15,23,42,0.18) 1px, transparent 0)",
+//           backgroundSize: "24px 24px",
+//         }}
+//       />
+
+//       <div className="relative z-10 mx-auto w-full max-w-7xl">
+//         <CoursesHeader />
+
+//         {/* 1-col phones · 2-col tablets · 4-col desktop */}
+//         <motion.div
+//           variants={container}
+//           initial="hidden"
+//           whileInView="visible"
+//           viewport={{ once: true, amount: 0.15 }}
+//           className="mt-8 grid grid-cols-1 gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4 xl:gap-5"
+//         >
+//           {courses.map((course) => (
+//             <CourseCard key={course.id} course={course} />
+//           ))}
+//         </motion.div>
+
+//         <ProgramFinder />
+//       </div>
+//     </section>
+//   );
+// }
+
+
 "use client";
 
 /**
- * CoursesSection — Kota Academy (v2 redesign)
+ * CoursesSection — Kota Academy (v3)
  * ---------------------------------------------------------------------------
- * Audit fixes vs v1:
- * · Rainbow CTAs (green/blue/brown/purple) → ONE brand CTA (lime gradient).
- *   Program differentiation moved to icons + class-range chips, never color.
- * · Photo banners (mixed art direction, text baked into images) → designed
- *   PROGRAM TILES: navy stage, dot-grid, program icon, ghost glyph, and the
- *   class-range chip promoted to the primary routing element.
- *   (Structure keeps an optional `image` slot — if consistent program
- *   photography arrives later, the navy-graded treatment can slot back in.)
- * · "View Features" accordion → 3 always-visible checklist rows (the site's
- *   pillar-card language). No hidden selling points, no uneven grids.
- * · Trust strip (duplicate of the faculty section's) → PROGRAM FINDER band:
- *   class → program routing links. Serves this section's actual job.
- * · "Most Popular" → gold (#F5B642, achievement color) + breathing glow
- *   (CARD_GLOW heritage), so it never competes with lime CTAs.
- * · Phones: single-column stack (was a 2-col crush).
- * · All load-bearing colors/gradients inline (Tailwind v4 hardening rule).
+ * v3 changes (vs v2):
+ * · Cards flipped FULLY DARK — navy program cards on the light section, the
+ *   same language as the Results showcase and Journey panel. Fixes the
+ *   "four equal white cards" low-contrast monotony.
+ * · Mobile: snap CAROUSEL (site gesture language — faculty/results already
+ *   swipe). The section costs ~1 card-height of scroll instead of 4.
+ * · JEE flagship: gold border + breathing glow (CARD_GLOW heritage).
+ * · User-edited copy preserved (4 features per card, title-above-chip,
+ *   "Not sure? Book free counselling" in the finder).
+ * · Hardening rules: load-bearing colors inline; no inherited-variant
+ *   dependence for critical visibility.
  * ---------------------------------------------------------------------------
  */
 
 import Link from "next/link";
+import { useCallback, useRef, useState } from "react";
 import {
   ArrowRight,
   Check,
@@ -1718,106 +2469,15 @@ export type Course = {
   description: string;
   href: string;
   icon: LucideIcon;
-  /** optional distinct glyph for the large watermark — use when the tile icon
-   *  would read as ring circles at scale (e.g. Target) */
+  /** distinct glyph for the large watermark when the tile icon would read as
+   *  ring circles at scale (e.g. Target) */
   ghostIcon?: LucideIcon;
   badge?: string;
-  /** 3 visible selling points (checklist rows) */
   features: string[];
   exploreLabel: string;
-  /** optional — when consistent program photography exists, render it on the
-   *  tile with the navy-graded treatment instead of the ghost glyph */
-  image?: string;
 };
 
 /* ---------------------------------- data ----------------------------------- */
-
-// const courses: Course[] = [
-//   {
-//     title: "JEE Main & Advanced",
-//     audience: "Class 11, 12 & Droppers",
-//     description:
-//       "Complete JEE preparation with concept clarity, advanced practice, tests & performance tracking.",
-//     href: "/courses/jee-main-advanced",
-//     icon: Target,
-//     badge: "Most Popular",
-//     exploreLabel: "Explore JEE Program",
-//     highlights: [
-// "Concept-first classes & advanced practice",
-// "Weekly NTA-pattern tests",
-// "Daily doubt support",
-// "Performance tracking & mentoring",
-//     ],
-//   },
-//   {
-//     title: "NEET UG Preparation",
-//     audience: "Class 11, 12 & Droppers",
-//     description:
-//       "Focused NEET preparation with NCERT mastery, regular tests, and expert doubt support.",
-//     href: "/courses/neet-ug-preparation",
-//     icon: Stethoscope,
-//     exploreLabel: "Explore NEET Program",
-//     highlights: [
-// "NCERT mastery with Biology focus",
-// "Regular NEET-pattern tests",
-// "Expert doubt support",
-// "Chapter-wise practice sheets",
-//     ],
-//   },
-//   {
-//     title: "Class 11–12 Boards",
-//     audience: "CBSE / State Board Prep",
-//     description:
-//       "Strengthen concepts, improve scores, and excel in school and board examinations.",
-//     href: "/courses/class-11-12-boards",
-//     icon: BookOpen,
-//     exploreLabel: "Explore Boards Program",
-//     highlights: [
-// "Chapter-wise concept & practice",
-// "Answer-writing training",
-// "Board-pattern test series",
-// "Score improvement tracking",
-//     ],
-//   },
-//   {
-//     title: "Class 8–10 Foundation",
-//     audience: "Class 8, 9 & 10 Students",
-//     description:
-//       "Build strong Maths, Science & Reasoning fundamentals to stay ahead for future exams.",
-//     href: "/courses/class-8-10-foundation",
-//     icon: GraduationCap,
-//     exploreLabel: "Explore Foundation Program",
-//     highlights: [
-//       "Strong Maths & Science basics",
-//       "Olympiad & NTSE support",
-//       "Regular assessments",
-//       "Future-exam readiness",
-//     ],
-//   },
-// ];
-
-/* program finder — class → program routing (replaces the duplicate trust strip) */
-const finder: { label: string; links: { name: string; href: string }[] }[] = [
-  {
-    label: "Class 8–10",
-    links: [{ name: "Foundation", href: "/courses/class-8-10-foundation" }],
-  },
-  {
-    label: "Class 11–12",
-    links: [
-      { name: "JEE", href: "/courses/jee-main-advanced" },
-      { name: "NEET", href: "/courses/neet-ug-preparation" },
-      { name: "Boards", href: "/courses/class-11-12-boards" },
-    ],
-  },
-  {
-    label: "Dropper",
-    links: [
-      { name: "JEE", href: "/courses/jee-main-advanced" },
-      { name: "NEET", href: "/courses/neet-ug-preparation" },
-    ],
-  },
-];
 
 const courses: Course[] = [
   {
@@ -1888,28 +2548,27 @@ const courses: Course[] = [
   },
 ];
 
-/* class → program routing (replaces the duplicated trust strip) */
-// const finder: { who: string; targets: { label: string; href: string }[] }[] = [
-//   {
-//     who: "Class 8–10",
-//     targets: [{ label: "Foundation", href: "/courses/class-8-10-foundation" }],
-//   },
-//   {
-//     who: "Class 11–12",
-//     targets: [
-//       { label: "JEE", href: "/courses/jee-main-advanced" },
-//       { label: "NEET", href: "/courses/neet-ug-preparation" },
-//       { label: "Boards", href: "/courses/class-11-12-boards" },
-//     ],
-//   },
-//   {
-//     who: "Droppers",
-//     targets: [
-//       { label: "JEE", href: "/courses/jee-main-advanced" },
-//       { label: "NEET", href: "/courses/neet-ug-preparation" },
-//     ],
-//   },
-// ];
+const finder: { who: string; targets: { label: string; href: string }[] }[] = [
+  {
+    who: "Class 8–10",
+    targets: [{ label: "Foundation", href: "/courses/class-8-10-foundation" }],
+  },
+  {
+    who: "Class 11–12",
+    targets: [
+      { label: "JEE", href: "/courses/jee-main-advanced" },
+      { label: "NEET", href: "/courses/neet-ug-preparation" },
+      { label: "Boards", href: "/courses/class-11-12-boards" },
+    ],
+  },
+  {
+    who: "Dropper",
+    targets: [
+      { label: "JEE", href: "/courses/jee-main-advanced" },
+      { label: "NEET", href: "/courses/neet-ug-preparation" },
+    ],
+  },
+];
 
 /* --------------------------------- motion ---------------------------------- */
 
@@ -1935,34 +2594,39 @@ function CourseCard({ course }: { course: Course }) {
 
   return (
     <motion.article
-      variants={fadeUp}
-      /* breathing glow on the Most Popular card — CARD_GLOW heritage */
-      animate={
-        popular && !reduce
-          ? {
-              boxShadow: [
-                "0 10px 30px rgba(15,23,42,0.06), 0 0 0px rgba(245,182,66,0)",
-                "0 10px 30px rgba(15,23,42,0.06), 0 0 34px rgba(245,182,66,0.22)",
-                "0 10px 30px rgba(15,23,42,0.06), 0 0 0px rgba(245,182,66,0)",
-              ],
-            }
-          : undefined
-      }
-      transition={
-        popular
-          ? { duration: 4.5, repeat: Infinity, ease: "easeInOut" }
-          : undefined
-      }
+      /* self-triggered entrance — no inherited variant dependence */
+      initial={reduce ? false : { opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.55, ease: EASE }}
       className="group relative flex h-full flex-col overflow-hidden rounded-3xl transition-transform duration-300 hover:-translate-y-1.5"
       style={{
-        background: "#FFFFFF",
+        background:
+          "radial-gradient(circle at 85% 0%, rgba(181,255,61,0.14), transparent 45%), linear-gradient(160deg, #0B1B33 0%, #0E2240 60%, #0A1A30 100%)",
         border: popular
-          ? "1px solid rgba(245,182,66,0.45)"
-          : "1px solid rgba(11,27,51,0.1)",
-        boxShadow: "0 10px 30px rgba(15,23,42,0.06)",
+          ? "1px solid rgba(245,182,66,0.5)"
+          : "1px solid rgba(255,255,255,0.1)",
+        boxShadow: "0 18px 40px -18px rgba(7,17,31,0.5)",
       }}
     >
-      {/* top hairline that ignites lime on hover — site card language */}
+      {/* breathing gold aura on the flagship — separate layer so it can loop
+          without fighting the entrance animation */}
+      {popular && !reduce && (
+        <motion.span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-3xl"
+          animate={{
+            boxShadow: [
+              "0 0 0px rgba(245,182,66,0)",
+              "0 0 36px rgba(245,182,66,0.28)",
+              "0 0 0px rgba(245,182,66,0)",
+            ],
+          }}
+          transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+      )}
+
+      {/* top hairline ignites lime on hover */}
       <span
         aria-hidden
         className="pointer-events-none absolute inset-x-6 top-0 z-20 h-px opacity-0 transition-opacity duration-500 group-hover:opacity-100"
@@ -1970,109 +2634,97 @@ function CourseCard({ course }: { course: Course }) {
           background: `linear-gradient(90deg, transparent, ${LIME}, transparent)`,
         }}
       />
-
-      {/* ---------- program tile (the card's identity block) ---------- */}
+      {/* dot-grid texture */}
       <div
-        className="relative shrink-0 overflow-hidden px-5 pb-4 pt-5"
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(circle at 82% 18%, rgba(181,255,61,0.16), transparent 50%), linear-gradient(135deg, ${NAVY} 0%, #13294B 100%)`,
+          backgroundImage:
+            "radial-gradient(circle at 1px 1px, rgba(181,255,61,0.16) 1px, transparent 0)",
+          backgroundSize: "20px 20px",
+          maskImage: "linear-gradient(180deg, #000 0%, transparent 45%)",
+          WebkitMaskImage: "linear-gradient(180deg, #000 0%, transparent 45%)",
         }}
-      >
-        {/* dot-grid texture */}
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, rgba(181,255,61,0.22) 1px, transparent 0)",
-            backgroundSize: "20px 20px",
-            maskImage: "linear-gradient(120deg, transparent 35%, #000 100%)",
-            WebkitMaskImage:
-              "linear-gradient(120deg, transparent 35%, #000 100%)",
-          }}
-        />
-        {/* ghost watermark — Ghost glyph, never ring-like at scale */}
-        <Ghost
-          aria-hidden
-          className="absolute -bottom-8 -right-6 h-36 w-36 transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-[-4deg]"
-          strokeWidth={1.2}
-          style={{ color: "rgba(181,255,61,0.13)" }}
-        />
+      />
+      {/* ghost watermark */}
+      <Ghost
+        aria-hidden
+        className="pointer-events-none absolute -bottom-8 -right-6 h-36 w-36 transition-transform duration-500 group-hover:-translate-y-1.5 group-hover:rotate-[-4deg]"
+        strokeWidth={1.2}
+        style={{ color: "rgba(181,255,61,0.1)" }}
+      />
 
-        <div className="relative z-10">
-          <div className="flex items-start justify-between gap-2">
-            {/* icon tile */}
-            <div
-              className="flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300 group-hover:shadow-[0_8px_20px_-6px_rgba(95,176,22,0.6)]"
-              style={{
-                background: "rgba(181,255,61,0.12)",
-                boxShadow: "inset 0 0 0 1px rgba(181,255,61,0.3)",
-              }}
-            >
-              <Icon
-                className="h-[22px] w-[22px]"
-                strokeWidth={1.9}
-                style={{ color: LIME }}
-                aria-hidden
-              />
-            </div>
-
-            {/* Most Popular — gold, never competing with lime CTAs */}
-            {course.badge ? (
-              <span
-                className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.08em]"
-                style={{
-                  background: "linear-gradient(145deg, #FFD37A, #E8A52E)",
-                  color: "#2A1D04",
-                  boxShadow: "0 6px 16px -4px rgba(245,182,66,0.55)",
-                }}
-              >
-                <Sparkles className="h-3 w-3" aria-hidden />
-                {course.badge}
-              </span>
-            ) : null}
-          </div>
-
-          {/* title lives on the tile — the stage always has a job */}
-          <h3 className="mt-4 text-lg font-extrabold leading-tight tracking-tight text-white sm:text-[20px]">
-            {course.title}
-          </h3>
-
-          {/* class-range chip — the routing element */}
-          <span
-            className="mt-2.5 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-bold"
+      <div className="relative z-10 flex h-full flex-col p-5 sm:p-6">
+        {/* top row */}
+        <div className="flex items-start justify-between gap-2">
+          <div
+            className="flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300 group-hover:shadow-[0_8px_20px_-6px_rgba(181,255,61,0.5)]"
             style={{
-              background: "rgba(181,255,61,0.94)",
-              color: "#13230A",
-              boxShadow: "0 6px 18px -6px rgba(181,255,61,0.6)",
+              background: "rgba(181,255,61,0.12)",
+              boxShadow: "inset 0 0 0 1px rgba(181,255,61,0.3)",
             }}
           >
-            {course.audience}
-          </span>
-        </div>
-      </div>
+            <Icon
+              className="h-[22px] w-[22px]"
+              strokeWidth={1.9}
+              style={{ color: LIME }}
+              aria-hidden
+            />
+          </div>
 
-      {/* ------------------------------- body ------------------------------- */}
-      <div className="flex flex-1 flex-col px-5 pb-5 pt-4">
-        <p className="text-[13px] leading-relaxed text-slate-600">
+          {course.badge ? (
+            <span
+              className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.08em]"
+              style={{
+                background: "linear-gradient(145deg, #FFD37A, #E8A52E)",
+                color: "#2A1D04",
+                boxShadow: "0 6px 16px -4px rgba(245,182,66,0.55)",
+              }}
+            >
+              <Sparkles className="h-3 w-3" aria-hidden />
+              {course.badge}
+            </span>
+          ) : null}
+        </div>
+
+        {/* identity */}
+        <h3 className="mt-4 text-lg font-extrabold leading-tight tracking-tight text-white sm:text-[20px]">
+          {course.title}
+        </h3>
+
+        <span
+          className="mt-2.5 inline-flex w-fit items-center rounded-full px-3 py-1.5 text-[12px] font-bold"
+          style={{
+            background: "rgba(181,255,61,0.94)",
+            color: "#13230A",
+            boxShadow: "0 6px 18px -6px rgba(181,255,61,0.5)",
+          }}
+        >
+          {course.audience}
+        </span>
+
+        <p
+          className="mt-3.5 text-[13px] leading-relaxed"
+          style={{ color: "rgba(255,255,255,0.62)" }}
+        >
           {course.description}
         </p>
 
-        {/* checklist — always visible, no accordion */}
+        {/* checklist */}
         <ul
           className="mt-4 grid gap-2 border-t border-dashed pt-3.5"
-          style={{ borderColor: "rgba(11,27,51,0.1)" }}
+          style={{ borderColor: "rgba(255,255,255,0.12)" }}
         >
           {course.features.map((f) => (
             <li
               key={f}
               className="flex items-start gap-2 text-[13px] font-medium leading-snug"
-              style={{ color: NAVY }}
+              style={{ color: "rgba(255,255,255,0.88)" }}
             >
               <Check
                 className="mt-[2px] h-[15px] w-[15px] flex-none"
                 strokeWidth={2.6}
-                style={{ color: "#5FB016" }}
+                style={{ color: LIME }}
                 aria-hidden
               />
               {f}
@@ -2080,7 +2732,7 @@ function CourseCard({ course }: { course: Course }) {
           ))}
         </ul>
 
-        {/* single brand CTA — identical treatment on every card */}
+        {/* CTA — pops hard against navy */}
         <div className="mt-auto pt-5">
           <Link
             href={course.href}
@@ -2091,7 +2743,7 @@ function CourseCard({ course }: { course: Course }) {
                 "linear-gradient(135deg, #C8FF55 0%, #8FE021 55%, #5FB016 100%)",
               color: "#13230A",
               boxShadow:
-                "0 12px 26px -10px rgba(120,200,30,0.55), inset 0 1px 0 rgba(255,255,255,0.35)",
+                "0 14px 30px -10px rgba(120,200,30,0.55), inset 0 1px 0 rgba(255,255,255,0.35)",
             }}
           >
             <span
@@ -2114,6 +2766,87 @@ function CourseCard({ course }: { course: Course }) {
   );
 }
 
+/* =========================== mobile carousel =============================== */
+
+function MobileCourseCarousel() {
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const [active, setActive] = useState(0);
+
+  const cardEls = useCallback(
+    () =>
+      Array.from(
+        scrollerRef.current?.querySelectorAll<HTMLElement>("[data-card]") ?? [],
+      ),
+    [],
+  );
+
+  const onScroll = () => {
+    const s = scrollerRef.current;
+    if (!s) return;
+    const center = s.getBoundingClientRect().left + s.clientWidth / 2;
+    let best = 0;
+    let bestDist = Infinity;
+    cardEls().forEach((c, i) => {
+      const r = c.getBoundingClientRect();
+      const d = Math.abs(r.left + r.width / 2 - center);
+      if (d < bestDist) {
+        bestDist = d;
+        best = i;
+      }
+    });
+    setActive(best);
+  };
+
+  const goTo = (i: number) => {
+    const s = scrollerRef.current;
+    const card = cardEls()[i];
+    if (!s || !card) return;
+    s.scrollTo({
+      left: card.offsetLeft - (s.clientWidth - card.clientWidth) / 2,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <div className="sm:hidden">
+      <div
+        ref={scrollerRef}
+        onScroll={onScroll}
+        className="-mx-4 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {courses.map((course) => (
+          <div key={course.id} data-card className="w-[85%] shrink-0 snap-center">
+            <CourseCard course={course} />
+          </div>
+        ))}
+      </div>
+
+      {/* dot indicator */}
+      <div className="mt-4 flex items-center justify-center gap-2">
+        {courses.map((c, i) => (
+          <button
+            key={c.id}
+            type="button"
+            aria-label={`Show ${c.title}`}
+            onClick={() => goTo(i)}
+            className="h-2 rounded-full transition-all duration-300"
+            style={
+              active === i
+                ? {
+                    width: 22,
+                    background: GREEN_DEEP,
+                    boxShadow: "0 0 10px rgba(95,176,22,0.5)",
+                  }
+                : { width: 8, background: "rgba(11,27,51,0.18)" }
+            }
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ================================ header =================================== */
 
 function CoursesHeader() {
@@ -2125,14 +2858,8 @@ function CoursesHeader() {
       viewport={{ once: true, amount: 0.4 }}
       className="mx-auto flex max-w-3xl flex-col items-center text-center"
     >
-      <motion.div
-        variants={fadeUp}
-        className="mb-3 inline-flex items-center gap-3"
-      >
-        <span
-          className="h-px w-8"
-          style={{ background: "rgba(78,148,23,0.45)" }}
-        />
+      <motion.div variants={fadeUp} className="mb-3 inline-flex items-center gap-3">
+        <span className="h-px w-8" style={{ background: "rgba(78,148,23,0.45)" }} />
         <span
           className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.22em] sm:text-xs"
           style={{ color: EYEBROW_GREEN }}
@@ -2140,10 +2867,7 @@ function CoursesHeader() {
           <GraduationCap className="h-3.5 w-3.5" aria-hidden />
           Our Programs
         </span>
-        <span
-          className="h-px w-8"
-          style={{ background: "rgba(78,148,23,0.45)" }}
-        />
+        <span className="h-px w-8" style={{ background: "rgba(78,148,23,0.45)" }} />
       </motion.div>
 
       <motion.h2
@@ -2168,115 +2892,16 @@ function CoursesHeader() {
 }
 
 /* ============================ program finder =============================== */
-/*  Replaces the trust strip (which duplicated the faculty section's items).  */
-/*  This is routing UI: class → program, every target is a link.              */
-
-// function ProgramFinder() {
-//   return (
-//     <motion.div
-//       variants={fadeUp}
-//       initial="hidden"
-//       whileInView="visible"
-//       viewport={{ once: true, amount: 0.3 }}
-//       className="relative mx-auto mt-8 max-w-7xl sm:mt-10"
-//     >
-//       {/* gradient hairline frame — system language */}
-//       <div
-//         className="rounded-3xl p-px"
-//         style={{
-//           background:
-//             "linear-gradient(120deg, rgba(181,255,61,0.55), rgba(11,27,51,0.1) 35%, rgba(11,27,51,0.1) 65%, rgba(181,255,61,0.45))",
-//         }}
-//       >
-//         <div
-//           className="relative overflow-hidden rounded-[calc(1.5rem-1px)] backdrop-blur-sm"
-//           style={{ background: "rgba(255,255,255,0.8)" }}
-//         >
-//           <span
-//             aria-hidden
-//             className="pointer-events-none absolute inset-0"
-//             style={{
-//               background:
-//                 "radial-gradient(520px 130px at 50% -35%, rgba(181,255,61,0.15), transparent)",
-//             }}
-//           />
-
-//           <div className="relative z-10 flex flex-col gap-4 px-5 py-5 sm:px-7 lg:flex-row lg:items-center lg:gap-8 lg:py-5">
-//             {/* label */}
-//             <div className="flex shrink-0 items-center gap-2.5">
-//               <span
-//                 className="flex h-9 w-9 items-center justify-center rounded-xl"
-//                 style={{
-//                   background: "#EAF7DC",
-//                   color: "#2C7A12",
-//                   boxShadow: "inset 0 0 0 1px rgba(95,176,22,0.3)",
-//                 }}
-//               >
-//                 <Compass className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden />
-//               </span>
-//               <span
-//                 className="text-[13.5px] font-extrabold tracking-tight"
-//                 style={{ color: NAVY }}
-//               >
-//                 Find your path
-//               </span>
-//             </div>
-
-//             {/* routes */}
-//             <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-3">
-//               {finder.map((row, i) => (
-//                 <div key={row.who} className="relative flex items-center gap-2.5">
-//                   {/* gradient separator between groups (sm+) */}
-//                   {i > 0 && (
-//                     <span
-//                       aria-hidden
-//                       className="absolute -left-4 top-1/2 hidden h-7 w-px -translate-y-1/2 sm:block"
-//                       style={{
-//                         background:
-//                           "linear-gradient(180deg, transparent, rgba(11,27,51,0.15), transparent)",
-//                       }}
-//                     />
-//                   )}
-//                   <span className="text-[12.5px] font-bold uppercase tracking-[0.08em] text-slate-500">
-//                     {row.who}
-//                   </span>
-//                   <ArrowRight className="h-3.5 w-3.5 text-slate-400" aria-hidden />
-//                   <span className="flex flex-wrap gap-1.5">
-//                     {row.targets.map((t) => (
-//                       <Link
-//                         key={t.label}
-//                         href={t.href}
-//                         className="rounded-full px-3 py-1.5 text-[12.5px] font-bold transition-all duration-200 hover:-translate-y-0.5"
-//                         style={{
-//                           background: "rgba(181,255,61,0.18)",
-//                           color: "#2C5A0E",
-//                           boxShadow: "inset 0 0 0 1px rgba(95,176,22,0.3)",
-//                         }}
-//                       >
-//                         {t.label}
-//                       </Link>
-//                     ))}
-//                   </span>
-//                 </div>
-//               ))}
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </motion.div>
-//   );
-// }
 
 function ProgramFinder() {
   return (
     <motion.div
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="visible"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.55, ease: EASE }}
       className="relative mx-auto mt-8 max-w-7xl sm:mt-10"
     >
-      {/* gradient hairline frame */}
       <div
         className="rounded-3xl p-px"
         style={{
@@ -2293,85 +2918,85 @@ function ProgramFinder() {
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(500px 130px at 50% -40%, rgba(181,255,61,0.15), transparent)",
+                "radial-gradient(520px 130px at 50% -35%, rgba(181,255,61,0.15), transparent)",
             }}
           />
 
-          <div className="relative z-10 flex flex-col items-center gap-x-8 gap-y-4 px-5 py-5 sm:py-4 lg:flex-row lg:justify-center">
-            <p
-              className="text-[12px] font-extrabold uppercase tracking-[0.16em]"
-              style={{ color: EYEBROW_GREEN }}
-            >
-              Find your path
-            </p>
+          <div className="relative z-10 flex flex-col gap-4 px-5 py-5 sm:px-7 lg:flex-row lg:items-center lg:gap-8 lg:py-5">
+            <div className="flex shrink-0 items-center gap-2.5">
+              <span
+                className="flex h-9 w-9 items-center justify-center rounded-xl"
+                style={{
+                  background: "#EAF7DC",
+                  color: "#2C7A12",
+                  boxShadow: "inset 0 0 0 1px rgba(95,176,22,0.3)",
+                }}
+              >
+                <Compass className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden />
+              </span>
+              <span
+                className="text-[13.5px] font-extrabold tracking-tight"
+                style={{ color: NAVY }}
+              >
+                Find your path
+              </span>
+            </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-3">
-              {finder.map((seg, i) => (
-                <div
-                  key={seg.label}
-                  className="relative flex items-center gap-2.5"
-                >
+            <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-3">
+              {finder.map((row, i) => (
+                <div key={row.who} className="relative flex items-center gap-2.5">
                   {i > 0 && (
                     <span
                       aria-hidden
-                      className="absolute -left-4 hidden h-7 w-px sm:block"
+                      className="absolute -left-4 top-1/2 hidden h-7 w-px -translate-y-1/2 sm:block"
                       style={{
                         background:
-                          "linear-gradient(180deg, transparent, rgba(11,27,51,0.18), transparent)",
+                          "linear-gradient(180deg, transparent, rgba(11,27,51,0.15), transparent)",
                       }}
                     />
                   )}
-                  <span
-                    className="text-[12.5px] font-bold"
-                    style={{ color: NAVY }}
-                  >
-                    {seg.label}
+                  <span className="text-[12.5px] font-bold uppercase tracking-[0.08em] text-slate-500">
+                    {row.who}
                   </span>
-                  <ArrowRight
-                    className="h-3.5 w-3.5"
-                    style={{ color: "#5FB016" }}
-                    strokeWidth={2.4}
-                    aria-hidden
-                  />
-                  <span className="flex items-center gap-1.5">
-                    {seg.links.map((l) => (
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-400" aria-hidden />
+                  <span className="flex flex-wrap gap-1.5">
+                    {row.targets.map((t) => (
                       <Link
-                        key={seg.label + l.name}
-                        href={l.href}
-                        className="rounded-full px-2.5 py-1 text-[12px] font-bold transition-all duration-300 hover:-translate-y-0.5"
+                        key={t.label}
+                        href={t.href}
+                        className="rounded-full px-3 py-1.5 text-[12.5px] font-bold transition-all duration-200 hover:-translate-y-0.5"
                         style={{
-                          background: "#EAF7DC",
-                          color: "#2C7A12",
+                          background: "rgba(181,255,61,0.18)",
+                          color: "#2C5A0E",
                           boxShadow: "inset 0 0 0 1px rgba(95,176,22,0.3)",
                         }}
                       >
-                        {l.name}
+                        {t.label}
                       </Link>
                     ))}
                   </span>
                 </div>
               ))}
-            </div>
 
-            <Link
-              href="#counselling"
-              className="group inline-flex items-center gap-1.5 text-[12.5px] font-bold transition-colors duration-300"
-              style={{ color: NAVY }}
-            >
-              Not sure?{" "}
-              <span style={{ color: "#2C7A12" }}>Book free counselling</span>
-              <ArrowRight
-                className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
-                style={{ color: "#5FB016" }}
-                aria-hidden
-              />
-            </Link>
+              {/* counselling escape hatch — user addition, preserved */}
+              <span className="text-[13px] text-slate-600">
+                Not sure?{" "}
+                <Link
+                  href="#counselling"
+                  className="font-bold transition-colors"
+                  style={{ color: GREEN_DEEP }}
+                >
+                  Book free counselling →
+                </Link>
+              </span>
+            </div>
           </div>
         </div>
       </div>
     </motion.div>
   );
 }
+
 /* ================================ section ================================== */
 
 export default function CoursesSection() {
@@ -2384,7 +3009,6 @@ export default function CoursesSection() {
           "radial-gradient(circle at 12% 12%, rgba(190,242,100,0.18), transparent 30%), radial-gradient(circle at 88% 28%, rgba(245,182,66,0.08), transparent 32%), linear-gradient(135deg, #F8FAF2 0%, #F6F9EE 46%, #EEF5DE 100%)",
       }}
     >
-      {/* faint dotted texture */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.12]"
@@ -2398,18 +3022,15 @@ export default function CoursesSection() {
       <div className="relative z-10 mx-auto w-full max-w-7xl">
         <CoursesHeader />
 
-        {/* 1-col phones · 2-col tablets · 4-col desktop */}
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          className="mt-8 grid grid-cols-1 gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4 xl:gap-5"
-        >
+        {/* phones: swipe carousel */}
+        <MobileCourseCarousel />
+
+        {/* sm+: grid — 2-col tablets, 4-col desktop */}
+        <div className="mt-8 hidden grid-cols-2 gap-4 sm:mt-10 sm:grid xl:grid-cols-4 xl:gap-5">
           {courses.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
-        </motion.div>
+        </div>
 
         <ProgramFinder />
       </div>

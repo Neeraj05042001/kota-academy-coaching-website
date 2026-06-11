@@ -1794,6 +1794,855 @@
 //   );
 // }
 
+// "use client";
+
+// import { useRef, useState, type CSSProperties } from "react";
+// import {
+//   motion,
+//   MotionConfig,
+//   useMotionValue,
+//   useMotionValueEvent,
+//   useReducedMotion,
+//   useScroll,
+//   useTransform,
+//   type MotionValue,
+//   type Variants,
+// } from "framer-motion";
+// import {
+//   ArrowRight,
+//   CalendarCheck,
+//   ClipboardCheck,
+//   Flag,
+//   GraduationCap,
+//   Heart,
+//   Rocket,
+//   ShieldCheck,
+//   Sparkles,
+//   TrendingUp,
+//   Trophy,
+//   UserRound,
+//   type LucideIcon,
+// } from "lucide-react";
+
+// /* -------------------------------------------------------------------------- */
+// /*  StudentJourney — "The Ascent" (hardened build)                            */
+// /*  All load-bearing colors / gradients / aspect-ratio are INLINE STYLES so   */
+// /*  they render regardless of Tailwind's class generation. Tailwind handles   */
+// /*  layout and spacing only.                                                  */
+// /*  Scroll-driven: path draws, runner climbs, nodes ignite, gold summit       */
+// /*  celebrates once. (Academic Process owns the time-looped runner.)          */
+// /* -------------------------------------------------------------------------- */
+
+// const LIME = "#B5FF3D";
+// const GOLD = "#F5B642";
+
+// type JourneyStep = {
+//   number: string;
+//   title: string;
+//   description: string;
+//   icon: LucideIcon;
+//   tag?: { label: string; icon: LucideIcon };
+//   isFinal?: boolean;
+// };
+
+// const journeySteps: JourneyStep[] = [
+//   {
+//     number: "1",
+//     title: "Free Demo Class",
+//     description: "Book online or call",
+//     icon: CalendarCheck,
+//     tag: { label: "Start here", icon: Sparkles },
+//   },
+//   {
+//     number: "2",
+//     title: "Counselling + Assessment",
+//     description: "Baseline test & study plan",
+//     icon: ClipboardCheck,
+//   },
+//   {
+//     number: "3",
+//     title: "Structured Learning",
+//     description: "Personalised timetable",
+//     icon: GraduationCap,
+//   },
+//   {
+//     number: "4",
+//     title: "Test · Track · Improve",
+//     description: "Weekly tests + reports",
+//     icon: TrendingUp,
+//   },
+//   {
+//     number: "5",
+//     title: "Crack IIT / NEET",
+//     description: "Celebrate your rank!",
+//     icon: Trophy,
+//     tag: { label: "Final goal", icon: Flag },
+//     isFinal: true,
+//   },
+// ];
+
+// const reassuranceItems = [
+//   { label: "Free counselling", icon: ShieldCheck },
+//   { label: "No obligation", icon: UserRound },
+//   { label: "Parent-friendly guidance", icon: Heart },
+// ];
+
+// const STEP_COUNT = journeySteps.length;
+// const nodeReach = (i: number) => i / (STEP_COUNT - 1);
+
+// /* ----- ascent geometry (viewBox 1080 × 680, stretched to the container) ---- */
+// const VB_W = 1080;
+// const VB_H = 680;
+// const STATION_X = [86, 313, 540, 767, 994];
+// const STATION_Y = [430, 350, 270, 190, 105];
+// const ASCENT_PATH =
+//   "M86 430 C 170 414, 245 372, 313 350 S 465 292, 540 270 S 690 212, 767 190 S 920 128, 994 105";
+
+// /* --------------------------------- motion ---------------------------------- */
+
+// const EXPO = [0.16, 1, 0.3, 1] as const;
+
+// const stagger: Variants = {
+//   hidden: {},
+//   visible: { transition: { staggerChildren: 0.12, delayChildren: 0.06 } },
+// };
+
+// const fadeUp: Variants = {
+//   hidden: { opacity: 0, y: 22 },
+//   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EXPO } },
+// };
+
+// const pop: Variants = {
+//   hidden: { opacity: 0, scale: 0.4 },
+//   visible: {
+//     opacity: 1,
+//     scale: 1,
+//     transition: { type: "spring", stiffness: 300, damping: 18, mass: 0.6 },
+//   },
+// };
+
+// const shimmerReach: Variants = {
+//   idle: { x: "-140%", opacity: 0 },
+//   play: {
+//     x: ["-140%", "240%"],
+//     opacity: [0, 1, 0],
+//     transition: { duration: 1.15, ease: "easeInOut" },
+//   },
+// };
+
+// /* -------------------------------------------------------------------------- */
+// /*  Section                                                                   */
+// /* -------------------------------------------------------------------------- */
+
+// export default function StudentJourney() {
+//   return (
+//     <MotionConfig reducedMotion="user">
+//       <section
+//         id="how-it-works"
+//         className="relative overflow-hidden py-16 text-[#0B1B33] md:py-20 lg:py-24"
+//         style={{
+//           background:
+//             "radial-gradient(120% 120% at 50% -10%, #FCFEF7 0%, #F2F8E6 48%, #E9F3D9 100%)",
+//         }}
+//       >
+//         <SectionBackground />
+
+//         <motion.div
+//           className="relative z-10 mx-auto w-full max-w-[1240px] px-5 sm:px-6 lg:px-8"
+//           initial="hidden"
+//           whileInView="visible"
+//           viewport={{ once: true, margin: "-90px" }}
+//           variants={stagger}
+//         >
+//           <SectionHeader />
+//           <JourneyPanel />
+//           <JourneyCTA />
+//           <ReassuranceLine />
+//         </motion.div>
+//       </section>
+//     </MotionConfig>
+//   );
+// }
+
+// function SectionBackground() {
+//   return (
+//     <>
+//       <div
+//         className="pointer-events-none absolute inset-0"
+//         style={{
+//           backgroundImage:
+//             "linear-gradient(rgba(47,125,23,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(47,125,23,0.045) 1px, transparent 1px)",
+//           backgroundSize: "46px 46px",
+//           maskImage: "radial-gradient(ellipse at center, black 50%, transparent 88%)",
+//           WebkitMaskImage:
+//             "radial-gradient(ellipse at center, black 50%, transparent 88%)",
+//         }}
+//       />
+//       <div
+//         className="pointer-events-none absolute -left-24 top-10 h-[320px] w-[320px] rounded-full blur-[110px]"
+//         style={{ background: "rgba(22,163,74,0.12)" }}
+//       />
+//       <div
+//         className="pointer-events-none absolute -right-20 top-40 h-[360px] w-[360px] rounded-full blur-[120px]"
+//         style={{ background: "rgba(181,255,61,0.16)" }}
+//       />
+//     </>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Header                                                                    */
+// /* -------------------------------------------------------------------------- */
+
+// function SectionHeader() {
+//   return (
+//     <motion.div variants={fadeUp} className="text-center">
+//       <div className="mb-5 flex items-center justify-center gap-3">
+//         <span className="h-px w-9" style={{ background: "rgba(78,148,23,0.6)" }} />
+//         <span className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#2F7D17]">
+//           How It Works
+//         </span>
+//         <span className="h-px w-9" style={{ background: "rgba(78,148,23,0.6)" }} />
+//       </div>
+
+//       <h2 className="mx-auto max-w-[820px] text-balance text-[32px] font-extrabold leading-[1.08] tracking-[-0.025em] text-[#0B1B33] sm:text-[40px] md:text-[48px] lg:text-[54px]">
+//         Your Path to{" "}
+//         <span
+//           style={{
+//             backgroundImage:
+//               "linear-gradient(120deg, #3E9A12, #7BC832 55%, #3E9A12)",
+//             WebkitBackgroundClip: "text",
+//             backgroundClip: "text",
+//             color: "transparent",
+//           }}
+//         >
+//           IIT&nbsp;/&nbsp;NEET
+//         </span>
+//         {" — "}
+//         <span className="relative whitespace-nowrap">
+//           <motion.span
+//             aria-hidden
+//             initial={{ scaleX: 0 }}
+//             whileInView={{ scaleX: 1 }}
+//             viewport={{ once: true }}
+//             transition={{ duration: 0.55, ease: EXPO, delay: 0.4 }}
+//             className="absolute -z-10 origin-left -skew-x-12"
+//             style={{
+//               left: "-2%",
+//               right: "-3%",
+//               top: "52%",
+//               bottom: "2%",
+//               borderRadius: 4,
+//               background: "rgba(181,255,61,0.6)",
+//             }}
+//           />
+//           Simplified
+//         </span>
+//       </h2>
+
+//       <p className="mx-auto mt-5 max-w-[620px] text-[15px] leading-7 text-[#4A5670] md:text-[16px]">
+//         A clear 5-step journey — from your first enquiry to focused
+//         preparation, progress tracking, and rank-ready confidence.
+//       </p>
+//     </motion.div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Panel                                                                     */
+// /* -------------------------------------------------------------------------- */
+
+// const NOISE =
+//   "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
+// const PANEL_BG =
+//   "radial-gradient(circle at 12% 8%, rgba(22,163,74,0.22), transparent 45%), radial-gradient(circle at 90% 92%, rgba(181,255,61,0.18), transparent 46%), radial-gradient(circle at 60% 50%, rgba(13,90,110,0.18), transparent 55%), linear-gradient(155deg, #071521 0%, #0A2030 52%, #07241A 100%)";
+
+// function JourneyPanel() {
+//   return (
+//     <motion.div
+//       variants={fadeUp}
+//       className="relative mt-12 overflow-hidden rounded-[26px] p-5 sm:p-7 lg:rounded-[30px] lg:p-9"
+//       style={{
+//         background: PANEL_BG,
+//         border: "1px solid rgba(255,255,255,0.1)",
+//         boxShadow: "0 30px 80px -22px rgba(7,21,33,0.5)",
+//       }}
+//     >
+//       <div
+//         className="pointer-events-none absolute inset-0 mix-blend-overlay"
+//         style={{ backgroundImage: NOISE, backgroundSize: "180px 180px", opacity: 0.06 }}
+//       />
+//       <div
+//         className="pointer-events-none absolute inset-x-10 top-0 h-px"
+//         style={{
+//           background:
+//             "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
+//         }}
+//       />
+//       <div
+//         className="pointer-events-none absolute inset-[7px] rounded-[20px] lg:rounded-[24px]"
+//         style={{ border: "1px solid rgba(255,255,255,0.05)" }}
+//       />
+
+//       <DesktopAscent />
+//       <MobileRoadmap />
+//     </motion.div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Shared pieces (all colors inline)                                         */
+// /* -------------------------------------------------------------------------- */
+
+// function StepNode({
+//   number,
+//   isFinal,
+//   size = "lg",
+//   progress,
+//   reach,
+//   reached,
+// }: {
+//   number: string;
+//   isFinal?: boolean;
+//   size?: "lg" | "sm";
+//   progress: MotionValue<number>;
+//   reach: number;
+//   reached: boolean;
+// }) {
+//   const dim = size === "lg" ? "h-10 w-10 text-[16px]" : "h-9 w-9 text-[15px]";
+//   const glow = useTransform(progress, [Math.max(0, reach - 0.04), reach], [0, 1]);
+
+//   const nodeStyle: CSSProperties = isFinal
+//     ? reached
+//       ? {
+//           background: "linear-gradient(145deg, #FFD37A, #D99A1F)",
+//           color: "#2A1D04",
+//           boxShadow: "0 0 26px rgba(245,182,66,0.6)",
+//         }
+//       : {
+//           background: "#33270E",
+//           color: GOLD,
+//           boxShadow:
+//             "inset 0 0 0 1.5px rgba(245,182,66,0.7), 0 6px 16px rgba(0,0,0,0.35)",
+//         }
+//     : reached
+//       ? {
+//           background: "linear-gradient(145deg, #C6FF52, #3FA31E)",
+//           color: "#08210B",
+//           boxShadow: "0 0 20px rgba(181,255,61,0.45)",
+//         }
+//       : {
+//           background: "#0C1E30",
+//           color: "#DDF3BD",
+//           boxShadow:
+//             "inset 0 0 0 1px rgba(181,255,61,0.45), 0 6px 16px rgba(0,0,0,0.35)",
+//         };
+
+//   return (
+//     <span className="relative flex shrink-0 items-center justify-center">
+//       <motion.span
+//         aria-hidden
+//         style={{
+//           opacity: glow,
+//           background: isFinal ? "rgba(245,182,66,0.4)" : "rgba(181,255,61,0.35)",
+//         }}
+//         className="pointer-events-none absolute -inset-2 rounded-full blur-md"
+//       />
+//       <motion.span
+//         variants={pop}
+//         className={`relative flex items-center justify-center rounded-full font-bold ${dim}`}
+//         style={nodeStyle}
+//       >
+//         {number}
+//       </motion.span>
+//     </span>
+//   );
+// }
+
+// function IconChip({
+//   Icon,
+//   isFinal,
+//   size = "lg",
+//   reached,
+// }: {
+//   Icon: LucideIcon;
+//   isFinal?: boolean;
+//   size?: "lg" | "sm";
+//   reached: boolean;
+// }) {
+//   const ic = size === "lg" ? "h-[21px] w-[21px]" : "h-5 w-5";
+//   return (
+//     <div
+//       className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+//       style={{
+//         border: `1px solid ${isFinal ? "rgba(245,182,66,0.4)" : "rgba(181,255,61,0.22)"}`,
+//         background: isFinal ? "rgba(245,182,66,0.12)" : "rgba(181,255,61,0.08)",
+//       }}
+//     >
+//       <motion.span
+//         animate={reached ? { scale: [1, 1.18, 1] } : { scale: 1 }}
+//         transition={{ duration: 0.5, ease: "easeOut" }}
+//         className="inline-flex"
+//       >
+//         <Icon
+//           className={`${ic} transition-transform duration-300 group-hover:scale-110`}
+//           style={{ color: isFinal ? GOLD : LIME }}
+//           strokeWidth={2}
+//           aria-hidden
+//         />
+//       </motion.span>
+//     </div>
+//   );
+// }
+
+// function Tag({
+//   tag,
+//   isFinal,
+// }: {
+//   tag: { label: string; icon: LucideIcon };
+//   isFinal?: boolean;
+// }) {
+//   const TagIcon = tag.icon;
+//   return (
+//     <span
+//       className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em]"
+//       style={
+//         isFinal
+//           ? {
+//               background: "rgba(245,182,66,0.14)",
+//               color: "#F8C865",
+//               border: "1px solid rgba(245,182,66,0.4)",
+//             }
+//           : {
+//               background: "rgba(181,255,61,0.12)",
+//               color: "#C6FF6E",
+//               border: "1px solid rgba(181,255,61,0.3)",
+//             }
+//       }
+//     >
+//       <TagIcon className="h-3 w-3" strokeWidth={2.4} aria-hidden />
+//       {tag.label}
+//     </span>
+//   );
+// }
+
+// /* gold highlight + one-time sweep for the summit card on arrival */
+// function CelebrationLayer({ reached }: { reached: boolean }) {
+//   return (
+//     <>
+//       <motion.span
+//         aria-hidden
+//         initial={{ opacity: 0 }}
+//         animate={{ opacity: reached ? 1 : 0 }}
+//         transition={{ duration: 0.45, ease: "easeOut" }}
+//         className="pointer-events-none absolute inset-0 rounded-[inherit]"
+//         style={{
+//           border: "1px solid rgba(245,182,66,0.6)",
+//           background:
+//             "radial-gradient(circle at 50% 118%, rgba(245,182,66,0.18), transparent 62%), linear-gradient(160deg, rgba(54,43,14,0.45), rgba(28,22,8,0.3))",
+//           boxShadow:
+//             "0 0 0 1px rgba(245,182,66,0.18), 0 22px 50px -16px rgba(245,182,66,0.5)",
+//         }}
+//       />
+//       <motion.span
+//         aria-hidden
+//         variants={shimmerReach}
+//         initial="idle"
+//         animate={reached ? "play" : "idle"}
+//         className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg]"
+//         style={{
+//           background:
+//             "linear-gradient(90deg, transparent, rgba(245,182,66,0.28), transparent)",
+//         }}
+//       />
+//     </>
+//   );
+// }
+
+// function useReached(progress: MotionValue<number>, reach: number) {
+//   const reduce = useReducedMotion();
+//   const [reached, setReached] = useState<boolean>(!!reduce);
+//   useMotionValueEvent(progress, "change", (v) => {
+//     if (v >= reach - 0.015) setReached(true);
+//   });
+//   return reached;
+// }
+
+// /* shared glass card surface */
+// const GLASS: CSSProperties = {
+//   background:
+//     "linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025))",
+//   border: "1px solid rgba(255,255,255,0.1)",
+//   boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07)",
+// };
+
+// const descColor = (isFinal?: boolean): CSSProperties => ({
+//   color: isFinal ? "#F2DCAE" : "#A8B4C6",
+// });
+
+// /* -------------------------------------------------------------------------- */
+// /*  Desktop — the ascent (lg+)                                                */
+// /* -------------------------------------------------------------------------- */
+
+// function DesktopAscent() {
+//   const reduce = useReducedMotion();
+//   const ref = useRef<HTMLDivElement>(null);
+//   const { scrollYProgress } = useScroll({
+//     target: ref,
+//     offset: ["start 0.85", "end 0.55"],
+//   });
+//   const filled = useMotionValue(1);
+//   const progress = reduce ? filled : scrollYProgress;
+
+//   const pathRef = useRef<SVGPathElement>(null);
+//   const cx = useMotionValue(STATION_X[0]);
+//   const cy = useMotionValue(STATION_Y[0]);
+//   useMotionValueEvent(progress, "change", (v) => {
+//     const p = pathRef.current;
+//     if (!p) return;
+//     const pt = p.getPointAtLength(Math.min(Math.max(v, 0), 1) * p.getTotalLength());
+//     cx.set(pt.x);
+//     cy.set(pt.y);
+//   });
+
+//   return (
+//     <motion.div
+//       ref={ref}
+//       variants={stagger}
+//       className="relative z-10 hidden lg:block"
+//       style={{ aspectRatio: "1080 / 680" }}
+//     >
+//       <svg
+//         viewBox={`0 0 ${VB_W} ${VB_H}`}
+//         preserveAspectRatio="none"
+//         className="absolute inset-0 h-full w-full overflow-visible"
+//         aria-hidden
+//       >
+//         <path
+//           d={ASCENT_PATH}
+//           fill="none"
+//           stroke="rgba(181,255,61,0.08)"
+//           strokeWidth={10}
+//           strokeLinecap="round"
+//           vectorEffect="non-scaling-stroke"
+//         />
+//         <path
+//           d={ASCENT_PATH}
+//           fill="none"
+//           stroke="rgba(181,255,61,0.22)"
+//           strokeWidth={2}
+//           strokeLinecap="round"
+//           strokeDasharray="3 9"
+//           vectorEffect="non-scaling-stroke"
+//         />
+//         <motion.path
+//           ref={pathRef}
+//           d={ASCENT_PATH}
+//           fill="none"
+//           stroke={LIME}
+//           strokeWidth={2.5}
+//           strokeLinecap="round"
+//           vectorEffect="non-scaling-stroke"
+//           style={{ pathLength: progress }}
+//         />
+//         {!reduce && (
+//           <motion.circle
+//             cx={cx}
+//             cy={cy}
+//             r={6}
+//             fill={LIME}
+//             style={{ filter: "drop-shadow(0 0 8px rgba(181,255,61,0.9))" }}
+//           />
+//         )}
+//       </svg>
+
+//       {journeySteps.map((step, index) => (
+//         <AscentStation
+//           key={step.number}
+//           step={step}
+//           index={index}
+//           progress={progress}
+//         />
+//       ))}
+//     </motion.div>
+//   );
+// }
+
+// function AscentStation({
+//   step,
+//   index,
+//   progress,
+// }: {
+//   step: JourneyStep;
+//   index: number;
+//   progress: MotionValue<number>;
+// }) {
+//   const reached = useReached(progress, nodeReach(index));
+
+//   return (
+//     <div
+//       className="absolute -translate-x-1/2"
+//       style={{
+//         width: 172,
+//         left: `${(STATION_X[index] / VB_W) * 100}%`,
+//         top: `calc(${(STATION_Y[index] / VB_H) * 100}% - 20px)`,
+//       }}
+//     >
+//       <div className="flex justify-center">
+//         <StepNode
+//           number={step.number}
+//           isFinal={step.isFinal}
+//           progress={progress}
+//           reach={nodeReach(index)}
+//           reached={reached}
+//         />
+//       </div>
+
+//       <motion.article
+//         variants={fadeUp}
+//         whileHover={{ y: -5 }}
+//         transition={{ duration: 0.25, ease: "easeOut" }}
+//         className="group relative mt-3 overflow-hidden rounded-[18px] px-3.5 py-4 text-center"
+//         style={GLASS}
+//       >
+//         {step.isFinal && <CelebrationLayer reached={reached} />}
+
+//         <div className="relative z-10 flex flex-col items-center">
+//           {step.tag && (
+//             <span className="mb-2.5">
+//               <Tag tag={step.tag} isFinal={step.isFinal} />
+//             </span>
+//           )}
+
+//           <IconChip Icon={step.icon} isFinal={step.isFinal} reached={reached} />
+
+//           <h3 className="mt-2.5 text-[15px] font-bold leading-snug tracking-[-0.01em] text-white xl:text-[16px]">
+//             {step.title}
+//           </h3>
+//           <p className="mt-1 text-[12.5px] leading-5" style={descColor(step.isFinal)}>
+//             {step.description}
+//           </p>
+//         </div>
+//       </motion.article>
+//     </div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Mobile roadmap (<lg) — vertical descent, rail warms to gold               */
+// /* -------------------------------------------------------------------------- */
+
+// function MobileRoadmap() {
+//   const reduce = useReducedMotion();
+//   const ref = useRef<HTMLDivElement>(null);
+//   const { scrollYProgress } = useScroll({
+//     target: ref,
+//     offset: ["start 0.9", "end 0.65"],
+//   });
+//   const filled = useMotionValue(1);
+//   const progress = reduce ? filled : scrollYProgress;
+//   const dotTop = useTransform(progress, (v) => `${Math.min(Math.max(v, 0), 1) * 100}%`);
+
+//   return (
+//     <motion.div ref={ref} variants={stagger} className="relative z-10 lg:hidden">
+//       <span
+//         className="pointer-events-none absolute bottom-7 left-[17px] top-7 w-[2px] rounded-full"
+//         style={{ background: "rgba(181,255,61,0.18)" }}
+//       />
+//       <motion.span
+//         style={{
+//           scaleY: progress,
+//           transformOrigin: "top",
+//           background:
+//             "linear-gradient(180deg, #B5FF3D 0%, #8FE021 62%, #F5B642 100%)",
+//         }}
+//         className="pointer-events-none absolute bottom-7 left-[17px] top-7 w-[2px] rounded-full"
+//       />
+//       {!reduce && (
+//         <span className="pointer-events-none absolute bottom-7 left-[17px] top-7 w-[2px]">
+//           <motion.span
+//             style={{
+//               top: dotTop,
+//               background: LIME,
+//               boxShadow:
+//                 "0 0 0 4px rgba(181,255,61,0.2), 0 0 12px rgba(181,255,61,0.8)",
+//             }}
+//             className="absolute left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full"
+//           />
+//         </span>
+//       )}
+
+//       <div className="space-y-3.5">
+//         {journeySteps.map((step, index) => (
+//           <MobileCard
+//             key={step.number}
+//             step={step}
+//             index={index}
+//             progress={progress}
+//           />
+//         ))}
+//       </div>
+//     </motion.div>
+//   );
+// }
+
+// function MobileCard({
+//   step,
+//   index,
+//   progress,
+// }: {
+//   step: JourneyStep;
+//   index: number;
+//   progress: MotionValue<number>;
+// }) {
+//   const reached = useReached(progress, nodeReach(index));
+
+//   return (
+//     <motion.div variants={fadeUp} className="relative flex items-stretch gap-3.5">
+//       <div className="relative z-10 flex w-9 shrink-0 justify-center pt-3.5">
+//         <StepNode
+//           number={step.number}
+//           isFinal={step.isFinal}
+//           size="sm"
+//           progress={progress}
+//           reach={nodeReach(index)}
+//           reached={reached}
+//         />
+//       </div>
+
+//       <div
+//         className="group relative flex flex-1 items-center gap-3 overflow-hidden rounded-[18px] p-3.5"
+//         style={GLASS}
+//       >
+//         {step.isFinal && <CelebrationLayer reached={reached} />}
+
+//         <div className="relative z-10 inline-flex">
+//           <IconChip
+//             Icon={step.icon}
+//             isFinal={step.isFinal}
+//             size="sm"
+//             reached={reached}
+//           />
+//         </div>
+
+//         <div className="relative z-10 min-w-0 flex-1">
+//           {step.tag && (
+//             <span className="mb-1 inline-block">
+//               <Tag tag={step.tag} isFinal={step.isFinal} />
+//             </span>
+//           )}
+//           <h3 className="text-[15px] font-bold leading-snug tracking-[-0.01em] text-white">
+//             {step.title}
+//           </h3>
+//           <p className="mt-0.5 text-[12.5px] leading-snug" style={descColor(step.isFinal)}>
+//             {step.description}
+//           </p>
+//         </div>
+//       </div>
+//     </motion.div>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  CTA                                                                       */
+// /* -------------------------------------------------------------------------- */
+
+// function JourneyCTA() {
+//   return (
+//     <motion.a
+//       variants={fadeUp}
+//       href="#contact"
+//       whileHover={{ y: -2 }}
+//       whileTap={{ scale: 0.985 }}
+//       transition={{ duration: 0.2, ease: "easeOut" }}
+//       className="group relative mx-auto mt-10 flex h-[58px] w-full max-w-[460px] items-center gap-2.5 overflow-hidden rounded-full pl-5 pr-2 sm:gap-3 sm:pl-6 md:h-[66px]"
+//       style={{
+//         background:
+//           "linear-gradient(135deg, #C8FF55 0%, #8FE021 48%, #5FB016 100%)",
+//         color: "#0A2410",
+//         boxShadow:
+//           "0 18px 42px -12px rgba(120,200,30,0.6), inset 0 0 0 1px rgba(0,0,0,0.06)",
+//       }}
+//     >
+//       <span
+//         className="pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-t-full"
+//         style={{
+//           background: "linear-gradient(180deg, rgba(255,255,255,0.45), transparent)",
+//         }}
+//       />
+//       <span
+//         className="pointer-events-none absolute inset-0 -translate-x-full transition-transform duration-700 group-hover:translate-x-[130%]"
+//         style={{
+//           background:
+//             "linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)",
+//         }}
+//       />
+
+//       <Rocket className="relative z-10 h-5 w-5 shrink-0" strokeWidth={2.3} aria-hidden />
+//       <span className="relative z-10 whitespace-nowrap text-[14.5px] font-extrabold tracking-[-0.01em] sm:text-[16px] md:text-[17px]">
+//         <span className="sm:hidden">Book a Free Demo</span>
+//         <span className="hidden sm:inline">
+//           Start Your Journey — Book a Free Demo
+//         </span>
+//       </span>
+
+//       <span
+//         className="relative z-10 ml-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors duration-300 md:h-[50px] md:w-[50px]"
+//         style={{
+//           background: "#0B2014",
+//           color: "#C8FF55",
+//           boxShadow: "0 4px 12px rgba(0,0,0,0.25)",
+//         }}
+//       >
+//         <ArrowRight
+//           className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5"
+//           strokeWidth={2.4}
+//           aria-hidden
+//         />
+//       </span>
+//     </motion.a>
+//   );
+// }
+
+// /* -------------------------------------------------------------------------- */
+// /*  Reassurance                                                               */
+// /* -------------------------------------------------------------------------- */
+
+// function ReassuranceLine() {
+//   return (
+//     <motion.div
+//       variants={fadeUp}
+//       className="mx-auto mt-6 flex max-w-[620px] flex-wrap items-center justify-center gap-x-6 gap-y-2.5 text-[#3A4660]"
+//     >
+//       {reassuranceItems.map((item, index) => {
+//         const Icon = item.icon;
+//         return (
+//           <div key={item.label} className="flex items-center gap-3">
+//             {index !== 0 && (
+//               <span
+//                 className="hidden h-4 w-px sm:block"
+//                 style={{ background: "#C9D8B8" }}
+//               />
+//             )}
+//             <span className="flex items-center gap-2">
+//               <Icon
+//                 className="h-[18px] w-[18px]"
+//                 style={{ color: "#3E8618" }}
+//                 strokeWidth={2.1}
+//                 aria-hidden
+//               />
+//               <span className="text-[13.5px] font-medium md:text-[14px]">
+//                 {item.label}
+//               </span>
+//             </span>
+//           </div>
+//         );
+//       })}
+//     </motion.div>
+//   );
+// }
+
 "use client";
 
 import { useRef, useState, type CSSProperties } from "react";
@@ -1804,6 +2653,7 @@ import {
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
+  useSpring,
   useTransform,
   type MotionValue,
   type Variants,
@@ -1890,13 +2740,17 @@ const reassuranceItems = [
 const STEP_COUNT = journeySteps.length;
 const nodeReach = (i: number) => i / (STEP_COUNT - 1);
 
-/* ----- ascent geometry (viewBox 1080 × 680, stretched to the container) ---- */
-const VB_W = 1080;
-const VB_H = 680;
-const STATION_X = [86, 313, 540, 767, 994];
-const STATION_Y = [430, 350, 270, 190, 105];
-const ASCENT_PATH =
-  "M86 430 C 170 414, 245 372, 313 350 S 465 292, 540 270 S 690 212, 767 190 S 920 128, 994 105";
+/* ----- track geometry: flat horizontal band (compact, zero dead space) ----- */
+/*  Stations are equal-width flex columns under a slim SVG track band. The    */
+/*  band stretches horizontally (preserveAspectRatio="none") but its height   */
+/*  is fixed px, so the node row aligns 1:1 with the track line.              */
+const VB_W = 1000;
+const BAND_PAD = 8;
+const NODE_H = 40; // StepNode lg size (h-10)
+const BAND_H = BAND_PAD * 2 + NODE_H; // 56
+const STATION_X = [100, 300, 500, 700, 900]; // column centers in VB units
+const TRACK_Y = BAND_PAD + NODE_H / 2; // 28
+const TRACK_PATH = `M ${STATION_X[0]} ${TRACK_Y} L ${STATION_X[4]} ${TRACK_Y}`;
 
 /* --------------------------------- motion ---------------------------------- */
 
@@ -1910,15 +2764,6 @@ const stagger: Variants = {
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 22 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EXPO } },
-};
-
-const pop: Variants = {
-  hidden: { opacity: 0, scale: 0.4 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { type: "spring", stiffness: 300, damping: 18, mass: 0.6 },
-  },
 };
 
 const shimmerReach: Variants = {
@@ -2150,7 +2995,10 @@ function StepNode({
         className="pointer-events-none absolute -inset-2 rounded-full blur-md"
       />
       <motion.span
-        variants={pop}
+        initial={{ opacity: 0, scale: 0.4 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ type: "spring", stiffness: 300, damping: 18, mass: 0.6 }}
         className={`relative flex items-center justify-center rounded-full font-bold ${dim}`}
         style={nodeStyle}
       >
@@ -2295,32 +3143,25 @@ function DesktopAscent() {
   const filled = useMotionValue(1);
   const progress = reduce ? filled : scrollYProgress;
 
-  const pathRef = useRef<SVGPathElement>(null);
-  const cx = useMotionValue(STATION_X[0]);
-  const cy = useMotionValue(STATION_Y[0]);
-  useMotionValueEvent(progress, "change", (v) => {
-    const p = pathRef.current;
-    if (!p) return;
-    const pt = p.getPointAtLength(Math.min(Math.max(v, 0), 1) * p.getTotalLength());
-    cx.set(pt.x);
-    cy.set(pt.y);
-  });
+  /* straight track → runner x maps linearly to progress */
+  const cx = useTransform(progress, [0, 1], [STATION_X[0], STATION_X[4]]);
+
+  /* spring-smoothed copy of progress drives card emergence — cards lag the
+     scroll slightly and SETTLE into place instead of tracking it rigidly */
+  const emerge = useSpring(progress, { stiffness: 80, damping: 18, mass: 0.4 });
 
   return (
-    <motion.div
-      ref={ref}
-      variants={stagger}
-      className="relative z-10 hidden lg:block"
-      style={{ aspectRatio: "1080 / 680" }}
-    >
+    <motion.div ref={ref} variants={stagger} className="relative z-10 hidden lg:block">
+      {/* slim track band behind the node row */}
       <svg
-        viewBox={`0 0 ${VB_W} ${VB_H}`}
+        viewBox={`0 0 ${VB_W} ${BAND_H}`}
         preserveAspectRatio="none"
-        className="absolute inset-0 h-full w-full overflow-visible"
+        className="absolute left-0 top-0 w-full overflow-visible"
+        style={{ height: BAND_H }}
         aria-hidden
       >
         <path
-          d={ASCENT_PATH}
+          d={TRACK_PATH}
           fill="none"
           stroke="rgba(181,255,61,0.08)"
           strokeWidth={10}
@@ -2328,7 +3169,7 @@ function DesktopAscent() {
           vectorEffect="non-scaling-stroke"
         />
         <path
-          d={ASCENT_PATH}
+          d={TRACK_PATH}
           fill="none"
           stroke="rgba(181,255,61,0.22)"
           strokeWidth={2}
@@ -2337,8 +3178,7 @@ function DesktopAscent() {
           vectorEffect="non-scaling-stroke"
         />
         <motion.path
-          ref={pathRef}
-          d={ASCENT_PATH}
+          d={TRACK_PATH}
           fill="none"
           stroke={LIME}
           strokeWidth={2.5}
@@ -2349,7 +3189,7 @@ function DesktopAscent() {
         {!reduce && (
           <motion.circle
             cx={cx}
-            cy={cy}
+            cy={TRACK_Y}
             r={6}
             fill={LIME}
             style={{ filter: "drop-shadow(0 0 8px rgba(181,255,61,0.9))" }}
@@ -2357,14 +3197,18 @@ function DesktopAscent() {
         )}
       </svg>
 
-      {journeySteps.map((step, index) => (
-        <AscentStation
-          key={step.number}
-          step={step}
-          index={index}
-          progress={progress}
-        />
-      ))}
+      {/* five equal columns — the row IS the panel, no dead zones */}
+      <div className="flex items-stretch" style={{ paddingTop: BAND_PAD }}>
+        {journeySteps.map((step, index) => (
+          <AscentStation
+            key={step.number}
+            step={step}
+            index={index}
+            progress={progress}
+            emerge={emerge}
+          />
+        ))}
+      </div>
     </motion.div>
   );
 }
@@ -2373,22 +3217,25 @@ function AscentStation({
   step,
   index,
   progress,
+  emerge,
 }: {
   step: JourneyStep;
   index: number;
   progress: MotionValue<number>;
+  emerge: MotionValue<number>;
 }) {
   const reached = useReached(progress, nodeReach(index));
 
+  /* emergence window: card i rises as the fill approaches its node */
+  const start = Math.max(0, nodeReach(index) - 0.16);
+  const end = Math.max(0.08, nodeReach(index));
+  const y = useTransform(emerge, [start, end], [96, 0]);
+  const opacity = useTransform(emerge, [start, end], [0, 1]);
+  const scale = useTransform(emerge, [start, end], [0.96, 1]);
+
   return (
-    <div
-      className="absolute -translate-x-1/2"
-      style={{
-        width: 172,
-        left: `${(STATION_X[index] / VB_W) * 100}%`,
-        top: `calc(${(STATION_Y[index] / VB_H) * 100}% - 20px)`,
-      }}
-    >
+    <div className="flex min-w-0 flex-1 flex-col px-2">
+      {/* node stays fixed on the track — only the card emerges */}
       <div className="flex justify-center">
         <StepNode
           number={step.number}
@@ -2399,32 +3246,33 @@ function AscentStation({
         />
       </div>
 
-      <motion.article
-        variants={fadeUp}
-        whileHover={{ y: -5 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-        className="group relative mt-3 overflow-hidden rounded-[18px] px-3.5 py-4 text-center"
-        style={GLASS}
-      >
-        {step.isFinal && <CelebrationLayer reached={reached} />}
+      <motion.div style={{ y, opacity, scale }} className="mt-3 flex flex-1 flex-col">
+        <motion.article
+          whileHover={{ y: -5 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          className="group relative flex w-full flex-1 flex-col overflow-hidden rounded-[18px] px-3.5 py-4 text-center"
+          style={GLASS}
+        >
+          {step.isFinal && <CelebrationLayer reached={reached} />}
 
-        <div className="relative z-10 flex flex-col items-center">
-          {step.tag && (
-            <span className="mb-2.5">
-              <Tag tag={step.tag} isFinal={step.isFinal} />
-            </span>
-          )}
+          <div className="relative z-10 flex flex-1 flex-col items-center justify-center">
+            {step.tag && (
+              <span className="mb-2.5">
+                <Tag tag={step.tag} isFinal={step.isFinal} />
+              </span>
+            )}
 
-          <IconChip Icon={step.icon} isFinal={step.isFinal} reached={reached} />
+            <IconChip Icon={step.icon} isFinal={step.isFinal} reached={reached} />
 
-          <h3 className="mt-2.5 text-[15px] font-bold leading-snug tracking-[-0.01em] text-white xl:text-[16px]">
-            {step.title}
-          </h3>
-          <p className="mt-1 text-[12.5px] leading-5" style={descColor(step.isFinal)}>
-            {step.description}
-          </p>
-        </div>
-      </motion.article>
+            <h3 className="mt-2.5 text-[15px] font-bold leading-snug tracking-[-0.01em] text-white xl:text-[16px]">
+              {step.title}
+            </h3>
+            <p className="mt-1 text-[12.5px] leading-5" style={descColor(step.isFinal)}>
+              {step.description}
+            </p>
+          </div>
+        </motion.article>
+      </motion.div>
     </div>
   );
 }
@@ -2443,6 +3291,8 @@ function MobileRoadmap() {
   const filled = useMotionValue(1);
   const progress = reduce ? filled : scrollYProgress;
   const dotTop = useTransform(progress, (v) => `${Math.min(Math.max(v, 0), 1) * 100}%`);
+  /* smoothed copy drives card emergence — same system as desktop, smaller amplitude */
+  const emerge = useSpring(progress, { stiffness: 90, damping: 20, mass: 0.4 });
 
   return (
     <motion.div ref={ref} variants={stagger} className="relative z-10 lg:hidden">
@@ -2480,6 +3330,7 @@ function MobileRoadmap() {
             step={step}
             index={index}
             progress={progress}
+            emerge={emerge}
           />
         ))}
       </div>
@@ -2491,15 +3342,24 @@ function MobileCard({
   step,
   index,
   progress,
+  emerge,
 }: {
   step: JourneyStep;
   index: number;
   progress: MotionValue<number>;
+  emerge: MotionValue<number>;
 }) {
   const reached = useReached(progress, nodeReach(index));
 
+  /* emergence window — card rises as the rail fill approaches its node */
+  const start = Math.max(0, nodeReach(index) - 0.14);
+  const end = Math.max(0.06, nodeReach(index));
+  const y = useTransform(emerge, [start, end], [44, 0]);
+  const opacity = useTransform(emerge, [start, end], [0, 1]);
+
   return (
-    <motion.div variants={fadeUp} className="relative flex items-stretch gap-3.5">
+    <div className="relative flex items-stretch gap-3.5">
+      {/* node stays welded to the rail — only the card emerges */}
       <div className="relative z-10 flex w-9 shrink-0 justify-center pt-3.5">
         <StepNode
           number={step.number}
@@ -2511,36 +3371,38 @@ function MobileCard({
         />
       </div>
 
-      <div
-        className="group relative flex flex-1 items-center gap-3 overflow-hidden rounded-[18px] p-3.5"
-        style={GLASS}
-      >
-        {step.isFinal && <CelebrationLayer reached={reached} />}
+      <motion.div style={{ y, opacity }} className="min-w-0 flex-1">
+        <div
+          className="group relative flex h-full w-full items-center gap-3 overflow-hidden rounded-[18px] p-3.5"
+          style={GLASS}
+        >
+          {step.isFinal && <CelebrationLayer reached={reached} />}
 
-        <div className="relative z-10 inline-flex">
-          <IconChip
-            Icon={step.icon}
-            isFinal={step.isFinal}
-            size="sm"
-            reached={reached}
-          />
-        </div>
+          <div className="relative z-10 inline-flex">
+            <IconChip
+              Icon={step.icon}
+              isFinal={step.isFinal}
+              size="sm"
+              reached={reached}
+            />
+          </div>
 
-        <div className="relative z-10 min-w-0 flex-1">
-          {step.tag && (
-            <span className="mb-1 inline-block">
-              <Tag tag={step.tag} isFinal={step.isFinal} />
-            </span>
-          )}
-          <h3 className="text-[15px] font-bold leading-snug tracking-[-0.01em] text-white">
-            {step.title}
-          </h3>
-          <p className="mt-0.5 text-[12.5px] leading-snug" style={descColor(step.isFinal)}>
-            {step.description}
-          </p>
+          <div className="relative z-10 min-w-0 flex-1">
+            {step.tag && (
+              <span className="mb-1 inline-block">
+                <Tag tag={step.tag} isFinal={step.isFinal} />
+              </span>
+            )}
+            <h3 className="text-[15px] font-bold leading-snug tracking-[-0.01em] text-white">
+              {step.title}
+            </h3>
+            <p className="mt-0.5 text-[12.5px] leading-snug" style={descColor(step.isFinal)}>
+              {step.description}
+            </p>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   );
 }
 
