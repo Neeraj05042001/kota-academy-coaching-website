@@ -1212,7 +1212,7 @@
 //           <ResultsHeader />
 //           <ProcessChips />
 //           <ResultsShowcase/>
-         
+
 //         </div>
 //       </div> */}
 
@@ -1226,7 +1226,6 @@
 //     </section>
 //   );
 // }
-
 
 // "use client";
 
@@ -2162,7 +2161,6 @@
 //   );
 // }
 
-
 // "use client";
 
 // import {
@@ -3032,7 +3030,8 @@ const featuredResult: FeaturedResult = {
   scoreLabel: "Percentile",
   name: "Arjun Gupta",
   program: "JEE Main 2025 · Two-Year Classroom Program",
-  statement: "Built consistency through weekly tests and focused doubt-solving.",
+  statement:
+    "Built consistency through weekly tests and focused doubt-solving.",
   tags: ["Weekly Tests", "Doubt Support", "Mentorship"],
   image: "/students/arjun-gupta.png",
 };
@@ -3054,19 +3053,97 @@ type StudentResult = {
 
 /* DEMO — 8 unique people. Photos appear ONLY under their own name. */
 const studentResults: StudentResult[] = [
-  { id: 1, category: "JEE Main", score: "97.8", scoreLabel: "Percentile", name: "Priya Sharma", program: "Two-Year Classroom Program", image: "/students/priya-sharma.png", accent: "lime", icon: Target },
-  { id: 2, category: "NEET", score: "640+", scoreLabel: "Score", name: "Rahul Singh", program: "Medical Preparation Program", image: "/students/rahul-singh.png", accent: "gold", icon: BadgeCheck },
-  { id: 3, category: "Class 12 Boards", score: "95.6%", name: "Sneha Verma", program: "Board Excellence Program", image: "/students/sneha-verma.png", accent: "lime", icon: GraduationCap },
-  { id: 4, category: "JEE Advanced", score: "1840", scoreLabel: "AIR", name: "Vikram Joshi", program: "Advanced Rankers Batch", image: "/students/vikram-joshi.png", accent: "gold", icon: Target },
+  {
+    id: 1,
+    category: "JEE Main",
+    score: "97.8",
+    scoreLabel: "Percentile",
+    name: "Priya Sharma",
+    program: "Two-Year Classroom Program",
+    image: "/students/priya-sharma.png",
+    accent: "lime",
+    icon: Target,
+  },
+  {
+    id: 2,
+    category: "NEET",
+    score: "640+",
+    scoreLabel: "Score",
+    name: "Rahul Singh",
+    program: "Medical Preparation Program",
+    image: "/students/rahul-singh.png",
+    accent: "gold",
+    icon: BadgeCheck,
+  },
+  {
+    id: 3,
+    category: "Class 12 Boards",
+    score: "95.6%",
+    name: "Sneha Verma",
+    program: "Board Excellence Program",
+    image: "/students/sneha-verma.png",
+    accent: "lime",
+    icon: GraduationCap,
+  },
+  {
+    id: 4,
+    category: "JEE Advanced",
+    score: "1840",
+    scoreLabel: "AIR",
+    name: "Vikram Joshi",
+    program: "Advanced Rankers Batch",
+    image: "/students/vikram-joshi.png",
+    accent: "gold",
+    icon: Target,
+  },
 
-  { id: 5, category: "NEET", score: "625+", scoreLabel: "Score", name: "Riya Mehta", program: "Medical Preparation Program", accent: "lime", icon: BadgeCheck },
-  { id: 6, category: "Class 10 Foundation", score: "94.2%", name: "Aditya Verma", program: "Foundation Program", accent: "gold", icon: BookOpen },
-  { id: 7, category: "JEE Main", score: "96.9", scoreLabel: "Percentile", name: "Kabir Singh", program: "Classroom Program", accent: "gold", icon: Target },
-  { id: 8, category: "Class 12 Boards", score: "96.2%", name: "Ananya Iyer", program: "Board Excellence Program", accent: "lime", icon: GraduationCap },
+  {
+    id: 5,
+    category: "NEET",
+    score: "625+",
+    scoreLabel: "Score",
+    name: "Riya Mehta",
+    program: "Medical Preparation Program",
+    image: "/students/vikram-joshi.png",
+    accent: "lime",
+    icon: BadgeCheck,
+  },
+  {
+    id: 6,
+    category: "Class 10 Foundation",
+    score: "94.2%",
+    name: "Aditya Verma",
+    program: "Foundation Program",
+    image: "/students/vikram-joshi.png",
+    accent: "gold",
+    icon: BookOpen,
+  },
+  {
+    id: 7,
+    category: "JEE Main",
+    score: "96.9",
+    scoreLabel: "Percentile",
+    name: "Kabir Singh",
+    program: "Classroom Program",
+    image: "/students/priya-sharma.png",
+    accent: "gold",
+    icon: Target,
+  },
+  {
+    id: 8,
+    category: "Class 12 Boards",
+    score: "96.2%",
+    name: "Ananya Iyer",
+    program: "Board Excellence Program",
+    image: "/students/priya-sharma.png",
+    accent: "lime",
+    icon: GraduationCap,
+  },
 ];
 
 const ctaContent = {
-  heading: "Want to know how your child can improve with the right academic plan?",
+  heading:
+    "Want to know how your child can improve with the right academic plan?",
   description: "Get a personalized preparation roadmap from our academic team.",
   buttonLabel: "Book Free Counselling",
   reassurance: "100% Free · No Obligation",
@@ -3259,14 +3336,20 @@ function ResultsHeader() {
         transition={{ duration: 0.55, ease: EXPO }}
         className="mb-4 inline-flex items-center justify-center gap-3"
       >
-        <span className="h-px w-10" style={{ background: "rgba(78,148,23,0.45)" }} />
+        <span
+          className="h-px w-10"
+          style={{ background: "rgba(78,148,23,0.45)" }}
+        />
         <span
           className="text-xs font-bold uppercase tracking-[0.24em] sm:text-sm"
           style={{ color: EYEBROW_GREEN }}
         >
           Results &amp; Achievements
         </span>
-        <span className="h-px w-10" style={{ background: "rgba(78,148,23,0.45)" }} />
+        <span
+          className="h-px w-10"
+          style={{ background: "rgba(78,148,23,0.45)" }}
+        />
       </motion.div>
 
       <motion.h2
@@ -3289,7 +3372,8 @@ function ResultsHeader() {
         className="mx-auto mt-5 max-w-2xl text-center text-base leading-7 text-slate-700 sm:text-lg sm:leading-8"
       >
         A glimpse of the outcomes achieved through focused classroom learning,
-        exam-oriented practice, regular testing, and personal academic mentoring.
+        exam-oriented practice, regular testing, and personal academic
+        mentoring.
       </motion.p>
     </motion.div>
   );
@@ -3372,7 +3456,8 @@ function FeaturedResultCard() {
         className="absolute right-0 top-8 z-[4] hidden h-[340px] w-[340px] lg:block"
         style={{
           ...dotGrid("rgba(181,255,61,0.4)", 18),
-          maskImage: "radial-gradient(circle at 60% 45%, #000 0%, transparent 68%)",
+          maskImage:
+            "radial-gradient(circle at 60% 45%, #000 0%, transparent 68%)",
           WebkitMaskImage:
             "radial-gradient(circle at 60% 45%, #000 0%, transparent 68%)",
         }}
@@ -3421,7 +3506,10 @@ function FeaturedResultCard() {
           {/* score — counts up on view */}
           <div className="mt-3 max-w-[340px] text-left">
             <div className="text-[2.75rem] font-extrabold leading-none tracking-tight sm:text-[4rem] lg:text-[4.75rem]">
-              <ScoreCount score={featuredResult.score} style={{ color: LIME }} />
+              <ScoreCount
+                score={featuredResult.score}
+                style={{ color: LIME }}
+              />
             </div>
 
             <div className="mt-2 flex items-center gap-2">
@@ -3570,7 +3658,10 @@ function ResultCard({ result }: { result: StudentResult }) {
             </div>
 
             {result.scoreLabel ? (
-              <p className="mt-0.5 text-xs font-semibold" style={{ color: a.score }}>
+              <p
+                className="mt-0.5 text-xs font-semibold"
+                style={{ color: a.score }}
+              >
                 {result.scoreLabel}
               </p>
             ) : null}
@@ -3769,7 +3860,9 @@ function ResultsPanel() {
                 key={result.id}
                 layout={!shouldReduceMotion}
                 initial={
-                  shouldReduceMotion ? false : { opacity: 0, y: 14, scale: 0.98 }
+                  shouldReduceMotion
+                    ? false
+                    : { opacity: 0, y: 14, scale: 0.98 }
                 }
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={
@@ -3974,7 +4067,11 @@ function ResultsCTA() {
           </a>
 
           <div className="inline-flex items-center gap-2 text-xs font-semibold text-slate-300 sm:text-sm">
-            <ShieldCheck className="h-4 w-4" style={{ color: LIME }} aria-hidden />
+            <ShieldCheck
+              className="h-4 w-4"
+              style={{ color: LIME }}
+              aria-hidden
+            />
             <span>{ctaContent.reassurance}</span>
           </div>
         </div>
